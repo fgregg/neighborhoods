@@ -1,0 +1,138 @@
+chunk: preamble
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-preamble
+fig:
+cacheDB:
+time: 2012-05-25 00:00:02
+
+chunk: getData
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-getData
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/getData_7ad1b429657050fd0ad73cb22bf01aaa
+time: 2012-05-25 00:00:02
+
+chunk: normalizeNeighborhoods
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-normalizeNeighborhoods
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/normalizeNeighborhoods_4c1d4cff5f92558c824550f696fa9915
+time: 2012-05-25 00:00:03
+
+chunk: splitAndUniquify
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-splitAndUniquify
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/splitAndUniquify_f78973cf4931e0ffa8b56cf0f58e22db
+time: 2012-05-25 00:00:12
+
+chunk: GIS
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-GIS
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/GIS_3661c7e236c5de886d7472abc0ba957e
+time: 2012-05-25 00:00:49
+
+chunk: /home/fgregg/sweave-cache/figs/fig-006
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-006
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/_a1c716e0720f50eede44542647b48cbd
+time: 2012-05-25 00:00:50
+
+chunk: trimOutliers
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-trimOutliers
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/trimOutliers_149e471ed141748cf4e37d4166845001
+time: 2012-05-25 00:00:50
+
+chunk: /home/fgregg/sweave-cache/figs/fig-008
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-008
+fig: /home/fgregg/sweave-cache/figs/fig-008.tikz
+cacheDB: /home/fgregg/sweave-cache/values/_4dcc067776ac3642eb6c219771987cc9
+time: 2012-05-25 00:00:50
+
+chunk: /home/fgregg/sweave-cache/figs/fig-009
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-009
+fig: /home/fgregg/sweave-cache/figs/fig-009.tikz
+cacheDB: /home/fgregg/sweave-cache/values/_5ed8d5eb9a90e0465f8b4741d889c47d
+time: 2012-05-25 00:00:50
+
+chunk: prY
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-prY
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/prY_0c2778d4cc3f3779fbca484a8fce509e
+time: 2012-05-25 00:00:50
+
+chunk: trainKDE
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-trainKDE
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/trainKDE_19247d7973337654431189212928e3a0
+time: 2012-05-25 00:00:50
+
+chunk: trainModel
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-trainModel
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/trainModel_13c64add1b72340078bba244bf0a2db7
+time: 2012-05-25 00:00:50
+
+chunk: plotPredictions
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-plotPredictions
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/plotPredictions_d0196808ac58af6a59b4ea4cca9f861d
+time: 2012-05-25 00:00:50
+
+chunk: KS
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-KS
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/KS_854c9f8477690b363e99539a285962ac
+time: 2012-05-25 00:00:50
+
+chunk: /home/fgregg/sweave-cache/figs/fig-015
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-015
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/_228df5f958e0adaa035fa73d282602bd
+time: 2012-05-25 00:00:50
+
+chunk: /home/fgregg/sweave-cache/figs/fig-016
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-016
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/_4c21eec11470d5c0c2a561420ecfa087
+time: 2012-05-25 00:00:55
+
+chunk: /home/fgregg/sweave-cache/figs/fig-017
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-017
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/_24230a94e5ef3f105fe0f15fbf4526fc
+time: 2012-05-25 00:00:55
+
+chunk: KStrain
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-KStrain
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/KStrain_bd26e77e3b45832cb80cd788f4e49299
+time: 2012-05-25 00:00:57
+
+chunk: KSplot
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-KSplot
+fig: /home/fgregg/sweave-cache/figs/fig-KSplot.pdf
+cacheDB: /home/fgregg/sweave-cache/values/KSplot_fb3244de7b4821787d3dbe8eb828b0a3
+time: 2012-05-25 00:03:13
+
+chunk: KSplot1
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-KSplot1
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/KSplot1_19e63b10c5911277c0447f51be7a5b86
+time: 2012-05-25 00:03:23
+
+chunk: allChicagoTrain
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-allChicagoTrain
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/allChicagoTrain_9a3fd08e29adede1369e7e23fc5d9112
+time: 2012-05-25 00:03:23
+
+chunk: /home/fgregg/sweave-cache/figs/fig-022
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-022
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/_71bd7f6a7de17c15555522807bbbf3fa
+time: 2012-05-25 00:03:23
+
+chunk: KSplot1
+chunkprefix: /home/fgregg/sweave-cache/figs/fig-KSplot1
+fig:
+cacheDB: /home/fgregg/sweave-cache/values/KSplot1_fb426a8e22163dc249dad4e97436749a
+time: 2012-05-25 00:03:23
+

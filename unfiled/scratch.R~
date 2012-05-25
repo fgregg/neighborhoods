@@ -1,0 +1,7 @@
+trimOutliers <- function(points, threshold) {
+  normalize <- function(x) {
+    (x - median(x))/mad(x)
+  }
+  points[abs(normalize(points$x)) < threshold &
+         abs(normalize(points$y)) < threshold, ]
+}

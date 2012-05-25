@@ -1,0 +1,126 @@
+In their programmatic article "Ecometrics," Stephen Raudenbush and
+Robert Sampson describe how scientists could construct valid measures
+of the properties of ecological areas, but provide little guidance as
+to how we might identify ecological areas in the first place.[fn:eco]
+In their Project of Human Development in Chicago Neighborhoods, they
+allow that their own effort to define "ecologically meaningful" zones,
+were not fully successful; that their neighborhood clusters likely
+introduced measurement error because of "inexact correspondence
+between the neighborhood boundaries imposed by the census geography
+and the ecological properties that shape social
+interaction."[fn:crimin]
+
+[fn:eco] Raudenbush, Stephen W, and Robert J
+Sampson. 1999. "Ecometrics: Toward a Science of Assessing Ecological
+Settings, With Application to the Systematic Social Observation of
+Neighborhoods." /Sociological Methodology/ 29 (1) (January 1):
+1-41. doi:10.1111/0081-1750.00059.  
+
+[fn:crimin] Morenoff, Jeffrey D., Robert J Sampson, and Stephen
+W. Raudenbush. 2001. “Neighborhood Inequality, Collective Efficacy,
+and the Spatial Dynamics of Urban Violence*.” /Criminology/ 39 (3)
+(August 1): 517-558. doi:10.1111/j.1745-9125.2001.tb00932.x.
+
+
+Raudenbush and his co-authors have attempted to either mitigate this
+error by including spatial autocorrelation terms in their models or
+avoid it by disaggregating neighborhood clusters into much smaller
+geographic units. However, this second strategy runs the risk of
+providing the right answer to the wrong question.
+
+By studying smaller geographic units, we can avoid the fallacy of
+assuming that the properties of an aggregate describe the properties
+of the elements. Unfortunately, by simply disaggregating, we run the
+risk of committing the complementary fallacy of expecting that the
+properties of the elements will describe the properties of a
+whole. Concretely, if the block is smaller than an ecological area,
+then even perfect measurement of the effect of collective efficacy on
+crime rates at the block level cannot tell us about how /ecological/
+properties shape social interaction if we do not know how to combine
+blocks together into the right ecological zones.[fn:mountain] 
+
+[fn:mountain] This assumes that 'ecological areas' are more than a
+convenient abstraction, such as defining a mountain as anything taller
+1,000 feet above sea level. If, in reality, properties of locations
+and processes are continuously distributed across space then it is
+completely appropriate to use the smallest geographic unit that admits
+analysis.
+
+
+If we cannot avoid the problem of defining ecological areas by changing
+the unit of analysis or purely statistical means, it seems to me that
+we have three alternatives. We can deduce an ecological area from
+theory, we can use local understanding of neighborhood areas and
+boundaries, and we can infer the existence of an area from its
+effects.
+
+At least in my far-from-comprehensive reading, Rick Grannis has the
+most developed theoretical account of when we should expect a
+geographical area to be a zone such that the properties of the area
+shape social interaction.[fn:grannis] However, he mainly helps us
+exclude the geographic areas we should expect /not/ to be ecological
+zones.  I hope it does not do too much violence to say that his stage
+model identifies necessary but not sufficient conditions for
+'neighboring' in geographic areas.
+
+[fn:grannis] Grannis, Rick. 2009. /From the ground up : translating
+geography into community through neighbor networks/. Princeton:
+Princeton University Press.
+
+Since we are often interested in how people's perceptions of a
+neighborhood shape what happens in that neighborhood, it seems very
+reasonable to let people define the geographic areas that we treat as
+a neighborhood. Unfortunately, attempts at this approach have run into
+two recurrent obstacles to defining a coherent neighborhood area from
+peoples perceptions. First, people tend to think about 'their
+neighborhood' as meaning a very local area, often not extending much
+beyond their face block. Second, when prompted to define the larger
+neighborhood area people typically are able to identify one or two
+boundaries but often are able to present the researcher with complete
+separation of the neighborhood area from surrounding neighborhoods.
+
+However, while people are often themselves uncertain and can disagree
+about the areal definition of their neighborhood, they are often able
+to say they live in some defined neighborhood. If we had sufficient
+data about where people thought they lived, we may be able to combine
+these data with Grannis's theory of neighboring to impute
+phenomenologically real neighborhood areas. I have been collecting data
+that could be used for this purpose for a few months from Craigslist
+rental, sublet, and roommate postings, and these data look very
+promising.
+
+Finally, we might attempt to find ecological areas by looking for
+their effects. If we believe that ecological attributes of an area
+have an effect on a murder rate, and we believed that the ecological
+attributes did not vary continuously over space we should expect to
+see see patterned differences in crime rates along borders of an
+ecological area. As a first approximation, we could model a murder
+rate without a predictor for neighborhood area but which did include
+local spatial dependency, and map the residuals to see if there are
+patterns of adjacent positive or negative residuals.
+
+Such an approach runs the danger of turning the definition of
+ecological areas into whatever most partitions the variance in a
+particular data set, but we may build confidence that we have found a
+real ecological areas if a.) the same spatial patterning of
+differences in outcomes emerges from a wide range of outcome
+variables, b.) the patterns align with our theories of neighboring,
+and c.) differences between spaces match whether individuals think
+spaces are different.
+
+
+#+TITLE:     Identifying Ecological Areas
+#+AUTHOR:    Forest Timothy Gregg
+#+EMAIL:     fgregg@rhodesx
+#+DATE:      2011-07-05 Tue
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:

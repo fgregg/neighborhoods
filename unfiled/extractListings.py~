@@ -1,0 +1,31 @@
+import MySQLdb
+import feedparser
+from time import mktime
+from datetime import datetime
+
+db = MySQLdb.connect(db="neighborhood",
+                     read_default_file="~/.my.cnf")
+db.set_character_set('utf8')
+
+c = db.cursor()
+c.execute('SET NAMES utf8;')
+c.execute('SET CHARACTER SET utf8;')
+c.execute('SET character_set_connection=utf8;')
+
+c.execute(""" SELECT rss_id, raw FROM rss WHERE rss_id > (SELECT max(rss_id) from listing)""")
+
+rows = c.fetchall()
+
+for row in rows :
+    rss_id, feed = row
+    feed = feedparser.parse(feed)
+    for entry in feed.entries :
+        try :
+            published = datetime.fromtimestamp(mktime(entry.published_parsed))
+            c.execute(""" REPLACE INTO listing (listing_id, published, title, content, rss_id) VALUES (%s, %s, %s, %s, %s)""",  (entry.id, published, entry.title, entry.summary, rss_id))
+        except TypeError :
+            pass
+
+
+c.close()
+db.close()

@@ -1,0 +1,73 @@
+% Created 2011-04-06 Wed 19:46
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\begin{document}
+
+\title{Pitch}
+\author{Forest Timothy Gregg}
+\date{06 April 2011}
+
+Social scientists are often frustrated in their investigation of
+social, spatial processes because the only data we have have been
+aggregated to large, geographic areas with boundaries not of our
+choosing, such as census blocks or postal zipcodes. Such aggregations
+limit our ability to make reliable inferences about spatial
+processes within a given areal unit, and introduce substantial error
+if we combine data with different boundaries. While the
+ideal solution to such problems would be to use unagreggated,
+individual-level data instead, but this is often not possible. Either
+the data no longer exist, they are too expensive, or it cannot be
+released for privacy reasons. However, when it may not be feasible to
+use unaggreagated data, recent advances in spatial statistics, the
+accumulation of accurate digital maps, and the progress on the problem
+of ecological inference have likely made it possible to statistically
+disaggregate data to a level where many of the current challenges
+disappear. Disaggregating the outcoming 2010 Census, we would
+dramatically demonstrate that possibility and create a dataset that
+would be used by thousands of researchers over the next ten years.
+
+In order to disaggregate a census tract, we need outside information
+about how we should expect the population to be distributed within the
+tract. If we had a map of building footprints, we could
+allocate the population only to the parts of the census tract
+where a building existed and not to parks, lakes, or
+cemeteries. Unfortunately, while such an allocation is substantially
+more accurate than assuming a uniform distribution of population over
+a tract area, there are a infinite number of ways that you could
+allocate the population to the building
+footprints. Finding the best allocation ends up being the ecological
+inference problem, a classically hard problem.
+
+Fortunately, recent work on this problem by Kosuke Imai, Ying
+Lu, and Aaron Strauss seems to indicate that  we can use prior
+beliefs about the individual level distributions to make accurate
+ecological inferences, and for census data, we have good priors
+beliefs. We have individual-level data from the Public-Use Microdata
+Samples and the American Housing Surveys. For many municipalities, we
+can acquire tax maps with property boundaries, size and number of
+floors of the building, and valuation. We have street maps, maps
+of how realtors partition a city, school districts, and
+parish boundaries. We have maps.
+
+The social sciences also have over a hundred years of theory about the
+social processes that distribute individuals and groups across
+space. For example, sociology has three big theories that predict
+different patterns of racial clustering. First, that cost of housing
+is spatially correlated, people live in the most expensive housing
+they can afford, and since wealth and race are correlated, different
+races live in different areas. Second, individuals have some level of
+preference to live amongst those of the same race as themselves, all
+else being equal. Third, search processes produce segregation either
+because knowledge of housing options is determined by one's already
+segregated social network, or realtors steer potential renters and
+home-owners towards certain neighborhoods.
+
+While having disjoint theories makes for exciting polemic, it should
+also make for better prediction if they make unique predictions within
+a blended model.  The hierarchically nested structure of the Census
+data affords us the opportunity to train and validate such a model,
+and thus, I believe, lay the ground for the next ten years of research
+into social, spatial processes.
+
+
+\end{document}

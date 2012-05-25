@@ -1,0 +1,76 @@
+* Census data is important data set
+The US Census is the most frequently used 
+
+* Problems with areal units, as provided by census
+
+* Solution
+
+jid:(j100067)
+
+** Pitch
+Social scientists often face limits in investigation of social,
+spatial processes because they can only use data that has been
+aggregated to into large, geographic areas with boundaries not of
+their choosing, such as census blocks or postal zipcodes. Such
+aggregations constrain our ability to make reliable inferences about
+spatial processes within the given areal unit, and introduce
+substantial error if we try to combine data with different boundary
+definitions like different decennial Censuses or zipcode and Census
+tract data. The ideal solution to the problems caused by aggregated
+data is to use unagreggated, individual-level data instead, but this
+is often not possible because the disaggregated data no longer exits,
+it is too expensive, or for reasons of privacy. However, when it may
+not be feasible to use unaggreagated data, recent advances in spatial
+statistics, the accumulation of accurate digital maps, and the problem
+of ecological inference have likely made it possible to statistically
+disaggregate geographically referenced data to a level where many of
+the current challenges dissappear. If we dissagregated the outcoming
+2010 Census data, we would dramitcally demonstrate this possibility
+and produce a dataset that would be used by thousands of researchers
+over the next ten years.
+
+In order to a census tract, we need some outside information about how
+we should expect the population to be distributed within the
+tract. For example, if we had a map of building footprints, we would
+do very well to allocate the population only to the parts of the
+census tract where a building existed and not to parks, lakes, or
+cemeteries. Unfortunately, while such an allocation is substantially
+more accurate than a uniform distribution of population over a tract,
+there are a infinite number of ways that you could allocate the
+population of the census tract to the building footprints. Finding the
+best allocation ends up being the ecological inference problem, a
+classically hard problem.
+
+However, recent work on the ecological inference problem by Kosuke
+Imai, Ying Lu, and Aaron Strauss seems to indicate that if we can
+develop prior beliefs about the individual level distributions, then
+good inferences are possible. We can develop good priors for census
+data. We have individual-level data from the Public-Use Microdata
+samples and the American Housing Survey. For many municipalities, we
+can acquire tax maps that showed property boundaries and include
+information about the valuation, size and number of floors of
+buildings. We have street maps and maps of how realtors partition a
+city, and school districts areas, and parish boundaries, and on and on.
+
+We also have over a hundred years of theory about the social processes
+that drive spatial distribution of individuals and groups, spread over
+sociology, urban geography, and land value economics. For example,
+with regards to racial segregation, sociology has three big theories
+that should predict different patterns of racial clustering. First,
+that cost of housing is spatially correlated, people live in the
+most expensive housing they can afford, and since wealth and race are
+correlated, different races live in different areas. Second,
+individuals have some level of preference to live amongst those of the
+same race as themselves, all else being equal. Third, search processes
+produce segregation either through chain-migration, where knowledge of
+opportunites for housing is determined by one's already segregation
+social network, or realtors subtly or not so subtly steer potential
+renters and home-owners towards one area or another.
+
+While having disjoint theories makes for exciting polemic, it also
+might make for better prediction if they make unique predctions with a
+blended model.  The hierarchically  nested structure of the Census
+data affords us the opportunity to train and validate our predictions.
+
+
+

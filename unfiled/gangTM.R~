@@ -1,0 +1,16 @@
+library(tm)
+library(RMySQL)
+
+gang.query <- "
+select description
+from tag where Intersects(lat_long, GeomFromText('POLYGON((-88 41, -87 40, -87 42, -88 42, -88 41))'))"
+
+
+con <- dbConnect(MySQL(), dbname="chicago_gangs")
+gangs <- dbGetQuery(con, gang.query)
+dbDisconnect(con)
+
+gangs <- Corpus(DataframeSource(gangs))
+
+gangsTDM <- TermDocumentMatrix(gangs)
+

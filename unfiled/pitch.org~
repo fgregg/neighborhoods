@@ -1,0 +1,44 @@
+* Census data is important data set
+The US Census is the most frequently used 
+
+* Problems with areal units, as provided by census
+
+* Solution
+
+jid:(j100067)
+
+Social scientists can often only access data aggregated into large,
+geographic areas with boundaries not of the scientists choosing, such
+as census blocks or postal zipcodes. Such aggregations limit our
+ability to make reliable inferences about spatial processes within the
+given areal unit; the combination of datasets with different boundary
+defintions; or even about changes over time, if boundaries change. The
+ideal solution to the problems caused by aggregated data is to use
+unagreggated, individual-level data instead, but this is often not
+possible because the data does not exist, it is too expensive, or for
+reasons of privacy. However, when it may not be feasible to use
+unaggreagated data, recent advances in spatial statistics, the
+accumulation of accurate digital maps, and the problem of ecological
+inference have likely made it possible to statistically disaggregate
+georgraphically referenced data to a level where many of the current
+challenges dissappear.
+
+
+
+
+
+
+
+
+
+combine different gegeographically
+make reliable inferences based upon combination of geographically
+encoded data from different sources
+
+Social scientific data 
+
+US Censuds
+The US Decennial Census is the single, most important source of social
+scientific data 
+
+The US Decennial Census is likely the most important 

@@ -1,0 +1,122 @@
+import flickrapi
+from xml.dom.minidom import parseString
+from xml.etree import ElementTree
+import MySQLdb
+
+def prettyPrint(element):
+    txt = ElementTree.tostring(element)
+    print parseString(txt).toprettyxml() 
+
+def photoList(photos) :
+    photo_list = []
+                           
+    for photo in photos :
+        photo_list.append({'id': photo.attrib['id'],
+                           'latitude': photo.attrib['latitude'] ,
+                           'longitude' : photo.attrib['longitude'] ,
+                           'title': photo.attrib['title'] ,
+                           'owner': photo.attrib['ownername'] ,
+                           'description': photo.find('description').text
+                           }
+                          )
+    return(photo_list)
+                         
+
+def photoWriteDatabase(photo_list) :
+    db = MySQLdb.connect(db="chicago_gangs",
+                         read_default_file="~/.my.cnf",
+                         charset="utf8",
+                         use_unicode=True)
+    c = db.cursor()
+
+    for photo in photo_list :
+        print int(photo['id'])
+        c.execute("""
+        INSERT IGNORE INTO tag
+        (image_id, title, description, lat_long, owner)
+        VALUES
+        (%s, %s, %s, PointFromText('POINT(%s %s)'), %s)""",
+                  (int(photo['id']),
+                   photo['title'],
+                   photo['description'],
+                   float(photo['longitude']),
+                   float(photo['latitude']),
+                   photo['owner']
+                   )
+                  )
+
+    c.close()
+
+api_key = 'eed8d2dcbb3b20c1a5095550854e9963'
+flickr = flickrapi.FlickrAPI(api_key, format='etree')
+
+gang_grafitti_nsid = '432182@N25'
+chicago_gang_grafitti_nsid = '1305490@N25'
+
+fields = "description,date_taken, owner_name, geo, tags, date_taken, date_upload, o_dims, views, media, path_alias" 
+
+#gg_sets = photoList(gang_grafitti_nsid, fields)
+#cgg_sets = photoList(chicago_gang_grafitti_nsid, fields)
+
+gg_sets = photoList(flickr.walk(group_id = gang_grafitti_nsid,
+                                has_geo = 1,
+                                extras = fields)
+                    )
+cgg_sets = photoList(flickr.walk(group_id = chicago_gang_grafitti_nsid,
+                                has_geo = 1,
+                                extras = fields)
+                     )
+
+gt_sets = photoList(flickr.walk(text = "gang tag",
+                                bbox = "-90,40,-86,44",
+                                has_geo = 1,
+                                extras = fields)
+                    )
+
+ggf1_sets = photoList(flickr.walk(text = "gang grafitti",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+ggf2_sets = photoList(flickr.walk(text = "gang graffiti",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+ggf3_sets = photoList(flickr.walk(text = "chicagoganggraffiti",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+ggf4_sets = photoList(flickr.walk(text = "chicagogangtags",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+ggf5_sets = photoList(flickr.walk(text = "ganggraffiti",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+ggf5_sets = photoList(flickr.walk(text = "gangtags",
+                                  bbox = "-90,40,-86,44",
+                                  has_geo = 1,
+                                  extras = fields)
+                      )
+
+photoWriteDatabase(gg_sets)
+photoWriteDatabase(cgg_sets)
+photoWriteDatabase(gt_sets)
+photoWriteDatabase(ggf1_sets)
+photoWriteDatabase(ggf2_sets)
+photoWriteDatabase(ggf3_sets)
+photoWriteDatabase(ggf4_sets)
+photoWriteDatabase(ggf5_sets)
+
+#Secret:
+#66cb5b3e09872c9a 

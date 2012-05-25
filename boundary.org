@@ -1,0 +1,189 @@
+* Tasks
+** SOMEDAY Literature Review for Spatial Distribution
+   - State "DONE"       from "TODO"       [2011-04-06 Wed 11:40]
+   - State "DONE"       from "TODO"       [2011-03-24 Thu 11:40]
+   - State "DONE"       from "TODO"       [2011-03-23 Wed 12:50]
+   CLOCK: [2011-03-24 Thu 09:04]--[2011-03-24 Thu 11:39] =>  2:35
+   CLOCK: [2011-03-23 Wed 08:15]--[2011-03-23 Wed 09:16] =>  1:01
+   - State "DONE"       from "TODO"       [2011-03-22 Tue 12:50]
+   CLOCK: [2011-03-22 Tue 11:16]--[2011-03-22 Tue 12:48] =>  1:32
+   CLOCK: [2011-03-21 Mon 11:00]--[2011-03-21 Mon 12:15] =>  1:15
+   :PROPERTIES:
+   :CLOCK_MODELINE_TOTAL: today
+   :Effort:   1:00
+   :LAST_REPEAT: [2011-04-06 Wed 20:31]
+   :END:
+- The David Harding part about violence organizing space is in his
+  book
+** TODO Rutgers Paper
+** TODO Write Seminar paper on cognitive map of city
+** TODO See Todd Shuble
+
+** TODO Respond to Rick Grannis
+** Archive 							    :ARCHIVE:
+*** DONE Print up http://www.springerlink.com.proxy.uchicago.edu/content/w47861/
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:02
+    :END:
+*** DONE Read up on spatial clustering
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:02
+    :END:
+
+*** DONE Check in with Carlos
+    SCHEDULED: <2011-03-23 Wed>
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:02
+    :END:
+*** Meet with Carlos
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:02
+    :END:
+<2011-03-25 Fri 16:00>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#+TITLE:     Research Agenda
+#+AUTHOR:    Forest Gregg
+#+EMAIL:     fgregg@rhodesx
+#+DATE:      2011-02-05
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:nil pri:nil tags:not-in-toc toc:nil num:nil
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+- asdf asd [%]
+- [] asasd
+- [] asdfasd
+*** DONE Get [[http://pi.lib.uchicago.edu/1001/cat/bib/7840088][/From the Ground Up/]]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:02
+    :END:
+*** DONE Look up Carter Butts
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:03
+    :END:
+Has work on predicting adjacency network from distance matrix using a
+model he calls Bernoulli Spatial Graphs, basically the edges are
+independent conditional on a distance function between
+vertices. Pretty interesting, not clearly relevant for this project.
+
+
+
+
++
+
+*** DONE [[file:~/academic/boundaries/pitch.org][Pitch]]
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2011-04-29 Fri 10:03
+    :END:
+
+
+* Notes
+** Predictions
+*** T-communities will be more homogeneous
+Rick Grannis
+*** Segregation is inversely correlated with average income
+*** Immigrants tend to live near each other
+- Chain migration
+
+
+*** Spatial Assimiliation Model
+- education -> increased racial integration
+- occupational prestige -> increased racial integration
+- income -> increased racial integration
+( seems to hold for "phenotypically white Hispanics and Asian")
+- p. 170 Charles
+
+*** Place stratification mode
+- constrained options, due to prejudice and discrimination
+
+*** Blacks are much more segregated than nay other group
+- Charles 171
+
+*** Hispanics less so, and Asians even less
+
+*** "Black homeowners reside in more segregated neighborhoods than black renters
+- Charles 179
+
+*** Exposure 
+
+*** Nation of origin effects
+- Irish, Italian, and polish whites live in poorer neighborhoods
+- Caribbeans do better than native born blacks
+
+
+*** In group-preferences leads to clustering
+- Whites don't want to live near blacks
+
+*** Housing market discrimination
+- Multiple Listing Service will be predictive
+
+*** Schools and Parishes
+
+** Natural areas
+*** Lee & Campbell 
+Four definitions of neighborhoods
+- territorial
+- social
+- egocentric
+- institutional
+
+In 1988 survey in Nashville, TN
+| territorial/egocentric        | 32.3 |
+| territorial/egocentric/social | 16.5 |
+| territorial                   | 16.1 |
+| territorial/social            | 12.6 |
+| social                        | 5.5  | 
+
+Definition correlated with demographic statuses. Rich, educated,
+young, white people most likely to see it as territorial. Older, less
+educationed, nonwhites to have a social component.
+
+Similar story with percieved size of neighborhood. 
+
+  
+- violence may organize turf and produce homeogeneity
+
+
+
+
+** Craiglists Maps
+*** Note: <2011-04-29 Fri>
+The three scripts to a) stuff CL rss files in a database, b) extract
+listings from the rss files, and c) extract places, geocode those
+places, and associate with labels in the listings are functional and
+operating.
+
+Areas for improvement
+- factor out mysqldb connectivity
+- currently the label tables associates a listing, a location, and a
+  label. It would be be much better if the table associated a listing
+  with the place name that we extracted (dirty_location). This is in
+  fact what the real listing does, and we don't want to have update
+  the label table if we get better at resolving dirty_locations to
+  canonical_locations.
+- we should create an auto_incremented ID instead of uniquely
+  identifying url resource, it would make it easier select ranges of
+  listings
+- we have some primary keys set as integers that are probably too
+  small for this data (i.e., someday we may have more than 99999
+  listings.)

@@ -1,0 +1,892 @@
+\documentclass{article}
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0.0823529411764706,0.0784313725490196,0.709803921568627}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{1,0,0}{#1}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0.694117647058824,0.247058823529412,0.0196078431372549}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.8,0.8,0.8}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0,0.592156862745098,1}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.0705882352941176,0.713725490196078,0.0705882352941176}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.0705882352941176,0.713725490196078,0.0705882352941176}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0.215686274509804,0.215686274509804,0.384313725490196}{\textbf{#1}}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.713725490196078,0.145098039215686}{#1}}%
+\newcommand{\hlslot}[1]{\textit{#1}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlprompt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+
+\usepackage{color}%
+ 
+\newsavebox{\hlnormalsizeboxclosebrace}%
+\newsavebox{\hlnormalsizeboxopenbrace}%
+\newsavebox{\hlnormalsizeboxbackslash}%
+\newsavebox{\hlnormalsizeboxlessthan}%
+\newsavebox{\hlnormalsizeboxgreaterthan}%
+\newsavebox{\hlnormalsizeboxdollar}%
+\newsavebox{\hlnormalsizeboxunderscore}%
+\newsavebox{\hlnormalsizeboxand}%
+\newsavebox{\hlnormalsizeboxhash}%
+\newsavebox{\hlnormalsizeboxat}%
+\newsavebox{\hlnormalsizeboxpercent}% 
+\newsavebox{\hlnormalsizeboxhat}%
+\newsavebox{\hlnormalsizeboxsinglequote}%
+\newsavebox{\hlnormalsizeboxbacktick}%
+
+\setbox\hlnormalsizeboxopenbrace=\hbox{\begin{normalsize}\verb.{.\end{normalsize}}%
+\setbox\hlnormalsizeboxclosebrace=\hbox{\begin{normalsize}\verb.}.\end{normalsize}}%
+\setbox\hlnormalsizeboxlessthan=\hbox{\begin{normalsize}\verb.<.\end{normalsize}}%
+\setbox\hlnormalsizeboxdollar=\hbox{\begin{normalsize}\verb.$.\end{normalsize}}%
+\setbox\hlnormalsizeboxunderscore=\hbox{\begin{normalsize}\verb._.\end{normalsize}}%
+\setbox\hlnormalsizeboxand=\hbox{\begin{normalsize}\verb.&.\end{normalsize}}%
+\setbox\hlnormalsizeboxhash=\hbox{\begin{normalsize}\verb.#.\end{normalsize}}%
+\setbox\hlnormalsizeboxat=\hbox{\begin{normalsize}\verb.@.\end{normalsize}}%
+\setbox\hlnormalsizeboxbackslash=\hbox{\begin{normalsize}\verb.\.\end{normalsize}}%
+\setbox\hlnormalsizeboxgreaterthan=\hbox{\begin{normalsize}\verb.>.\end{normalsize}}%
+\setbox\hlnormalsizeboxpercent=\hbox{\begin{normalsize}\verb.%.\end{normalsize}}%
+\setbox\hlnormalsizeboxhat=\hbox{\begin{normalsize}\verb.^.\end{normalsize}}%
+\setbox\hlnormalsizeboxsinglequote=\hbox{\begin{normalsize}\verb.'.\end{normalsize}}%
+\setbox\hlnormalsizeboxbacktick=\hbox{\begin{normalsize}\verb.`.\end{normalsize}}%
+\setbox\hlnormalsizeboxhat=\hbox{\begin{normalsize}\verb.^.\end{normalsize}}%
+
+
+
+\newsavebox{\hltinyboxclosebrace}%
+\newsavebox{\hltinyboxopenbrace}%
+\newsavebox{\hltinyboxbackslash}%
+\newsavebox{\hltinyboxlessthan}%
+\newsavebox{\hltinyboxgreaterthan}%
+\newsavebox{\hltinyboxdollar}%
+\newsavebox{\hltinyboxunderscore}%
+\newsavebox{\hltinyboxand}%
+\newsavebox{\hltinyboxhash}%
+\newsavebox{\hltinyboxat}%
+\newsavebox{\hltinyboxpercent}% 
+\newsavebox{\hltinyboxhat}%
+\newsavebox{\hltinyboxsinglequote}%
+\newsavebox{\hltinyboxbacktick}%
+
+\setbox\hltinyboxopenbrace=\hbox{\begin{tiny}\verb.{.\end{tiny}}%
+\setbox\hltinyboxclosebrace=\hbox{\begin{tiny}\verb.}.\end{tiny}}%
+\setbox\hltinyboxlessthan=\hbox{\begin{tiny}\verb.<.\end{tiny}}%
+\setbox\hltinyboxdollar=\hbox{\begin{tiny}\verb.$.\end{tiny}}%
+\setbox\hltinyboxunderscore=\hbox{\begin{tiny}\verb._.\end{tiny}}%
+\setbox\hltinyboxand=\hbox{\begin{tiny}\verb.&.\end{tiny}}%
+\setbox\hltinyboxhash=\hbox{\begin{tiny}\verb.#.\end{tiny}}%
+\setbox\hltinyboxat=\hbox{\begin{tiny}\verb.@.\end{tiny}}%
+\setbox\hltinyboxbackslash=\hbox{\begin{tiny}\verb.\.\end{tiny}}%
+\setbox\hltinyboxgreaterthan=\hbox{\begin{tiny}\verb.>.\end{tiny}}%
+\setbox\hltinyboxpercent=\hbox{\begin{tiny}\verb.%.\end{tiny}}%
+\setbox\hltinyboxhat=\hbox{\begin{tiny}\verb.^.\end{tiny}}%
+\setbox\hltinyboxsinglequote=\hbox{\begin{tiny}\verb.'.\end{tiny}}%
+\setbox\hltinyboxbacktick=\hbox{\begin{tiny}\verb.`.\end{tiny}}%
+\setbox\hltinyboxhat=\hbox{\begin{tiny}\verb.^.\end{tiny}}%
+
+
+
+\newsavebox{\hlscriptsizeboxclosebrace}%
+\newsavebox{\hlscriptsizeboxopenbrace}%
+\newsavebox{\hlscriptsizeboxbackslash}%
+\newsavebox{\hlscriptsizeboxlessthan}%
+\newsavebox{\hlscriptsizeboxgreaterthan}%
+\newsavebox{\hlscriptsizeboxdollar}%
+\newsavebox{\hlscriptsizeboxunderscore}%
+\newsavebox{\hlscriptsizeboxand}%
+\newsavebox{\hlscriptsizeboxhash}%
+\newsavebox{\hlscriptsizeboxat}%
+\newsavebox{\hlscriptsizeboxpercent}% 
+\newsavebox{\hlscriptsizeboxhat}%
+\newsavebox{\hlscriptsizeboxsinglequote}%
+\newsavebox{\hlscriptsizeboxbacktick}%
+
+\setbox\hlscriptsizeboxopenbrace=\hbox{\begin{scriptsize}\verb.{.\end{scriptsize}}%
+\setbox\hlscriptsizeboxclosebrace=\hbox{\begin{scriptsize}\verb.}.\end{scriptsize}}%
+\setbox\hlscriptsizeboxlessthan=\hbox{\begin{scriptsize}\verb.<.\end{scriptsize}}%
+\setbox\hlscriptsizeboxdollar=\hbox{\begin{scriptsize}\verb.$.\end{scriptsize}}%
+\setbox\hlscriptsizeboxunderscore=\hbox{\begin{scriptsize}\verb._.\end{scriptsize}}%
+\setbox\hlscriptsizeboxand=\hbox{\begin{scriptsize}\verb.&.\end{scriptsize}}%
+\setbox\hlscriptsizeboxhash=\hbox{\begin{scriptsize}\verb.#.\end{scriptsize}}%
+\setbox\hlscriptsizeboxat=\hbox{\begin{scriptsize}\verb.@.\end{scriptsize}}%
+\setbox\hlscriptsizeboxbackslash=\hbox{\begin{scriptsize}\verb.\.\end{scriptsize}}%
+\setbox\hlscriptsizeboxgreaterthan=\hbox{\begin{scriptsize}\verb.>.\end{scriptsize}}%
+\setbox\hlscriptsizeboxpercent=\hbox{\begin{scriptsize}\verb.%.\end{scriptsize}}%
+\setbox\hlscriptsizeboxhat=\hbox{\begin{scriptsize}\verb.^.\end{scriptsize}}%
+\setbox\hlscriptsizeboxsinglequote=\hbox{\begin{scriptsize}\verb.'.\end{scriptsize}}%
+\setbox\hlscriptsizeboxbacktick=\hbox{\begin{scriptsize}\verb.`.\end{scriptsize}}%
+\setbox\hlscriptsizeboxhat=\hbox{\begin{scriptsize}\verb.^.\end{scriptsize}}%
+
+
+
+\newsavebox{\hlfootnotesizeboxclosebrace}%
+\newsavebox{\hlfootnotesizeboxopenbrace}%
+\newsavebox{\hlfootnotesizeboxbackslash}%
+\newsavebox{\hlfootnotesizeboxlessthan}%
+\newsavebox{\hlfootnotesizeboxgreaterthan}%
+\newsavebox{\hlfootnotesizeboxdollar}%
+\newsavebox{\hlfootnotesizeboxunderscore}%
+\newsavebox{\hlfootnotesizeboxand}%
+\newsavebox{\hlfootnotesizeboxhash}%
+\newsavebox{\hlfootnotesizeboxat}%
+\newsavebox{\hlfootnotesizeboxpercent}% 
+\newsavebox{\hlfootnotesizeboxhat}%
+\newsavebox{\hlfootnotesizeboxsinglequote}%
+\newsavebox{\hlfootnotesizeboxbacktick}%
+
+\setbox\hlfootnotesizeboxopenbrace=\hbox{\begin{footnotesize}\verb.{.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxclosebrace=\hbox{\begin{footnotesize}\verb.}.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxlessthan=\hbox{\begin{footnotesize}\verb.<.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxdollar=\hbox{\begin{footnotesize}\verb.$.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxunderscore=\hbox{\begin{footnotesize}\verb._.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxand=\hbox{\begin{footnotesize}\verb.&.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxhash=\hbox{\begin{footnotesize}\verb.#.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxat=\hbox{\begin{footnotesize}\verb.@.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxbackslash=\hbox{\begin{footnotesize}\verb.\.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxgreaterthan=\hbox{\begin{footnotesize}\verb.>.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxpercent=\hbox{\begin{footnotesize}\verb.%.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxhat=\hbox{\begin{footnotesize}\verb.^.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxsinglequote=\hbox{\begin{footnotesize}\verb.'.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxbacktick=\hbox{\begin{footnotesize}\verb.`.\end{footnotesize}}%
+\setbox\hlfootnotesizeboxhat=\hbox{\begin{footnotesize}\verb.^.\end{footnotesize}}%
+
+
+
+\newsavebox{\hlsmallboxclosebrace}%
+\newsavebox{\hlsmallboxopenbrace}%
+\newsavebox{\hlsmallboxbackslash}%
+\newsavebox{\hlsmallboxlessthan}%
+\newsavebox{\hlsmallboxgreaterthan}%
+\newsavebox{\hlsmallboxdollar}%
+\newsavebox{\hlsmallboxunderscore}%
+\newsavebox{\hlsmallboxand}%
+\newsavebox{\hlsmallboxhash}%
+\newsavebox{\hlsmallboxat}%
+\newsavebox{\hlsmallboxpercent}% 
+\newsavebox{\hlsmallboxhat}%
+\newsavebox{\hlsmallboxsinglequote}%
+\newsavebox{\hlsmallboxbacktick}%
+
+\setbox\hlsmallboxopenbrace=\hbox{\begin{small}\verb.{.\end{small}}%
+\setbox\hlsmallboxclosebrace=\hbox{\begin{small}\verb.}.\end{small}}%
+\setbox\hlsmallboxlessthan=\hbox{\begin{small}\verb.<.\end{small}}%
+\setbox\hlsmallboxdollar=\hbox{\begin{small}\verb.$.\end{small}}%
+\setbox\hlsmallboxunderscore=\hbox{\begin{small}\verb._.\end{small}}%
+\setbox\hlsmallboxand=\hbox{\begin{small}\verb.&.\end{small}}%
+\setbox\hlsmallboxhash=\hbox{\begin{small}\verb.#.\end{small}}%
+\setbox\hlsmallboxat=\hbox{\begin{small}\verb.@.\end{small}}%
+\setbox\hlsmallboxbackslash=\hbox{\begin{small}\verb.\.\end{small}}%
+\setbox\hlsmallboxgreaterthan=\hbox{\begin{small}\verb.>.\end{small}}%
+\setbox\hlsmallboxpercent=\hbox{\begin{small}\verb.%.\end{small}}%
+\setbox\hlsmallboxhat=\hbox{\begin{small}\verb.^.\end{small}}%
+\setbox\hlsmallboxsinglequote=\hbox{\begin{small}\verb.'.\end{small}}%
+\setbox\hlsmallboxbacktick=\hbox{\begin{small}\verb.`.\end{small}}%
+\setbox\hlsmallboxhat=\hbox{\begin{small}\verb.^.\end{small}}%
+
+
+
+\newsavebox{\hllargeboxclosebrace}%
+\newsavebox{\hllargeboxopenbrace}%
+\newsavebox{\hllargeboxbackslash}%
+\newsavebox{\hllargeboxlessthan}%
+\newsavebox{\hllargeboxgreaterthan}%
+\newsavebox{\hllargeboxdollar}%
+\newsavebox{\hllargeboxunderscore}%
+\newsavebox{\hllargeboxand}%
+\newsavebox{\hllargeboxhash}%
+\newsavebox{\hllargeboxat}%
+\newsavebox{\hllargeboxpercent}% 
+\newsavebox{\hllargeboxhat}%
+\newsavebox{\hllargeboxsinglequote}%
+\newsavebox{\hllargeboxbacktick}%
+
+\setbox\hllargeboxopenbrace=\hbox{\begin{large}\verb.{.\end{large}}%
+\setbox\hllargeboxclosebrace=\hbox{\begin{large}\verb.}.\end{large}}%
+\setbox\hllargeboxlessthan=\hbox{\begin{large}\verb.<.\end{large}}%
+\setbox\hllargeboxdollar=\hbox{\begin{large}\verb.$.\end{large}}%
+\setbox\hllargeboxunderscore=\hbox{\begin{large}\verb._.\end{large}}%
+\setbox\hllargeboxand=\hbox{\begin{large}\verb.&.\end{large}}%
+\setbox\hllargeboxhash=\hbox{\begin{large}\verb.#.\end{large}}%
+\setbox\hllargeboxat=\hbox{\begin{large}\verb.@.\end{large}}%
+\setbox\hllargeboxbackslash=\hbox{\begin{large}\verb.\.\end{large}}%
+\setbox\hllargeboxgreaterthan=\hbox{\begin{large}\verb.>.\end{large}}%
+\setbox\hllargeboxpercent=\hbox{\begin{large}\verb.%.\end{large}}%
+\setbox\hllargeboxhat=\hbox{\begin{large}\verb.^.\end{large}}%
+\setbox\hllargeboxsinglequote=\hbox{\begin{large}\verb.'.\end{large}}%
+\setbox\hllargeboxbacktick=\hbox{\begin{large}\verb.`.\end{large}}%
+\setbox\hllargeboxhat=\hbox{\begin{large}\verb.^.\end{large}}%
+
+
+
+\newsavebox{\hlLargeboxclosebrace}%
+\newsavebox{\hlLargeboxopenbrace}%
+\newsavebox{\hlLargeboxbackslash}%
+\newsavebox{\hlLargeboxlessthan}%
+\newsavebox{\hlLargeboxgreaterthan}%
+\newsavebox{\hlLargeboxdollar}%
+\newsavebox{\hlLargeboxunderscore}%
+\newsavebox{\hlLargeboxand}%
+\newsavebox{\hlLargeboxhash}%
+\newsavebox{\hlLargeboxat}%
+\newsavebox{\hlLargeboxpercent}% 
+\newsavebox{\hlLargeboxhat}%
+\newsavebox{\hlLargeboxsinglequote}%
+\newsavebox{\hlLargeboxbacktick}%
+
+\setbox\hlLargeboxopenbrace=\hbox{\begin{Large}\verb.{.\end{Large}}%
+\setbox\hlLargeboxclosebrace=\hbox{\begin{Large}\verb.}.\end{Large}}%
+\setbox\hlLargeboxlessthan=\hbox{\begin{Large}\verb.<.\end{Large}}%
+\setbox\hlLargeboxdollar=\hbox{\begin{Large}\verb.$.\end{Large}}%
+\setbox\hlLargeboxunderscore=\hbox{\begin{Large}\verb._.\end{Large}}%
+\setbox\hlLargeboxand=\hbox{\begin{Large}\verb.&.\end{Large}}%
+\setbox\hlLargeboxhash=\hbox{\begin{Large}\verb.#.\end{Large}}%
+\setbox\hlLargeboxat=\hbox{\begin{Large}\verb.@.\end{Large}}%
+\setbox\hlLargeboxbackslash=\hbox{\begin{Large}\verb.\.\end{Large}}%
+\setbox\hlLargeboxgreaterthan=\hbox{\begin{Large}\verb.>.\end{Large}}%
+\setbox\hlLargeboxpercent=\hbox{\begin{Large}\verb.%.\end{Large}}%
+\setbox\hlLargeboxhat=\hbox{\begin{Large}\verb.^.\end{Large}}%
+\setbox\hlLargeboxsinglequote=\hbox{\begin{Large}\verb.'.\end{Large}}%
+\setbox\hlLargeboxbacktick=\hbox{\begin{Large}\verb.`.\end{Large}}%
+\setbox\hlLargeboxhat=\hbox{\begin{Large}\verb.^.\end{Large}}%
+
+
+
+\newsavebox{\hlLARGEboxclosebrace}%
+\newsavebox{\hlLARGEboxopenbrace}%
+\newsavebox{\hlLARGEboxbackslash}%
+\newsavebox{\hlLARGEboxlessthan}%
+\newsavebox{\hlLARGEboxgreaterthan}%
+\newsavebox{\hlLARGEboxdollar}%
+\newsavebox{\hlLARGEboxunderscore}%
+\newsavebox{\hlLARGEboxand}%
+\newsavebox{\hlLARGEboxhash}%
+\newsavebox{\hlLARGEboxat}%
+\newsavebox{\hlLARGEboxpercent}% 
+\newsavebox{\hlLARGEboxhat}%
+\newsavebox{\hlLARGEboxsinglequote}%
+\newsavebox{\hlLARGEboxbacktick}%
+
+\setbox\hlLARGEboxopenbrace=\hbox{\begin{LARGE}\verb.{.\end{LARGE}}%
+\setbox\hlLARGEboxclosebrace=\hbox{\begin{LARGE}\verb.}.\end{LARGE}}%
+\setbox\hlLARGEboxlessthan=\hbox{\begin{LARGE}\verb.<.\end{LARGE}}%
+\setbox\hlLARGEboxdollar=\hbox{\begin{LARGE}\verb.$.\end{LARGE}}%
+\setbox\hlLARGEboxunderscore=\hbox{\begin{LARGE}\verb._.\end{LARGE}}%
+\setbox\hlLARGEboxand=\hbox{\begin{LARGE}\verb.&.\end{LARGE}}%
+\setbox\hlLARGEboxhash=\hbox{\begin{LARGE}\verb.#.\end{LARGE}}%
+\setbox\hlLARGEboxat=\hbox{\begin{LARGE}\verb.@.\end{LARGE}}%
+\setbox\hlLARGEboxbackslash=\hbox{\begin{LARGE}\verb.\.\end{LARGE}}%
+\setbox\hlLARGEboxgreaterthan=\hbox{\begin{LARGE}\verb.>.\end{LARGE}}%
+\setbox\hlLARGEboxpercent=\hbox{\begin{LARGE}\verb.%.\end{LARGE}}%
+\setbox\hlLARGEboxhat=\hbox{\begin{LARGE}\verb.^.\end{LARGE}}%
+\setbox\hlLARGEboxsinglequote=\hbox{\begin{LARGE}\verb.'.\end{LARGE}}%
+\setbox\hlLARGEboxbacktick=\hbox{\begin{LARGE}\verb.`.\end{LARGE}}%
+\setbox\hlLARGEboxhat=\hbox{\begin{LARGE}\verb.^.\end{LARGE}}%
+
+
+
+\newsavebox{\hlhugeboxclosebrace}%
+\newsavebox{\hlhugeboxopenbrace}%
+\newsavebox{\hlhugeboxbackslash}%
+\newsavebox{\hlhugeboxlessthan}%
+\newsavebox{\hlhugeboxgreaterthan}%
+\newsavebox{\hlhugeboxdollar}%
+\newsavebox{\hlhugeboxunderscore}%
+\newsavebox{\hlhugeboxand}%
+\newsavebox{\hlhugeboxhash}%
+\newsavebox{\hlhugeboxat}%
+\newsavebox{\hlhugeboxpercent}% 
+\newsavebox{\hlhugeboxhat}%
+\newsavebox{\hlhugeboxsinglequote}%
+\newsavebox{\hlhugeboxbacktick}%
+
+\setbox\hlhugeboxopenbrace=\hbox{\begin{huge}\verb.{.\end{huge}}%
+\setbox\hlhugeboxclosebrace=\hbox{\begin{huge}\verb.}.\end{huge}}%
+\setbox\hlhugeboxlessthan=\hbox{\begin{huge}\verb.<.\end{huge}}%
+\setbox\hlhugeboxdollar=\hbox{\begin{huge}\verb.$.\end{huge}}%
+\setbox\hlhugeboxunderscore=\hbox{\begin{huge}\verb._.\end{huge}}%
+\setbox\hlhugeboxand=\hbox{\begin{huge}\verb.&.\end{huge}}%
+\setbox\hlhugeboxhash=\hbox{\begin{huge}\verb.#.\end{huge}}%
+\setbox\hlhugeboxat=\hbox{\begin{huge}\verb.@.\end{huge}}%
+\setbox\hlhugeboxbackslash=\hbox{\begin{huge}\verb.\.\end{huge}}%
+\setbox\hlhugeboxgreaterthan=\hbox{\begin{huge}\verb.>.\end{huge}}%
+\setbox\hlhugeboxpercent=\hbox{\begin{huge}\verb.%.\end{huge}}%
+\setbox\hlhugeboxhat=\hbox{\begin{huge}\verb.^.\end{huge}}%
+\setbox\hlhugeboxsinglequote=\hbox{\begin{huge}\verb.'.\end{huge}}%
+\setbox\hlhugeboxbacktick=\hbox{\begin{huge}\verb.`.\end{huge}}%
+\setbox\hlhugeboxhat=\hbox{\begin{huge}\verb.^.\end{huge}}%
+
+
+
+\newsavebox{\hlHugeboxclosebrace}%
+\newsavebox{\hlHugeboxopenbrace}%
+\newsavebox{\hlHugeboxbackslash}%
+\newsavebox{\hlHugeboxlessthan}%
+\newsavebox{\hlHugeboxgreaterthan}%
+\newsavebox{\hlHugeboxdollar}%
+\newsavebox{\hlHugeboxunderscore}%
+\newsavebox{\hlHugeboxand}%
+\newsavebox{\hlHugeboxhash}%
+\newsavebox{\hlHugeboxat}%
+\newsavebox{\hlHugeboxpercent}% 
+\newsavebox{\hlHugeboxhat}%
+\newsavebox{\hlHugeboxsinglequote}%
+\newsavebox{\hlHugeboxbacktick}%
+
+\setbox\hlHugeboxopenbrace=\hbox{\begin{Huge}\verb.{.\end{Huge}}%
+\setbox\hlHugeboxclosebrace=\hbox{\begin{Huge}\verb.}.\end{Huge}}%
+\setbox\hlHugeboxlessthan=\hbox{\begin{Huge}\verb.<.\end{Huge}}%
+\setbox\hlHugeboxdollar=\hbox{\begin{Huge}\verb.$.\end{Huge}}%
+\setbox\hlHugeboxunderscore=\hbox{\begin{Huge}\verb._.\end{Huge}}%
+\setbox\hlHugeboxand=\hbox{\begin{Huge}\verb.&.\end{Huge}}%
+\setbox\hlHugeboxhash=\hbox{\begin{Huge}\verb.#.\end{Huge}}%
+\setbox\hlHugeboxat=\hbox{\begin{Huge}\verb.@.\end{Huge}}%
+\setbox\hlHugeboxbackslash=\hbox{\begin{Huge}\verb.\.\end{Huge}}%
+\setbox\hlHugeboxgreaterthan=\hbox{\begin{Huge}\verb.>.\end{Huge}}%
+\setbox\hlHugeboxpercent=\hbox{\begin{Huge}\verb.%.\end{Huge}}%
+\setbox\hlHugeboxhat=\hbox{\begin{Huge}\verb.^.\end{Huge}}%
+\setbox\hlHugeboxsinglequote=\hbox{\begin{Huge}\verb.'.\end{Huge}}%
+\setbox\hlHugeboxbacktick=\hbox{\begin{Huge}\verb.`.\end{Huge}}%
+\setbox\hlHugeboxhat=\hbox{\begin{Huge}\verb.^.\end{Huge}}%
+ 
+
+\def\urltilda{\kern -.15em\lower .7ex\hbox{\~{}}\kern .04em}%
+
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.16,0.16,1}{#1}}
+\newcommand{\hlesc}[1]{\textcolor[rgb]{1,0,1}{#1}}
+\newcommand{\hlstr}[1]{\textcolor[rgb]{1,0,0}{#1}}
+\newcommand{\hldstr}[1]{\textcolor[rgb]{0.51,0.51,0}{#1}}
+\newcommand{\hlslc}[1]{\textcolor[rgb]{0.51,0.51,0.51}{\it{#1}}}
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.51,0.51,0.51}{\it{#1}}}
+\newcommand{\hldir}[1]{\textcolor[rgb]{0,0.51,0}{#1}}
+\newcommand{\hlsym}[1]{\textcolor[rgb]{0,0,0}{#1}}
+\newcommand{\hlline}[1]{\textcolor[rgb]{0.33,0.33,0.33}{#1}}
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0,0,0}{\bf{#1}}}
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.51,0,0}{#1}}
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0,0,0}{\bf{#1}}}
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0,0,0.51}{#1}}
+
+\newenvironment{Houtput}{\raggedright}{%
+%
+}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{endnotes}
+\usepackage{tikz}
+\usetikzlibrary{external}
+\tikzexternalize[mode=list and make]
+
+\usepackage{subfigure}
+\pgfrealjobname{modeling}
+\usepackage[nogin]{Sweave}
+
+
+
+\begin{document}
+\section{Background}
+Sociology is a discipline of latent variables. We never directly
+observe a class, a political party, an organization, but only behavior
+or traces of behavior that we believe to be expression of a hidden
+principle. In this sociology is no different than any empirical
+science. But unlike some sciences, sociology has had a hard time
+finding ways to measure our most important latent variables so
+that we believe these measurements to be reliable and valid.
+
+While most sciences can be mainly concerned with accurately and
+reliably measuring attributes of things, in the social sciences, we
+must also put together the things that we want to measure like
+markets, neighborhoods, or occupations. At our most innocent, we
+face the danger of the fallacy of composition, and more commonly and
+devastatingly we unintentionally gerrymander the world into the forms
+we expected to see. While we have compiled wisdom about avoiding the
+most common ways of fooling ourselves, we have little positive art on
+how to collect observations together into reliable and valid sets.
+
+Since, the development of Item Response Theory in the 1950s, we have
+known how to combine many noisy, imprecise measurements in a
+principled way to produce a accurate, precise estimates of a latent
+trait of a unit. Strangely, we have never adapted these techniques for
+the creation of units. For example, we might believe that an ethnic
+group can organize friendships, marriages, consumption patterns,
+political behavior, names, and self-understanding. But when we study
+ethnic groups as things, we typically only use one, maybe two
+criterion, which we do not believe to be all that accurate, to sort
+people into groups with hard boundaries even though we think that
+these groups could overlap and even nest.
+
+We can do better. In this work, I will demonstrate how we can create
+valid and reliable definitions of neighborhoods in a host of American
+cities, by combining a variety observations that we believe to be
+organized by neighborhoods: labeling by residents, foreclosure rates,
+crime rates, and census data. Each of these types of data, when used
+singly, would produce implausible neighborhood definitions, but in
+combination should gain confidence that we are capturing something
+beyond random variation and biases in the data. However, while this
+work will produce neighborhood definitions that should be of the
+greatest interest to urban sociologists, the method is applicable to
+creating defensible definitions of many sociological units.
+
+
+
+
+
+
+
+
+
+
+
+constructing measurements of hidden traits of units and means of
+evaluating the reliability of the measure, and a host of means of
+convincing ourselves of the validity. Yet, we have not adapted the
+basic insight that differential outcomes of multiple measurements can
+be combined in a principled way to produce precise measurements of a
+hidden variable, even if the
+
+
+
+
+
+
+
+
+
+Unlike most sciences, our fundamental methodological problem is not
+the measurement of attributes of entities, but the measurement of
+existence of those entities. Of course, we are also interested
+attributes, but before
+
+Unlike that other great discipline of latent variables, pyschometrics,
+our recurrent problem is not the measurement of hidden attribute of a
+element, but figuring out what elements make up hidden things and even
+how thingy that always hidden thing is.  We have a body of literature
+on how to do some of this that we call sampling design, or case
+selection, or colligation. However, while this literature contains
+much cautions against various ways of gerrymandering the world, we
+have little art for positively evaluating whether the way that we
+carve up the world makes sense.
+
+
+Ultimately, we 
+
+
+
+
+
+in the first
+place. can plausibly claim that our collection is an instance of
+something: a city, an industrial field, a country. This is hard.
+
+
+
+ng problem we face
+our classic variables are not hidden attributes of units, but the
+
+I believe that this has not been lack of ability, but to lack of data,
+and that in this moment of unparalleled and creepy recording of traces
+of human behavior, we can do better. The main challenge we face, the
+one we have always faced is how to convince ourselves about something
+that we cannot see.
+
+This work on neighborhood boundaries hopes to be evidence for that
+hope. First, I will learn a set of neighborhood boundaries for the 20
+largest American cities using a collection of labels that people have
+applied to locations and existing theory of neighborhoods. Second, I
+will evaluate whether the derived neighborhood boundaries correlates
+with differences in demographics, as we would predict. Finally, I will
+evaluate whether incorporating information about derived neighborhood
+boundaries improves our predictions about spatial, social processes,
+particularly crime rates.
+
+This particular paper is about work on the first step, learning
+neighborhood boundaries. 
+
+\section{Data}
+I have a nightly updated database of geocoded Craigslist apartment
+rentals, sublet, and roommate listings. For most of these listings,
+the poster entered some text in the ``Specific Location'' field. From
+this data, we want to create a map of the probabilities that some
+point in a city will be labeled by a neighborhood name.
+
+\subsection{Pre-processing}
+The first task must be to filter and normalize the ``Specific
+Location'' labels into canonical neighborhood names. Aside from
+variations of spelling of neighborhood names, some labels consist of
+address or intersection information or claims that the listing is near
+a train station, park, beach, or other generic landmark. We want to
+discard such labels, and keep only labels that refer to a neighborhood
+or some unique landmark, such as a named park or university.
+
+Ideally, we would like to learn this filter and normalization mapping,
+perhaps by creating a metric that combines a Levenshtein and Euclidean
+distance metric. Alternatively, if we had sufficient data, we would
+likely do well just to discard all labels that appear less than some
+threshold. However for the case of Chicago, I have built up a set of
+handcoded rules that works well.
+
+
+
+
+
+
+For some listings, the poster enters more than one neighborhood in the
+``Specific Location'' field, i.e. ``Lakeview/Lincoln Park''. For such
+listings, we create a new location for each neighborhood in the label,
+so, for the example above, it is as if we saw two listings at the same
+location, one labeled ``Lakeview'' and the other ``Lincoln Park.''
+Some other scheme of credit assignment might be worth exploring.
+
+After all this processing, we make sure that every location-label pair
+is unique. Almost all duplicates are due to the same poster reposting
+the same listing, and such reposts contain no more information than
+the first post. We throw away some information here, and we would be a
+better off if we could only discard postings that we know are really
+from the same poster.
+
+
+
+Finally, we reproject the latitude and longitude encoded coordinates to a
+State Plane Coordinate System, particularly NAD83 / UTM zone 16N. We
+will be using other geocoded inormation, and this is a good common
+projection for Chicago.
+
+
+
+
+ 
+
+
+
+\section{Density Estimation}
+Now, we want to make a kernel density estimate for each
+neighborhood. For now, we will only estimate the density of a subset
+of neighborhoods on the near north side where Craigslist postings
+are concentrated.
+
+As our kernel density estimates will depend upon the variance of the
+data, we attempt to find and remove outliers using the Hampel
+test.\footnote{Lauire Davies and Ursula Gather. ``The Identification
+  of Multiple Outliers.'' \emph{Journal of the American Statistical
+    Association}, 1993, (88:423), p.782.}
+
+
+\subsection{Bandwidth Selection}
+
+
+
+
+\begin{figure}[h!]
+  \centering
+  \subfigure[]{
+
+{\tikzexternaldisable
+\input{/home/fgregg/sweave-cache/figs/fig-008.tikz}
+}
+}
+\subfigure[]{
+
+{\tikzexternaldisable
+\input{/home/fgregg/sweave-cache/figs/fig-009.tikz}
+}
+}
+\caption{(a) All ``Lakeview'' locations; (b)``Lakeview'' locations with outliers removed, CV = 0.9}
+\end{figure}
+
+The most important choice in kernel density estimation is selecting
+the bandwidth, and I examined a number of multivariate bandwidth
+selectors: drop in plugins, smoothed cross validation, cross validated
+nearest neighbors, and cross validated adaptive nearest neighbors.
+
+The most plausible looking results came from a drop-in plugin from the
+`ks'
+library\footnote{\url{http://cran.r-project.org/web/packages/ks/}}. This
+method depends upon assuming, at one point, that the true density is
+Gaussian. I would like to implement the bandwidth selection procedure
+described by Botov et.al., which makes no such assumption and which
+seems to make more efficient estimates for distributions which are not
+Gaussian.\footnote{Botev, Grotowski, Kroese, ``Kernel Density
+  Estimation Via Diffiusion.''  \emph{The Annals of Statistics} 2010,
+  (38:5), p. 2916-2957.}
+
+\section{Evaluation and Discussion}
+After estimating the density for every neighborhood, we can plot them,
+and the decision boundaries between them. In addition to calculating
+the boundaries between neighborhoods, I define a threshold value, such
+that if the probability that a point belongs to any neighborhood is
+below that threshold I assign that point to a `no neighborhood' class.
+
+In order to get a sense of plausibility of those boundaries we will
+also plot the official boundaries of the Chicago Community Areas, the
+river, and large city parks. We should expect that the geographic
+features should make up many of the boundaries. At the median values
+of neighborhood labels, I plot the neighborhood name and the number of
+points that the density was estimated with.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}[h!]
+  \centering
+
+\includegraphics{/home/fgregg/sweave-cache/figs/fig-KSplot}
+\caption{Density and decision boundaries for North Side neighborhoods}
+\end{figure}
+
+The resulting decision boundaries follow our expected borders
+remarkably well, particularly where we have many observations. The
+decision boundary between Lakeview and Lincoln Park follows
+Diversey. Roscoe Village and North Center are separated from Lakeview
+by the railroad tracks. Humboldt Park and Wicker Park are divided from
+Logan Square and Bucktown by North Avenue. Almost no neighborhood
+crosses the river, and where a decision boundary does cross the water
+it is for neighborhoods where we have relatively little support.
+
+Interestingly, both Ravenswood and Andersonville lay across the
+tracks, and this does not seem to be an approximation error.
+
+It seems like we could definitely benefit from incorporating beliefs
+that neighborhood boundaries fall along certain kinds of geographic
+features, but we will need to allow neighborhoods to cross these lines
+if the data strongly suggest that they do.
+
+
+
+
+
+
+
+
+\begin{figure}
+  \centering
+
+\caption{All Chicago Neighborhoods with more than 5 locations}
+\end{figure}
+
+\end{document}
+
+We mainly have two strategies: obviousness and theoretic, but simple
+classifiers. For some questions, there seems to be only one reasonable
+grouping and identifying members of that grouping is simple.  If we
+want to measure teacher ability, then classrooms are a natural
+grouping and there is little difficulty in saying which students and
+teachers belong to a particular class. While we may believe that much
+happens outside the classroom that will affect student performance, we
+accept that if the teacher is affecting the students achievement, she
+is affecting him in the classroom and not within a different grouping.
+
+For most of the groupings, though, we have no such clear and simple
+way of deciding who belongs to what.  Sometimes this is because
+membership seems to be graduated, sometimes because the grouping
+itself is hard to define, and often both. We know of no well accepted
+procedure for identifying the members of a class, city, political
+parties, industrial fields, metropolitan areas, social networks. The
+analyst must define some criterion that she hopes will do an adequate
+job for her specific research question. Insofar as she is explicit,
+the criterion is almost always very simple and in quantitative research,
+it's usually a threshold on a handful of variables.\footnote{For
+  example, the extent of the Census's metropolitan statistical areas
+  is defined by the counties where 25\% of the employed workers
+  commute to a central metropolitan county or 25\% of the employees in
+  a county commute from that metro county.}
+
+
+
+
+
+
+Our core concepts are  It is the critical the about identifying valid latent
+classes and finding relations among them. 
+
+
+
+When attempting to understand our world, the first problem an
+empirical social scientists faces is to identify how a set of
+observations is \emph{about} something. Because of the finiteness of
+time, money, and patience, we can only observe and analyze a limited
+set of behaviors and traces of behavior, and we have to convince
+ourselves and our colleagues that we chose a meaningful set.
+ 
+Studying individuals, psychometrics has built up a techniques for
+evaluating the reliability and validity of observations. If we believe
+that we have identified some meaningful grouping of individuals, we
+can extend these practices to make measures of a group properties,
+what Raudenbush calls ecometrics. However, we have very little of
+either theory or accepted art about how we should identify
+meaningful groupings.
+
+Say we have some simple procedure to identify members of a
+grouping. As an example let take Census's procedure for identifying
+Metropolitan Statistical Areas (MSA): a county belongs to a MSA if 25\% of
+the employed workers commute to a central metropolitan county or 25\%
+of the employees in a county commute from that metro county. How would
+we evaluate if this a good procedure?
+
+First, we have to 
+If we conceive of an MSA, or any classification we make, as an
+approximation of a true grouping that we cannot directly observe, then
+we have two ways forward. First, 
+
+
+Borrowing from psychometrics, if we get the
+same groupings by using different, independent features, then we may
+become more confident that the grouping is not just an artifact of a
+particular criterion.\footnote{Ideally, we should want features that
+  are independent conditional on the true hidden class.}
+
+For many of the groupings we are interested in, 
+
+
+
+
+
+One way forward is to conceive of the census
+procedure as a measure of a latent variable. With that tack, we can
+evaluate MSA's by comparing the shape we 
+
+
+Using a psychometric strategy for establishing the
+validity of measurements of latent variables, and a metropolitan area
+is a latent variable, we could compare MSA with other partitions of
+space that we created using other features we believe associated with
+metropolitan areas and which are not just proxies for number of
+commuters.
+
+For One rarely used strategy is to ask people how they would
+classify the world.
+
+
+
+
+
+First, we may look to at test-rest reliability. I
+
+First, we 
+may ask if it is reliable
+
+
+In evaluating such classifications, we cannot use our standard
+techniques for assessing reliability. 
+
+....
+
+
+However, assessing the reliability of such 
+
+
+In either case, 
+
+
+
+ 
+
+
+
+
+
+
+is only one groupings, like
+schools, prisons, courtrooms,
+
+
+
+
+
+
+
+
+
+school, the recent work of Raudenbush can guide us devising and
+evaluating measures of attributes of a grouping, say teacher ability
+and school effects. However, the if
+
+
+
+
+hology and survey research has built up a 
+Because of
+
+
+
+the relatively little predictive power
+
+We have to convince ourselves
+and also our colleagues that our data bears upon our argument.
+
+
+Even the most holistic amongst us, when
+confront behavior and traces of behavior, we
+
+Historically, this has been
+very difficult.
+
+When we study behavior and traces of behavior, we are often in the
+position of trying to decide when a collection of grains of sand
+becomes a pile. Say we want to study a group process, we will want to
+identify all the members of the group. But there is no group, there is
+only
+
+
+
+If we want to study an organization, we have to
+identify, at least implicitly, the things that 
+
+identify a subset of all the things we
+could possible attend to that
+
+separate those parts of the world that we consider to be important
+parts of the organization from those that we do not. Perhaps 
+
+
+
+
+
+
+
+
+
+
+organize the world into 
+organize some set of observable features
+into an instance. 
+
+our world that
+
+to define what part of the world they hope
+to understand. 
+Even the most committed holist must study some finite
+thing or set of things due to limits of time, money, and the patience
+of dissertation committees.
+
+Ideally, 
+
+Unfortunately, for most of the phenomena we study, finding an obvious
+and uncontroversial 
+
+
+are notoriously
+difficult to define 
+
+
+to study some
+bounded thing if only because we have to 
+
+
+
+scientists face is to define our The first and problem One of the most
+vexed problems faced by empirical social scientists is defining their
+case.
+
+
+
