@@ -1,4 +1,13 @@
 *.py[co]
+*.aux
+*.pdf
+*.log
+*.*~
+*.map
+*.out
+*.snm
+*.nav
+*.toc
 
 # Packages
 *.egg
