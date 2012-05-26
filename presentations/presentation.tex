@@ -2,6 +2,21 @@
 \mode<article>{\usepackage{fullpage}}
 \mode<presentation>{\usetheme{default}}
 \mode<presentation>{\usenavigationsymbolstemplate{}}
+\newcommand{\blackframe}{
+  \mode<presentation>{
+    {
+      \setbeamercolor{background canvas}{bg=black}
+      \begin{frame}[plain]{}
+      \end{frame}
+    }
+  }
+  \mode<presentation>{
+    \setbeamercolor{background canvas}{bg=white}
+  }
+}
+
+
+
 % everyone:
 \usepackage[english]{babel}
 \usepackage{tikz}
@@ -19,9 +34,15 @@ for a discussion.
 
 Let's me introduce the problem.
 
+\testframe{}
+
+\mode<all>{
+\blackframe{}
+}
+
 \begin{frame}
 \begin{itemize}{}
-\item[]<1-> \color<2->{gray}In the social sciences, most of us study aggregate ``things.''
+\item[]<1-> \color<2->{gray}In the social sciences, most of us study aggregate ``things.'' asdf
   \note{Like class, status, party, social movements...}
   \pause
 \item[]<2-2> If we get the boundaries of these things wrong, then our
@@ -55,15 +76,7 @@ Zachary's famous karate club, which had been divided into
   \end{frame}
 }
   
-\mode<presentation>{
-{   
-    \setbeamercolor{background canvas}{bg=black}
-    \begin{frame}[plain]{}
-    \end{frame}
-}
-}
-\mode<presentation>{\setbeamercolor{background canvas}{bg=white}}
-\mode*
+\blackframe{}
 
 For me, when I look at this picture, I have a feeling of
 understanding. It looks to me like the algorithm uncovered a real
