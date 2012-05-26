@@ -2,7 +2,7 @@
 \mode<article>{\usepackage{fullpage}}
 \mode<presentation>{\usetheme{default}}
 \mode<presentation>{\usenavigationsymbolstemplate{}}
-\newcommand{\blackframe}{
+\newcommand{\blackout}{
   \mode<presentation>{
     {
       \setbeamercolor{background canvas}{bg=black}
@@ -14,8 +14,17 @@
     \setbeamercolor{background canvas}{bg=white}
   }
 }
-
-
+\newcommand{\fullscreenimage}[1]{
+  { % all template changes are local to this group.
+    \begin{frame}[plain]
+      \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+          \includegraphics[width=\paperwidth]{#1}
+        };
+      \end{tikzpicture}
+    \end{frame}
+  }
+}
 
 % everyone:
 \usepackage[english]{babel}
@@ -34,11 +43,7 @@ for a discussion.
 
 Let's me introduce the problem.
 
-\testframe{}
 
-\mode<all>{
-\blackframe{}
-}
 
 \begin{frame}
 \begin{itemize}{}
@@ -65,18 +70,17 @@ Zachary's famous karate club, which had been divided into
 \note{Read Wayne Zachary's famous paper, get image from Jacob, and
   figure out which algorithm produced that partition} 
 
-
-{ % all template changes are local to this group.
-  \begin{frame}[plain]
-    \begin{tikzpicture}[remember picture,overlay]
-      \node[at=(current page.center)] {
-        \includegraphics[width=\paperwidth]{./presentation_images/karate.jpg}
-      };
-    \end{tikzpicture}
-  \end{frame}
+\mode<all>{
+\fullscreenimage{./presentation_images/karate.jpg}
 }
-  
-\blackframe{}
+
+
+
+\testframe{}
+
+\mode<all>{
+\blackout{}
+}  
 
 For me, when I look at this picture, I have a feeling of
 understanding. It looks to me like the algorithm uncovered a real
@@ -94,15 +98,10 @@ That's all true. So the next question is this. How can we make sure we
 are not fooling ourselves? How can we convince ourselves that a
 pattern that looks real to us is not just what we expected to see?
 
-{ % all template changes are local to this group.
-  \begin{frame}[plain]
-    \begin{tikzpicture}[remember picture,overlay]
-      \node[at=(current page.center)] {
-        \includegraphics[width=\paperwidth]{./presentation_images/dog-park-big.jpg}
-      };
-    \end{tikzpicture}
-  \end{frame}
+\mode<all>{
+\fullscreenimage{./presentation_images/dog-park-big.jpg}
 }
+
 
 This problem does not just come along with using these computational
 techniques, it is an inescapable problem of much of social research,
