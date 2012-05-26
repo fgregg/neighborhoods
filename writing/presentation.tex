@@ -1,0 +1,235 @@
+%\documentclass[ignorenonframetext,red]{beamer}
+\mode<article>{\usepackage{fullpage}}
+\mode<presentation>{\usetheme{default}}
+\mode<presentation>{\usenavigationsymbolstemplate{}}
+% everyone:
+\usepackage[english]{babel}
+\usepackage{tikz}
+\title{Validating Neighborhoods}
+\author{Forest Gregg}
+\begin{document}
+\mode*
+\maketitle
+
+\section{Introduction}
+Today, I'd like to talk to you about a basic problem for social
+research and some ideas about how we might respond. This is early
+work, so I am going keep my presentation to 30 minutes so we have time
+for a discussion.
+
+Let's me introduce the problem.
+
+\begin{frame}
+\begin{itemize}{}
+\item[]<1-> \color<2->{gray}In the social sciences, most of us study aggregate ``things.''
+  \note{Like class, status, party, social movements...}
+  \pause
+\item[]<2-2> If we get the boundaries of these things wrong, then our
+  observations are invalid.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+How do we know that we have gotten the boundaries right?
+\end{center}
+\end{frame}
+
+
+
+Last week, Jacob Foster showed us the network diagram of Wayne
+Zachary's famous karate club, which had been divided into
+'communities' by the X algorithm. 
+
+\note{Read Wayne Zachary's famous paper, get image from Jacob, and
+  figure out which algorithm produced that partition} 
+
+
+{ % all template changes are local to this group.
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[at=(current page.center)] {
+        \includegraphics[width=\paperwidth]{./presentation_images/karate.jpg}
+      };
+    \end{tikzpicture}
+  \end{frame}
+}
+  
+\mode<presentation>{
+{   
+    \setbeamercolor{background canvas}{bg=black}
+    \begin{frame}[plain]{}
+    \end{frame}
+}
+}
+\mode<presentation>{\setbeamercolor{background canvas}{bg=white}}
+\mode*
+
+For me, when I look at this picture, I have a feeling of
+understanding. It looks to me like the algorithm uncovered a real
+pattern that caused the members of the karate club to separate as it
+did. 
+
+As I said that, I'm sure that many of started to think that's a pretty
+big jump to make. All the community detection algorithms we discussed
+can be very flexible. The reason the picture looks about right is
+because it looked about right to the analyst who made it. If it did
+not, the she would have changed a parameter or moved on to a different
+algorithm until it did.
+
+That's all true. So the next question is this. How can we make sure we
+are not fooling ourselves? How can we convince ourselves that a
+pattern that looks real to us is not just what we expected to see?
+
+{ % all template changes are local to this group.
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[at=(current page.center)] {
+        \includegraphics[width=\paperwidth]{./presentation_images/dog-park-big.jpg}
+      };
+    \end{tikzpicture}
+  \end{frame}
+}
+
+This problem does not just come along with using these computational
+techniques, it is an inescapable problem of much of social research,
+whether we acknowledge it or not. We spend most of our time studying
+aggregate ``things'': organizations, networks of scientific
+collaborations, political parties, and status groups, or as I will
+discuss today, neighborhoods.
+
+In order to get on with studying the empirical properties of
+neighborhood or it's measurable effect on individuals, we have to
+decide which part of the city is part of what neighborhood. This is
+hard to do well. If we don't do it well, then any observed patterns
+ascribed to the neighborhood may not really be caused by the
+neighborhood but, instead, by how we defined it.
+
+
+
+
+
+
+
+
+
+% { % all template changes are local to this group.
+%   \begin{frame}
+%     \begin{tikzpicture}[remember picture,overlay]
+%       \node[at=(current page.center)] {
+%         \includegraphics[height=\paperheight]{./presentation_images/toyotaSupply.png}
+%       };
+%     \end{tikzpicture}
+%   \end{frame}
+% }
+
+% { % all template changes are local to this group.
+%   \begin{frame}
+%     \begin{tikzpicture}[remember picture,overlay]
+%       \node[at=(current page.center)] {
+%         \includegraphics[height=\paperheight]{./presentation_images/TeaParty.png}
+%       };
+%     \end{tikzpicture}
+%   \end{frame}
+}
+
+
+not the problem of 
+
+For much of the social sciences, this is a fundamental problem. When we 
+
+
+This is not just a problem of 
+
+That's what I'm going to be talking about today, for a particular kind
+of pattern: the urban neighborhood. Sociologists have been splitting up cities into neighborhoods for almost a hundred yearsWe have splitting up cities in
+
+
+
+
+How could we convince ourselves that we have found a real pattern, that when we The problem 
+
+
+
+
+ Since we know how the club did split, we
+should not be all the impressed if someone can tune an algorithm to
+split it up in a way that looks about right.
+
+
+
+
+
+Given that we know what happened, 
+
+
+My sense of what looks right is probably pretty similar to Especially for these smaller networks, 
+
+With these algorithms, especially where you have a
+relatively small network, it's pretty easy to push around the
+output by adjusting parameters. 
+
+This algorithm, on a particular run, came up with
+this way of splitting things up. That output depended upon either the
+user or the programmer adjusting one or more sensitivity threshold. If
+the algorithm was run with other reasonable choices of parameters, it
+might come up with a different way of splitting things up. Even if we weren't too worried about 
+didn't, we saw in Jacob's presentation that there are different
+approaches to community detection, and a different algorithm, that
+seemed quite reasonable, might split things up differently.
+
+
+
+ might have a set of algorithms that all appear equally reasonable ways of finding 
+
+
+
+
+
+
+I want us to 
+
+
+
+Let's say that we use 
+
+
+
+
+There are many views about the uses of community detection. However,
+as things stand now in the social sciences, we are not all that
+interested in making more accurate predictions or for finding a more
+concise representation of set of data. We like those things, but 
+
+For us though,  but for social scientists
+For social scientists, we will mainly be interested the community dect
+One way of looking at the community detection algorithms that we have been talking about for the past two sessions
+
+In the past few workshops, we have  this problem:
+
+
+
+
+207
+This is the introduction text. This text is not shown in the
+presentation, but will be part of the article.
+
+This text is once more not shown in the presentation.
+\section{Main Part}
+While this text is not shown in the presentation, the section command
+also applies to the presentation.
+We can add a subsection that is only part of the article like this:
+\subsection<article>{Article-Only Section}
+With some more text.
+\begin{frame}
+This text is part both of the article and of the presentation.
+\begin{itemize}
+\item This stuff is also shown in both version.
+\item This too.
+  \only<article>{\item This particular item is only part
+    of the article version.}
+\item<presentation:only@0> This text is also only part of the article.
+\end{itemize}
+\end{frame}
+
+\end{document}
