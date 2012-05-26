@@ -1,32 +1,4 @@
-%\documentclass[ignorenonframetext,red]{beamer}
-\mode<article>{\usepackage{fullpage}}
-\mode<presentation>{\usetheme{default}}
-\mode<presentation>{\usenavigationsymbolstemplate{}}
-\newcommand{\blackout}{
-  \mode<presentation>{
-    {
-      \setbeamercolor{background canvas}{bg=black}
-      \begin{frame}[plain]{}
-      \end{frame}
-    }
-  }
-  \mode<presentation>{
-    \setbeamercolor{background canvas}{bg=white}
-  }
-}
-\newcommand{\fullscreenimage}[1]{
-  { % all template changes are local to this group.
-    \begin{frame}[plain]
-      \begin{tikzpicture}[remember picture,overlay]
-        \node[at=(current page.center)] {
-          \includegraphics[width=\paperwidth]{#1}
-        };
-      \end{tikzpicture}
-    \end{frame}
-  }
-}
-
-% everyone:
+\input{beamer.macros}
 \usepackage[english]{babel}
 \usepackage{tikz}
 \title{Validating Neighborhoods}
@@ -47,9 +19,10 @@ Let's me introduce the problem.
 
 \begin{frame}
 \begin{itemize}{}
-\item[]<1-> \color<2->{gray}In the social sciences, most of us study aggregate ``things.'' asdf
-  \note{Like class, status, party, social movements...}
-  \pause
+\item[]<1-> \color<2->{gray}In the social sciences, most of us study
+  aggregate ``things.''  \note{Like class, status, party, social
+    movements...}  
+\pause
 \item[]<2-2> If we get the boundaries of these things wrong, then our
   observations are invalid.
 \end{itemize}
