@@ -1,11 +1,20 @@
 \input{beamer.macros}
 \usepackage[english]{babel}
 \usepackage{tikz}
+\newcommand{\fadeitem}[2]{\item[]\uncover<#1>{#2}}
 \title{Validating Neighborhoods}
 \author{Forest Gregg}
 \begin{document}
 \mode*
 \maketitle
+
+\mode<all>{
+\fullscreenimage{\includegraphics[width=\paperwidth]{./presentation_images/dog-park-big.jpg}}
+}
+
+\mode<all>{
+\blackout{}
+}  
 
 \section{Introduction}
 Today, I'd like to talk to you about a basic problem for social
@@ -13,26 +22,209 @@ research and some ideas about how we might respond. This is early
 work, so I am going keep my presentation to 30 minutes so we have time
 for a discussion.
 
-Let's me introduce the problem.
+So, here's the problem. In the social sciences, most of us study
+aggregate things. Like class, status, party, social movements, or a
+market. In order to get on with that studying, we have to say what
+part of the world /is/ the thing we are studying.
 
+If you want to study organizations, you have to decide what set of
+entities and interactions are part of a particular organization and
+which are not.
 
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./presentation_images/toyotaSupply.png}}
+}
 
-\begin{frame}
-\begin{itemize}{}
-\item[]<1-> \color<2->{gray}In the social sciences, most of us study
-  aggregate ``things.''  \note{Like class, status, party, social
-    movements...}  
-\pause
-\item[]<2-2> If we get the boundaries of these things wrong, then our
-  observations are invalid.
-\end{itemize}
-\end{frame}
+If you want to study social movements, you have to decide how who is
+and is not part of the movement?
+
+\mode<all>{
+\fullscreenimage{\includegraphics[width=\paperwidth]{./presentation_images/99-percent.jpg}}
+}
+
+If you are studying scientific collaboration networks, you have to decide what counts as a collaboration. Is it co-authorship?
+
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./presentation_images/many-author.png}}
+}
+
+\mode<all>{
+\blackout{}
+}  
+
+To do empirical research about these social things we /have/ to divide
+up the world. But, if we do that badly, then no degree of care of
+observation or sophistication of technique can save us from drawing
+wrong conclusions about the thing that we started out to understand.
+
+So, how do we make sure we are not doing that? If we have to draw some boundaries, then 
 
 \begin{frame}
 \begin{center}
 How do we know that we have gotten the boundaries right?
 \end{center}
 \end{frame}
+
+Now, some of you are probably thinking -- it depends upon what we want
+'right' to mean. I completely agree. I have some ideas, but I want
+your help with that problem.
+
+I think we may do better if we review a concrete case. If we look at
+how some smart people smart people have tried to find good boundaries
+for a particular kind of thing; that may be helpful to think with.
+
+So, let's consider the neighborhood, and even more concretely, let's
+consider how social scientists have attempted to identify the
+neighborhoods of Chicago. Since the 1920s, once a generation somebody
+takes on this task, usually pretty innocent of preceding efforts.
+While that kind of forgetting may be bad for cumulative social
+science, but it is good for our conversation today because it probably
+contributed to a wider variety of approaches we can consider.
+
+In my reading, it looks like there were four general approaches:
+
+\begin{frame}
+\begin{itemize}{}
+\fadeitem{1}{Squinting at maps}
+\pause
+\fadeitem{2}{Hand-tuned clustering of maps}
+\pause
+\fadeitem{3}{Asking people to make the maps for us}
+\pause 
+\fadeitem{4}{Predicting neighborhoods}
+\end{itemize}
+\end{frame}
+
+\section{Squinting}
+{
+\setbeamercovered{default}
+\begin{frame}
+\begin{itemize}{}
+\item[] Squinting at maps
+\item[] \color{gray}{Hand-tuned clustering of maps}
+\item[] \color{gray}{Asking people to make the maps for us}
+\item[] \color{gray}{Predicting neighborhoods}
+\end{itemize}
+\end{frame}
+}
+
+
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{../scientific_segments/social_base_chicago_bw_large.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-0.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-1.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-2.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-3.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-4.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-5.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-6.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-7.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-8.png}}
+}
+\mode<all>{
+\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-9.png}}
+}
+
+
+In the 1920s, Ernest Burgess of the Department of Sociology at the
+University of Chicago, had a map made of Chicago that showed the
+rivers and canals, major street's, rail lines, parks, and industrial
+areas. This was map was the a preliminary stage of a grand research
+project that aimed to understand the principles behind the physical
+growth of the fastest growing metropolis in the world, and the second
+biggest city in the country.
+
+Burgess saw that growth as driven by a very simple dynamic. Retailers,
+manufacturers, and residents were all trying to minimize travel or
+trucking costs.  The center of the city, the place of the minimum
+average distance to any other part of the city, should therefore have
+the most expensive land, and the price of land should fall with
+distance from the center.  This price gradient should, in turn, sort
+out the distribution of land uses. Retailers benefited most from
+centrality, to the central district should be a commercial
+zone. Manufacturers would be close by, and then residential
+districts. As the city grew, the gradient of prices would shift
+upwards, and the central commercial district would expand int to
+manufacturing, and the manufacturing would take over residential
+districts.
+
+Even with a few more wrinkles, the theory was very simple and it
+seemed to really explain the development of Chicago very well at a
+rough level. However, the theory was silent about how uses of land
+were distributed within a band of land prices. We know where to expect
+a department store versus a warehouse, but why are all Germans on the
+Northsdie of the river and all the Irish on the South?
+
+For Burgess, there were two 
+
+
+
+
+for Burgess, the competition for land was within any zone of land price, 
+
+while the theory could tell you where you should expect to see a department store even in flat Chicago, Euclidean distance is not a very
+good proxy for travel time. There are the various branches of the river, a
+
+To make more precise predictions, Burgess appreciated that he
+needed to do two things. First, 
+
+
+
+
+
+
+
+the This bid up the cost of land, such tbenefited differentially from 
+
+
+
+, a city that had grown from 
+
+Burgess saw these large physical  
+
+If we get the boundaries of these things wrong, then our
+  observations are invalid.
+
+
+
+
+
+ scholar  hase made without real eng usually without really knowing about the previo
+
+THis history attempts to scientifically
+define the neighborhoods of Chicago
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -43,17 +235,15 @@ Zachary's famous karate club, which had been divided into
 \note{Read Wayne Zachary's famous paper, get image from Jacob, and
   figure out which algorithm produced that partition} 
 
-\mode<all>{
-\fullscreenimage{./presentation_images/karate.jpg}
-}
+% \mode<all>{
+% \fullscreenimage{./presentation_images/karate.jpg}
+% }
 
 
 
 \testframe{}
 
-\mode<all>{
-\blackout{}
-}  
+
 
 For me, when I look at this picture, I have a feeling of
 understanding. It looks to me like the algorithm uncovered a real
@@ -71,9 +261,7 @@ That's all true. So the next question is this. How can we make sure we
 are not fooling ourselves? How can we convince ourselves that a
 pattern that looks real to us is not just what we expected to see?
 
-\mode<all>{
-\fullscreenimage{./presentation_images/dog-park-big.jpg}
-}
+
 
 
 This problem does not just come along with using these computational
@@ -102,7 +290,7 @@ neighborhood but, instead, by how we defined it.
 %   \begin{frame}
 %     \begin{tikzpicture}[remember picture,overlay]
 %       \node[at=(current page.center)] {
-%         \includegraphics[height=\paperheight]{./presentation_images/toyotaSupply.png}
+
 %       };
 %     \end{tikzpicture}
 %   \end{frame}

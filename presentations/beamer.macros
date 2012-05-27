@@ -1,23 +1,26 @@
 \newcommand{\blackout}{
   \mode<presentation>{
-    {
       \setbeamercolor{background canvas}{bg=black}
       \begin{frame}[plain]{}
       \end{frame}
-    }
   }
   \mode<presentation>{
     \setbeamercolor{background canvas}{bg=white}
   }
 }
+
 \newcommand{\fullscreenimage}[1]{
-  { % all template changes are local to this group.
+  \mode<presentation>{	
+    \setbeamercolor{background canvas}{bg=black}
     \begin{frame}[plain]
       \begin{tikzpicture}[remember picture,overlay]
         \node[at=(current page.center)] {
-          \includegraphics[width=\paperwidth]{#1}
+          #1
         };
       \end{tikzpicture}
     \end{frame}
+  }
+  \mode<presentation>{
+    \setbeamercolor{background canvas}{bg=white}
   }
 }
