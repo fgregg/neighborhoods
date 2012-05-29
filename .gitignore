@@ -8,6 +8,8 @@
 *.snm
 *.nav
 *.toc
+*.*#
+.#*
 
 # Packages
 *.egg
