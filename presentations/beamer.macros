@@ -24,3 +24,21 @@
     \setbeamercolor{background canvas}{bg=white}
   }
 }
+
+\newcommand{\crossfade}[2]{
+  \mode<presentation>{	
+    \setbeamercolor{background canvas}{bg=black}
+      \begin{frame}[plain]
+        \begin{center}
+	  \begin{tikzpicture}[remember picture,overlay]
+            \node[at=(current page.center)] {
+              \multiinclude[<+>][format=#1,graphics={height=\paperheight}]{#2}
+            };
+	\end{tikzpicture}    
+        \end{center}
+      \end{frame}
+  }
+  \mode<presentation>{	
+    \setbeamercolor{background canvas}{bg=white}
+  }
+}

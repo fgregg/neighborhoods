@@ -1,12 +1,15 @@
 \input{beamer.macros}
 \usepackage[english]{babel}
 \usepackage{tikz}
+\usepackage{xmpmulti}
 \newcommand{\fadeitem}[2]{\item[]\uncover<#1>{#2}}
 \title{Validating Neighborhoods}
 \author{Forest Gregg}
 \begin{document}
 \mode*
 \maketitle
+
+
 
 \mode<all>{
 \fullscreenimage{\includegraphics[width=\paperwidth]{./presentation_images/dog-park-big.jpg}}
@@ -15,6 +18,8 @@
 \mode<all>{
 \blackout{}
 }  
+
+
 
 \section{Introduction}
 Today, I'd like to talk to you about a basic problem for social
@@ -108,44 +113,17 @@ In my reading, it looks like there were four general approaches:
 \end{frame}
 }
 
+\mode<all>{
+\crossfade{png}{./presentation_images/comarea}
+}
 
 \mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{../scientific_segments/social_base_chicago_bw_large.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-0.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-1.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-2.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-3.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-4.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-5.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-6.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-7.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-8.png}}
-}
-\mode<all>{
-\fullscreenimage{\includegraphics[height=\paperheight]{./preentation_images/output-9.png}}
+\crossfade{png}{./presentation_images/devel}
 }
 
 
 In the 1920s, Ernest Burgess of the Department of Sociology at the
-University of Chicago, had a map made of Chicago that showed the
+University of Chicago, had a map made of Chicago showing
 rivers and canals, major street's, rail lines, parks, and industrial
 areas. This was map was the a preliminary stage of a grand research
 project that aimed to understand the principles behind the physical
@@ -158,18 +136,45 @@ trucking costs.  The center of the city, the place of the minimum
 average distance to any other part of the city, should therefore have
 the most expensive land, and the price of land should fall with
 distance from the center.  This price gradient should, in turn, sort
-out the distribution of land uses. Retailers benefited most from
-centrality, to the central district should be a commercial
+out the distribution of land uses. Retailers benefited
+most from centrality, to the central district should be a commercial
 zone. Manufacturers would be close by, and then residential
 districts. As the city grew, the gradient of prices would shift
-upwards, and the central commercial district would expand int to
-manufacturing, and the manufacturing would take over residential
+upwards, and the central commercial district would expand into to zones previously used for industrial purposes, manufacturing would take over residential
 districts.
 
 Even with a few more wrinkles, the theory was very simple and it
-seemed to really explain the development of Chicago very well at a
-rough level. However, the theory was silent about how uses of land
-were distributed within a band of land prices. We know where to expect
+seemed to explain much about the development of Chicago even if we
+just used distance, as the crow flies, from State and Madison as a
+proxy measure of travel costs. But, in order to really test the power
+of his model, Burgess's moved beyond that simplification to attempt to
+take into account the real geography of the city.
+
+Vivian Palmer, Burgess's close collaborator on this work, describes the task:
+
+It was assumed that the topographic and physical barriers erected by
+man gave the city a relief map with many small basins; [and] that
+competition for location regulated by land valued sorted and
+distributed the population of the city into territorial groupings
+within these basins.
+
+So how to identify these basins:
+
+As a first step, Burgess more or less squinted at this map, and split
+Chicago up into 75 parts. Unfortunately he called these segments
+``Community areas,'' which would lead to lots of confusion expected
+these areas to have something to do with collective identity or
+neighborly interaction
+
+Now, squinting is a great place to start, especially if you choose the
+right data at which to squint. Burgess did, and as we'll see later,
+his division of Chicago stands up quite well almost ninety years on.
+
+
+
+
+However, the theory was silent about how uses of land
+were distributed /within/ a band of land prices. We know where to expect
 a department store versus a warehouse, but why are all Germans on the
 Northsdie of the river and all the Irish on the South?
 
