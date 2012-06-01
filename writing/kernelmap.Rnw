@@ -378,7 +378,7 @@ neighborhoods <- c("lakeview","lincoln park", "roscoe village",
                    "lincoln square", "avondale", "old town",
                    "logan square", "bucktown", "wicker park",
                    "humboldt park", "andersonville", "albany park",
-                   "irving park", "edgewater", "gold coast", 
+                   "gold coast", 
 "river north", "ukrainian village", "east village", "noble square", 
 "streeterville", "west town", "magnificent mile", "river west")
 
