@@ -1,0 +1,848 @@
+The fundamental methodological problem of the neighborhood effects
+literature is the fundamental methodological problem of sociological
+inquiry. Our claims about the effects of neighborhoods depends upon
+how we carved up the city into neighborhoods in the first
+place. Unless we believe we cut at the joints, then we should not
+believe that we are estimating anything beyond our own butchery. The
+same is true of our analyses of class, party, and status group.
+
+I believe there is way to reliably define valid neighborhoods by
+examining the relations between the blocks of a city. If succesful,
+this method should provide two things. First, it can provide a basis
+for a better understanding of urban processes in American
+cities. Second, it should suggest an approach for developing reliable
+and valid social groupings more generally.
+
+In this proposal I describe the approach, how I plan to validate it,
+and what it might mean if this approach is succesful.
+
+* Ye shall know them by their fruits
+Our science does stand ready to precisely define what a neighborhood
+is. For reasons I will explain below, this is no a mortal
+liability. However, because neighborhood is such an overloaded term,
+let us agree on some basic properties of the kinds of things we want
+to call neighborhoods.
+
+Let us reserve the term neighborhood for something that a.) organizes
+some observable phenomena, b.) in space, c.) that is contiguous. If
+you don't like the active voice, we could also say that a neighborhood
+is an emergent property of coherent local phenomena; the critical
+point for us now is that there is some coherence or organization
+within a neighborhood. 
+
+We should avoid the meaning of neighborhood as the area within some
+radius of a focal point. This can be a very useful definition, and we
+will lean very heavy on the basic insight that things that are close
+both tend to be more similar and have more influence than things that
+are far. However, here we are trying to understand the distribution of
+the organization of that similiarity and influence across
+space. Hopefully, those organizations will look like what we want to
+call neighborhoods.
+
+If a neighborhood organizes phenomena, or is the product of coherent
+phenomena, what kind of phenomena might we associate with
+neighborhoods? A hundred years of uban sociology gives us a good list
+of candidates.
+
+- We might think that within a neighborhood people would more likely
+  have neighborly relations, and are more likely to give the same name
+  if asked what neighborhood they lived in.
+- We might think that neighborhoods, in some sense, share a common
+  fate. They have similar levels of upkeep of buildings, similar
+  building stock, and similar crime rates.
+- We might think that neighborhoods change as units, or at least we
+  often talk as if we do. If, young professionals start moving
+  into a part of neighborhood that was working class, we might expect
+  that the whole neighborhood, as a whole, might change composition
+  within a few years.
+- We might think that neighborhoods tend to not cross certain large
+  physical barriers like rivers, large parks, highways, and busy
+  streets.
+
+* Putting things together
+
+If we have the ideas about what kinds of phenomena neighborhoods
+organize and which produce neighborhoos, we could try to cut the city
+up into areas where these phenomena cohere. This basically what
+Stephen Raudenbush did to define the "neighbohorhood clusters" for his
+and Robert Sampson's neighborhood efficacy research.
+
+Unfortunately, Raudenbush has never published a full description
+of his procedure for defining the neighborhood clusters, from what I
+can glean, he did a clustering used a clustering algorithm that
+partioned Chicago's 847 census tracts into areas that were relatively
+homogeneous. Then he refined, by hand, these clusterings based upon
+local knowledge of Chicago's neighborhoods and barriers like highways,
+parks, and the river.
+
+Philip Hauser undertook a similar endeavor in the 1930s when he
+defined 120 "sub-community" areas while working for the Civil Works
+Administration. With the assistance of Ernest Burgess and Charles
+Newcomb, Hauser put together "contiguous census tracts with relatively
+homogenous populations as determined by [the 1930 census]" and from
+material drawn from the voluminous files of "Social Histories of Local
+Communities of Chicago." "The more important criteria employed in
+defining the areas were: the equivalent median rental of the census
+tract, the nativity and race of the population, the presence of
+physical barriers, the nature of the transportation facilities,
+community and neighborhood tradition and organization, and various
+indexes of social organization, particularly the divorce rate and the
+delinquency rate, The investigators' acquaintance with the city was
+also a factor."[67]
+
+We should have two concerns with Raudenbush and Hauser method. First,
+the way that they divide the city does not seem reliable. If a
+different researcher tried to replicate their approach, she would
+likely draw slightly different boundaries. Second, and more troubling,
+the researchers made no efforts, at least that we know about, to
+validate their aggregations. 
+
+We can easily imagine ways to make their procedures by removing
+the elements of subjective judgement. Unfortunately, I would expect
+that doing so would actually make their aggregations less
+valid. However, if we can figure out a way to validate aggregations
+than the problem of reliability might be solved along the way.
+
+* Validating neighborhoods
+I think we have three ways that we might validate whether a certain
+area that we have put together is a neighborhood. We can evaluate
+whether our way of putting the city together buys us greater
+predictive power in the outcome of what we think are neighborhood
+scale social processes. If we have credible theories about how
+neighborhoods emerge, than we can compare our neighborhoods to what
+theory would predict. Finally, we can test to see if what we put
+together is recognizable as a neighborhood by residents.
+
+We should use all these approaches, but I believe we should start with
+residents perceptions
+
+* Where are you?
+Asking people to define neighborhoods has clear appeal. Who should know
+better where they live than the people who live there? Unfortunately,
+we have learned that while people can often tells us what neighborhood
+they live in, they usually cannot define the neighborhood boundaries
+for us.
+
+In Albert Hunter's wonderful book on Chicago neighborhoods, he asked
+801 Chicago residents to answer two questions: "What is the name of
+this part of Chicago?" and "What are the boundaries of this area?"
+[69]. Eighty-five percent of respondents were able to provide a name,
+but only 65% were able to provide four boundaries of the area. Hunter
+did not compare the degree to which the elicited boundaries
+correspond, but the work of other researchers consistently shows that
+residents rarely agree about all four boundaries of their
+neighborhood.(Campbell Lee)
+
+Many resarchers have sought a sociological explanation for why
+residents are unable to define boudandaries or define conflicting
+boundaries. A cognitive explanation seems more likely. People do not
+navigate through their environment by projecting themselves onto an
+map and then checking whether they are within a polygon. When we ask
+people to do that, they do not give coherent answers. This does not
+mean they don't know where they are.
+
+Ideally, we would like to ask a large, random sample of residents in a
+city Hunter's first question, the question that most people can
+answer: "What is the name of this part of the city." We don't have
+those data and we are unlikely to get them, certainly not for every
+American city. However, before we get down to what we can do, it's
+worth asking Don Rubin's terrifying question: "What would you do if
+you had all the data?"
+
+* Learning neighborhoods
+If we had a good, large sample of where people think they are, I would
+expect that we could easily classify the city into three kinds of
+areas: Areas where people nominate the same name for the area they
+live; areas where people give a names, but there is no consensus about
+the name; and areas where people cannot give a name of the area. 
+
+Specifically, I would use a simple technique like a kernel density
+estimate to create a probability distribution of nomination of area
+names over city blocks. Conditioning on location, I would define
+blocks that had a very high probability to be claimed to be part of an
+area as the "collectively percieved neighborhood." Areas below a
+certain probability I would define as "ambiguous areas." Areas with a
+high proportion of respondents who were unable to give a name, I would
+define as "undefined areas."
+
+We would then have map of the city where every part of it was labeled
+as belonging to a particular neighorhood, or labeled as an ambiguous
+or undefined areas. This is training data.
+
+The problem with Raudenbush or Hauser's approach is that we don't know
+what we want the map of our the "neighborhood clusters" or
+"sub-community areas" to look like. Or to put it another way, we know
+that we want to put together areas that are similar along a number of
+criterion, but we do not know how we should weight similarity of
+housing stock verus the crime rate versus the nativity of residents.
+
+With every part of the city labeled, we could learn those
+weights. I'll explain how momentarily, but first let's make sure we
+want to. 
+
+* Why the "Perceived Neighborhood"
+A "collectively percieved neighborhood" certainly is just one
+among many ways of defining a neighborhood. Why should we want to take
+recovering these areas as our goal?
+
+To be honest, the ground here is shaky. One answer is that we will
+want to use the percieved neighborhood if it gives us neighborhoods
+that appear valid according to other criteria which I will discuss
+below. While true, why do I have any hope that it will?
+
+Some neighborhood processes depend upon a level of rough consensus
+among residents that they live in the same neighborhood. Defending a
+neighborhood from the immigration of a ethnic group would be a good
+example. We might be tempted to say that the "collectively perceived
+neighborhood" lines up with a shared definition of neighborhood,
+and so, for at least some processes, it will be exactly right unit of
+analysis. 
+
+That would be nice if it was true. Unfortunately, people on
+both sides of a street can think they live in Hyde Park, but the
+people who live on the south side of the street can think the north
+siders are really Kenwood people. At best, we can say that a shared
+understanding of where people live can be a basis for an agreement
+that they live in the same place, but it is not a sufficent condition.
+
+Ultimately, I'm pinning my hopes on a belief that individual's
+perceptions on neighborhoods emerge out of the interaction between an
+active, sensing, and organizing intelligence and an organization of
+phenomen in the world. A resident will tend to say this place is
+part of Lakeview instead of Buena Park, because it belongs better to
+Lakeview and not Buena Park. We may never be able to fully recover
+what goes into that "sense", but that is the true of all of our
+senses. We may however, be able to simulate that sense with a high
+degree of precision.
+
+If true, if we had a good model of how people chunk up their space,
+that should be very predictive of how people move through that
+space. Ideally, would would not only want to understand the chunks of
+individuals perceived environments, but also what those chunks afford
+to individuals and what those chunks feel like. However, first we need
+to know what the chunks are. Where kids play depends upon what places
+feels safe or exciting. We might be able to get a sense of what the
+"places" are.
+
+It is not a crazy conjecture, although still just a conjecture, to
+think that the perceptually chunks of a city are the elementary units
+of spacial social processes. We will return to this idea when we
+discuss how we might validate our method. But, finally, let's discuss
+that method.
+
+* Segmentating the City
+I propose to use a technique from image segmenentation called a Potts
+model, originally due to Renfrey Potts who formulated the model to
+investigate the behavior of interacting spins on a crystalline lattice.
+
+The basic idea is as follows. First, for every block in the city, we
+will pay a certain cost for assigning it either the name of a
+neighborhood or labeling it as an ambiguous or undefined area. Let's
+call this the node cost. Second, we look at the labels of all the
+neighboring blocks. For every pair of possible labels, we will pay a
+different cost. Let's call this the edge cost. 
+
+All else being equal, we will pay less to assign the same label to two
+adjacent blocks. When all the costs are defined, we attempt to find
+the allocation of labels that minimizes the total cost. This is also
+equivalent to minimizing the "energy" of the system or finding the
+most likely allocation of labels.
+
+The real power of this model is that we can make the edge costs a
+function of the similarity between blocks along what every measure we
+might like. We can decide to pay less to assign two blocks to the same
+neighborhood if they have a similar crime rate, or pay more if they
+have very different housing stocks. 
+
+With training data, and a reasonably parameterized form, we can learn
+these cost functions so as to recover the desired division of the
+city. I said above that the lack of agreed definition of neighborhoods
+is not a mortal liability. We can learn what matters.  We can use
+whatever measures of social phenomena we might think to be produced by
+neighborhoods or produce them. While the typical concerns about
+overfitting apply, we have a lot of training data. There are around
+10,000 census blocks in Chicago.
+
+Ideally, we would not use census blocks, but face blocks. Face blocks,
+the street, and side of the street that you live on, appear to be what 
+appear to be what most people think about first when they think about
+where they live. Unfortunately, census blocks are the smallest areal
+units that we can get census information about. In Chicago, they are
+often the size of city blocks.
+
+They are mature packages for learning Potts models in Matlab
+http://www.cs.ubc.ca/~murphyk/Software/CRF/crf.html
+
+* Noisy, Biased, and Incomplete Training Data
+Training a model requires training data. I don't have the data I would
+want, a large random sample of residents who answered the question
+"What is the name of this part of the city?" I do have data on how
+residents of large American cities answered a similar question. The
+sample is extremely biased, the response rate is not good, coverage is
+spotty, and different respondents clearly have a variety of different
+agendas when they did answer. I think it might be good enough.
+
+** The Data
+I have a nightly updated database of geocoded Craigslist apartment
+rentals, sublet, and roommate listings. When filling out a listing, a
+poster has an option of filling out a free text field called
+``Specific Location'' field. Most people seem to interpret this a
+place to put in a neighborhood name.
+
+The first task must be to filter and normalize the ``Specific
+Location'' labels into canonical neighborhood names. Aside from
+variations of spelling of neighborhood names, some labels consist of
+address or intersection information or claims that the listing is near
+a train station, park, beach, or other generic landmark. We want to
+discard such labels, and keep only labels that refer to a neighborhood
+or some unique landmark, such as a named park or university.
+
+Ideally, we would like to learn this filter and normalization mapping,
+perhaps by resolving strings that are similar if the geocoded
+locations are nearby. Alternatively, if we had sufficient data, we
+would likely do well just to discard all labels that appear less than
+some threshold. However for the case of Chicago, I have built up a set
+of handcoded rules that works well.
+
+For some listings, the poster enters more than one neighborhood in the
+``Specific Location'' field, i.e. ``Lakeview/Lincoln Park''. For such
+listings, we create a new location for each neighborhood in the label,
+so, for the example above, it is as if we saw two listings at the same
+location, one labeled ``Lakeview'' and the other ``Lincoln Park.''
+Some other scheme of credit assignment might be worth exploring.
+
+After all this processing, we make sure that every location-label pair
+is unique. Almost all duplicates are due to the same poster reposting
+the same listing, and such reposts contain no more information than
+the first post. We throw away some information here, and we would be a
+better off if we could only discard postings that we know are really
+from the same poster.
+ 
+Finally, we reproject the latitude and longitude encoded coordinates to a
+State Plane Coordinate System, particularly NAD83 / UTM zone 16N. We
+will be using other geocoded inormation, and this is a good common
+projection for Chicago.
+
+** Biases in the data
+From a simple plot of the data for Chicago, we can see how biased this
+sample is. We have a lot of coverage where there are younger, educated
+Chicagoans who rent. Working class areas or areas of high
+homeownership have very sparse coverage.
+
+Even more troubling, some posters are certainly claiming to be in a
+neighborhood that is more desirable than the one the poster thinks the
+location is really in. Initially, this bias was my chief concern.  It
+appears that such 'aspirational' neighborhood claims are drowned out
+by 'honest claims.' Small neighborhoods are also likely to be
+under-represented in this data, as it appears that posters are often
+giving the names that they think readers will recognize. I have no
+real sense of the magnititude of this problem. Some very small
+neighborhoods do show up well in these data.
+
+Given all these deep imperfections, why should we expect that this
+data can tell us anything about neighborhoods beyond how they are
+claimed by the population of Craigslist posters? I have only a weak
+answer. Where we have good coverage, as on the North side of
+Chicago, the boundaries estimated from these data seem very reasonable
+to long time Chicago north siders.  The biased ways that how people
+claim neighborhoods do not seem to overwhelm the signal of "collective
+perception."
+
+However, assuming that the way that the population of Craigslist
+posters perceive an organized environement just like everyone else in
+Chicago is a very dangerous assumption, and one that I have no warrant
+to make. This is the biggest risk to this project falling apart.
+
+While I will take this risk, if this works, my claims of validity will
+not depend on this assumption.
+
+** Making the Training Data
+Where we have a lot of observations, we can recover very plausible
+neighborhood areas from a simple technique like a kernel density
+estimate. 
+
+To improve the estimates of neighbhorhood areas, we can either way
+another few years for data to accumulate or we can use a more
+complicated model that incorporates good, prior beliefs about where
+neighbhorhood boundaries should fall.  We are going to take the second
+route. 
+
+One of the few things that urban sociologists agree upon is that
+neighborhoods are more likely to divide along certain boundaries:
+arterial streets, highways, rivers, large parks, railroad embankments,
+and industrial corridors. Of course this is not always true. Hyde Park
+crosses 55th St, Ravenswood straddles a railroad embankment, and
+Andersonville crosses Foster Ave. However, it does tend to be true,
+and certainly no one thinks that a house can be half in one
+neighborhood and half in the other.[fn::Although it could fully be in
+both.]
+
+I will define a Potts model where the node cost of labeling a block as
+a certain neighborhood is related to the estimated conditional
+probability density estimate of the centroid of the block being
+labeled as that neighborhood, as estimated from a kernel density
+estimate. In other words, it will be cheaper to assign a block to a
+neighborhood if the kernel density estimate suggests that it is likely
+to be in that neighborhood. Second, I will define edge costs so that
+it is more expensive for blocks that are separated by an arterial road
+to be labeled the same. I will define similar but more expensive edge
+costs for blocks separated by highways, rivers, parks, embankments,
+and industrial corridors. 
+
+I will adjust these costs by hand until they resulting segmentation of
+neighborhoods looks about right. I know this pretty unprincipled, but
+I will only do this in areas where where the kernel density estimate
+already produced plausible neighborhood boundaries, and where the
+smoothing of effect of edge costs only moves the neighborhood
+boundaries less than a few blocks.
+
+To do this I need the following data: spatial definitions of Chicago
+census blocks, spatial definition of arterial streets, spatial
+definition of rivers, spatial definition of parks, spatial definitions
+of the highway, spatial definitions of the railroad lines, and spatial
+defintions of industrial corridors. I have all that data. 
+
+* Learning similarity
+With resulting area definitions, I will learn the cost functions
+putting together similar blocks.
+
+I will use the following data as features, aggregated to the block
+level: ten years of reported crimes in Chicago, five years of
+foreclosure data, common membership in school attendance boundary,
+census data on the distribution of age, race, ethnicity, education,
+occupation, income, homeownership, language spoken, age of housing
+stock, monthly rental, home values, and number of units in
+structure. Where I have a distribution, I will use the Jensen-Shannon
+divergence as my distance metric, otherwise I will use the absolute
+value of the difference between census blocks.
+
+I have all this data except for the foreclosure data and school
+attendance boundaries. I believe I can get the foreclosure data from
+Matt Gee who used to work with this data at the Treasury and the
+school boundary data from Jimm Dispensa, the head of School
+Demographics and Planning Department at Chicago Public Schools.
+
+* So What? 
+
+Let's assume that it all works swimmingly. What would we have done?
+First, our learned cost functions give us a measure of how the
+shared features of blocks produce coherence. This measure should allow
+us to not only reproduce "collectively percievied neighborhoods", but
+by setting thresholds on that value of coherence we can recover
+coherent areas within a city at various scales. 
+
+We can, then, produce valid ecological areas at various
+resolutions. In Chicago some "collectively perceived neighborhoods"
+are very large. By adjusting the threshold of coherence, you can break
+up the neighborhood at the joints. We can do this for every large
+American city.
+
+Second, the parameters of the model may themselve be of interest,
+particularly in cross city comparison. If we are interested in what
+produces a sense of place, we should be very interseted in the
+features that contribute significantly to inter-block coherence.
+
+Finally, we can think of the our measure of coherence as a measure of
+thinginess. Neighborhoods are more dynamic than we sometimes
+realize. They are born, merge, and disappear. We can get a measure of
+how thingy a neighborhood is and how thingy an areas is that is not
+yet recognized as distinct neighborhood and might. 
+
+* How would we know?  
+Hopefully, that sounds good. But given the series of dangerous
+assumptions that I am making, how should we know if we can trust the
+results.
+
+
+
+
+ 
+
+
+ 
+ 
+
+
+
+
+
+
+
+While, its tempting to linger here
+
+If a neighborhood is perceived as a gestalt, than 
+
+
+
+ can think they live in Hyde Park, agreement does not
+imply is We might be tempted to say that There are certain kinds of neighborhood processes, like defending a
+neighbrhood from the immigration of a different ethnic group, that we
+think d
+The first answer is that 
+
+
+
+
+Critically, we all think that if there
+is such a thing as a neighborhood it should be contiguous.
+
+
+
+
+
+ overlap of what a
+neighborhood would do if such a thing existed.
+
+they is often substand 
+
+
+should avoids the problems 
+
+that
+avoids the problems of 
+
+Historically, we have relied on intensive definitions of social
+groupings. We look at the characteristics of individual elements and
+attempt to define a membership test based upon those qualities. When
+empirical researchers have refused to be exhausted in their contention
+for a better understanding of this world, we find that the social
+world refused to play along. Either our groupings do not seem to
+explain all that much have or find that our criterion is much to
+inclusive or exclusive of the kinds of things we want to reason
+about. It may not be a cause for joy, but we should be proud that our
+science has led us to be so suspicious of our classic categories.
+
+If the qualities of things do not tell us what group they belong to,
+than perhaps we might hope that its the relation among things that
+truly matters. Such is the hope of Sassure and Ron Burt. Unfortuntely,
+even if its true that it is relations all the way down, this pure
+network view is fairly useless for guiding empirical research. We can
+only pursue tiny subspaces of the nearly infinite possible empirical
+interactions that, say, a person could have over a week.
+
+For empirical research, we have to decide what we include and what we
+won't. We are faced, once more, with the problem of defining a social
+grouping. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+categorizing the world based upon the characteristics
+of individual elements ist continue stay up and fight with one
+another, and these have proven too brittle. The most
+
+I have been working on how we can define reliable and valid
+neighborhoods, as an instance of the generic problem of defining
+reliable and valid social aggregations. While this is not the place
+for me to describe that work, suffice it to say that it relies, in
+part, in collecting and combining neighborhood perceptions. In order
+to test some of my ideas, it would be useful to have data on how
+these perceptions have changed over time.
+
+For Chicago, I knew that Albert Hunter interviewed 801 Chicagoan's
+about their perceptions of neighborhoods in the 1960s,[fn:hunter] and
+I have been talking with him about using his original data. However, I
+had a vague recollection of reading somewhere that similar material
+was collected as part of Ernest Burgess's division of Chicago into
+community areas in the 1920s. If I could find that material, then with
+Hunter's data and the data I am collecting now, I would have data on
+neighborhood perceptions spanning 90 years at three time points.
+
+[fn:hunter] Hunter, Albert. 1974. /Symbolic Communities: The Persistence and Change of Chicago's Local Communities/. Chicago: University of Chicago Press.
+
+* Social History of Chicago's Local Community Areas
+In abstract, Ernest Burgess's model of urban ecology predicted that
+concentric circles of land use and social processes issuing from a
+central business district. However, Burgess always argued that a city
+was not an abstract homogeneous space, but comprised of natural areas
+that would shape the configuration of zones for any particular
+city. In the 1920s, he collaborated with Vivien Palmer to define these
+natural areas and to test the ecological theory of urban process.
+
+His first attempt was the Chicago community
+areas. Here is how Palmer describes that effort, and it worth quoting
+in length:
+
+#+BEGIN_QUOTE
+[the community areas] were derived from the following series of maps
+and field studies:
+
+1. Maps showing physical barriers such as the river system with its
+   canals and branches, railroads, boulevards, parks, and industrial
+   property which seemed to divide the landscape into natural pockets
+   and to hamper communication between these different sections.
+2. Use maps which indicated areas of differing types of dwellings
+   (apartments, houses, cottages, duplexes), centers of group life as
+   shown by the locations of public buildings (churches, schools,
+   field houses of parks), and vacant or undeveloped land.
+3. Maps showing business centers and their dispersion, the centers
+   being denoted by points of high land value and the location of
+   large institutions of commercialized recreation (dance halls and
+   movie palaces), while the dispersion was shown by the location of
+   drug stores. The physical barriers discovered in 1 also assisted in
+   locating the boundaries of business areas.
+4. Maps showing local community and neighborhood names, and local
+   residents' conceptions of the boundaries of these areas. The
+   material for these maps was secured from preliminary field studies
+   made largely by students who covered the entire city. This material
+   was used only in an incidental and preliminary manner to clear
+   points raised by the other three criteria.
+
+The areas thus defined gave some seventy divisions of the city. In
+this conception of ecological areas, the physical and economic factors
+were stressed. It was assumed that the topographic and physical
+barriers erected by man gave the city a relief map with many small
+basis; that competition for location regulated by land valued sorted
+and distributed the population of the city into territorial groupings
+within these basins; and that each of the groupings had its economic
+organization culminating in a local business center, and a community
+organization consisting of both this business center and a community
+center of other institutions.[fn:comareas]
+#+END_QUOTE
+
+[fn:comareas] Palmer, Vivien Marie. "The Primary Settlement as a Unit
+of Urban Growth and Organization". Dissertation, University of
+Chicago, 1932. University of Chicago Library., p. 19-20
+
+This division set the grounds for an enormous research project to
+study the conditions and historic development of each of these areas
+called the "Social History of Local Communities in Chicago" funded by
+the Local Community Research Committee and directed by Vivien
+Palmer. Starting in 1924, Palmer organized the research of hundreds of
+undergraduate sociology students and collected enormous materials from
+countless civic organizations, business associations, and governmental
+organs. 
+
+By 1930, the project had amassed a huge amount of material (see
+Appendix A), but it ultimately bore no fruit. Around 1930, Vivien
+Palmer prepared a prospectus for a series to be entitled /Social
+Backgrounds of Chicago's Local Communities/. Each volume was to cover
+the current condition and developmental history of a Chicago community
+area, and, for the prospectus, Palmer describes the North Center
+community area. Apparently, no publisher was interested.[fn:ucpress]
+Palmer also drew on this material for her 1932 dissertation "Primary
+Settlements as a Unit of Urban Growth and Organization" and a report,
+of the same year, she prepared for the United Charities of Chicago
+entitled "Study of the Development of Chicago's North
+Side."[fn:northside] None of this material was published in any form.
+
+[fn:ucpress] There might be some relevant material in the University
+of Chicago Press collection since they almost certainly considered
+publishing this. I haven't looked there.
+
+[fn:northside] Palmer, Vivien Marie. "Study of the Development of
+Chicago's North Side." Chicago: United Charities of
+Chicago, 1932. Chicago Historical Society.
+
+
+
+Part of the problem may have been that the developmental history of
+local communities makes for very boring reading, and the bulk of her
+work just confronts us as a one damn thing after
+another.  A typical paragraph:
+
+#+BEGIN_QUOTE
+About 1910, the Illinois Brick Company, the last remaining brickyard
+in Northcenter, withdrew and its old site along the river and pit holes
+were gradually filled. In 1914 Flick subdivided the area from Pensacola
+to Maplewood, and from Berteau to the river and bungalows and a few
+duplexes were built. The same year William Zelosky added another small
+subdivision of bungalows to the south of Flick's The last subdivision
+in this section was made in 1922, a small district of bungalows built
+on the remade land of the brickyards. A car line had been opened on
+Western Avenue in 1911 and in 1925 the street was widened. In 1923,
+the Mid-City golf course,, Chicago's nearest approach to an all-winter
+links, opened along the river from Byron to Cornelia, on the site of
+the Illinois Brick Company. And in the same year Paul Revere Park was
+dedicated.[fn:nc]
+#+END_QUOTE
+
+[fn:nc] Palmer, Vivien Marie. "Social Backgrounds of Chicago's Local
+Communities." Chicago, 1929. University of Chicago Library.
+
+
+* Natural areas
+But while we might get lost in this tangle of particulars, Vivien Palmer
+was not. In the eight years that she studied Chicago's communities,
+she developed pushed longer and harder on the problem of the how to
+carve up city, naturally. Her efforts have not yet, I think, been
+equaled. I quote again from her dissertation.
+
+#+BEGIN_QUOTE
+As our natural histories accumulated we began to realize that the
+ecological areas which had been defined mainly by topographic and
+economic criteria did not give us the elementary territorial
+groupings of the city. With our extensive research into these
+ecological areas we were finding that the majority of them contained a
+number of smaller territorial groupings which were often bound
+together at the present time by a common shopping and commercial
+center which sometimes shared other institutions. Yet these units had
+other distinctive characteristics and group relationships, often
+subtle yet recognized by their residents, which set them apart
+from each other. So we sought to formulate some new conception which
+would enable us to explain the existence of these smaller groupings
+and delimit them objectively... 
+
+A more careful examination of natural histories, of the account of the
+development of the natural territorial led us to the conception of the
+primary settlement areas as the unit of our research. 
+
+As Chicago expanded outward from its embryo village of a few square
+miles it grew decade by decade, and is till growing, by the addition
+of small relatively isolated settlements. With an abundance of open
+land always on its borders and under our present system of property
+ownership, small sections usually known as subdivisions were being
+placed on market for industrial , business, and home sites. As the
+city grew, also, its populations was becoming increasingly
+heterogeneous and and groups relatively homogeneous in nationality,
+economic status, and occupational strata were becoming segregated in
+each of these new primary settlements. Most of these areas developed a
+local life and character. Taken together they constituted a natural
+social organization of the  city which was primary and over which
+many of the later forces of city growth had to work themselves over.[fn:primary]
+#+END_QUOTE
+
+[fn:primary] Palmer, Vivien Marie. 1932. "The Primary Settlement as a
+Unit of Urban Growth and Organization". Dissertation, Chicago:
+University of Chicago., p.30-33
+
+
+She argues that these settlements continue to pattern urban
+processes because sometimes the residents are able to resist the
+processes of urban growth, but more typically the settlement's
+"previous homogeneity insured its change practically as a unit."
+These settlements would rarely coalesce, but could be split by
+building a new barrier, like a railroad, belt of industry, public
+park, or wide boulevard. However, even after a fire razed an area, she
+claimed that primary settlement areas would re-emerge, and even when
+"rooming houses appeared over several adjacent primary settlement
+areas, like a chameleon, it took on the characteristics of the various
+primary settlements beneath it, still showing perceptible difference
+between the areas."[fn:primary2]
+
+[fn:primary2] /ibid./ p.33-34
+
+The balance of her dissertation, where she describes how she
+identified these primary settlements on the North Side of Chicago and
+how they shaped the development of that sector is unreadably tedious.
+Fortunately, she provide a series of maps showing these developments
+from 1837 to 1879, and her report "The Development of the North Side"
+includes a series of maps of developments down to 1929.
+
+* Validation of Palmer's Analysis
+On seeing these maps, it occurred to me that I am in an excellent
+position to test Palmer's model of the basic units of social
+process. If the neighborhood perceptions that I find in 2012 conform
+to the patterns she would have predicted 80 years ago, that would be
+the kind of positive result that we almost never see in social
+science. I prepared a map plotting some preliminary data on
+neighborhood perception on the North Side over her 1920-1929 North
+Side settlement map (Figure 1).
+
+Briefly, these "neighborhood perception" layer is a kernel density
+estimate of the probability density that a place will be
+labeled as a neighborhood in a housing listing on
+Craigslist. Different colors correspond to different neighborhoods and
+the lines between are the decision boundaries.
+
+It doesn't quite hit you right between the eyes, but by my light there
+seems to be a fair amount of agreement. When I improve my method of
+estimating neighborhood boundaries, I expect that these maps will
+correspond much more closely.
+
+Assuming for a moment that Vivien Palmer was exactly right, how
+would we use her insight without doing eight years of massive
+antiquarian research for every eighth of a city? One way we might go forward is by
+following her claim that the elementary territorial grouping change
+as a unit. Since we have a long series now of stable census
+definitions we may could extract the eigenvectors of the the
+trajectories of demographic changes. Census tracks which comprise an
+elemental grouping should move together.
+
+
+\newpage
+\begin{figure}[h!]
+\centering
+\includegraphics[clip=true, trim=0.5in 1in 0in 0in]{/home/fgregg/academic/boundaries/Rplots.pdf}
+\caption{Neighborhood Perception over 1920-1929 Settlements}
+\end{figure}
+
+* What happened to the Files of the Social History of Chicago's Local Community Areas
+I went into Special Collections hoping to find material on
+neighborhood perceptions in 1920s Chicago, and while I found something
+else of great interest, I found only references to a great cache of
+the material I was originally looking for. Unfortunately, I have not
+been able to find out what happened to the materials that Palmer
+amassed and were on file in the Social Science Research
+Building. Donald Bogue has no recollection of ever hearing of Vivien
+Palmer. Frank Conaway, are erstwhile sociology bibliography is happily
+retired and didn't answer my calls. Albert Hunter has no idea, nor do
+the reference librarians in special collections. It is not at NORC. 
+
+It does appear that some of maps, but only some, may have made it into
+the Regenstein Map Collection, but nothing like the 600 Palmer claims
+were on file. 
+
+  
+\appendix
+
+\section{Social Background Materials on File at the Social Science Research Building at the University of Chicago}
+
+
+1. (Census data from 1910 and 1920)
+2. A series of some six hundred maps on Chicago and its local
+   comm units. This series contains base maps, census rate maps and
+   maps showing the distribution of a wide range of social phenomena
+   -- land values, business centers, memberships of various
+   institutions, delinquency, murders, crime, poverty, motion picture
+   theatres, dance halls, cabarets, rooming houses, the development of
+   the city's transportation system, subdivisions and many other
+   phases of past and present Chicago.
+3. A series of fifty volumes of documents on the social backgrounds of
+   local communities. These volumes contain interviews with people who
+   have been active in the life of local areas, copies of rare
+   manuscripts and publications, digests of previous studies which
+   have been made and bibliographies.
+4. A series of documents, pamphlets and directories on each of the
+   nationality groups of the city. Edward Burchard's file of
+   nationality data is also on deposit in our offices.
+5. Documents of special studies, as for instance, hobos, houseboat
+   colonies, gangs, selected institutions and organizations, or
+   townships annexed to Chicago.
+6. Materials of the Illinois State Health Insurance investigation
+7. Schedules and case materials of the Rent Investigation, 1923
+8. Committee of Fifteen records.
+9. Materials of the Illinois Crime Survey made by the Illinois
+   Association for Criminal Justice
+10. Newspaper clippings of the Illinois Civil Service Commission.
+11. 1925 Industries Survey material compiled by Mabel Magee.
+
+(Palmer, Vivien Marie. 1929. "Social Backgrounds of Chicago's Local
+Communities".)
+   
+#+TITLE:     City Divisions
+#+AUTHOR:    Forest Timothy Gregg
+#+EMAIL:     fgregg@rhodesx
+#+DATE:      2012-02-22 Wed
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:not-in-toc
+
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT:
+
