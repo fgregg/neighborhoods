@@ -7,12 +7,17 @@
   \mode<presentation>{
     \setbeamercolor{background canvas}{bg=white}
   }
+  \mode<article>{
+    \begin{frame}
+      \frametitle{Blackout}
+    \end{frame}
+  }
 }
 
-\newcommand{\fullscreenimage}[1]{
+\newcommand{\fullscreenimage}[2]{
   \mode<presentation>{	
     \setbeamercolor{background canvas}{bg=black}
-    \begin{frame}[plain]
+    \begin{frame}[plain, label=#2]
       \begin{tikzpicture}[remember picture,overlay]
         \node[at=(current page.center)] {
           #1
@@ -23,9 +28,18 @@
   \mode<presentation>{
     \setbeamercolor{background canvas}{bg=white}
   }
+  \mode<article>{
+    \begin{frame}
+    \frametitle{Image: #2}
+    \end{frame}			
+    \begin{figure}[h!]
+      \centering
+    \includeslide[height=5cm]{#2}
+    \end{figure}		
+   }
 }
 
-\newcommand{\crossfade}[2]{
+\newcommand{\crossfade}[3]{
   \mode<presentation>{	
     \setbeamercolor{background canvas}{bg=black}
       \begin{frame}[plain]
@@ -41,4 +55,9 @@
   \mode<presentation>{	
     \setbeamercolor{background canvas}{bg=white}
   }
+  \mode<article>{
+    \begin{frame}
+      \frametitle{Animation: #3}
+    \end{frame}
+   }
 }
