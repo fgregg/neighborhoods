@@ -3,7 +3,7 @@ library(RMySQL)
 library(maptools)
 library(rgdal)
 
-setwd('/home/fgregg/academic/boundaries')
+setwd('/home/fgregg/academic/neighborhood')
 
 
 genLogit <- function(x, A=0, K=1, B=1, v=1, Q=1, M=0) {
@@ -109,22 +109,22 @@ partialOrder <- function(listings) {
 
 
 # Import Base Layers
-com.areas <- readOGR("/home/fgregg/academic/boundaries/chicomm.shp",
+com.areas <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/chicomm.shp",
                      layer="chicomm",
                      p4s="+proj=longlat")
 com.areas <- spTransform(com.areas,
                          CRS("+proj=utm +zone=16 +datum=NAD83")
                          )
 
-tracts <- readOGR("/home/fgregg/academic/boundaries/Census_Tracts.shp",
+tracts <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/Census_Tracts.shp",
                      layer="Census_Tracts")
 tracts <- spTransform(tracts,
                       CRS("+proj=utm +zone=16 +datum=NAD83")
                       )
 
-gang.areas.ns <- readOGR("/home/fgregg/academic/boundaries/North Side .kml",
+gang.areas.ns <- readOGR("/home/fgregg/academic/boundaries/phenomena/North Side .kml",
                          layer="North Side ")
-gang.areas.ss <- readOGR("/home/fgregg/academic/boundaries/southside.kml",
+gang.areas.ss <- readOGR("/home/fgregg/academic/boundaries/phenomena/southside.kml",
                          layer="South_Chicago")
 gang.areas.ns <- spTransform(gang.areas.ns,
                              CRS("+proj=utm +zone=16 +datum=NAD83")
@@ -138,22 +138,22 @@ gang.areas.ss <- spTransform(gang.areas.ss,
 #                   layer="Major_Streets1",
 #                   p4s="+proj=utm +zone=16 +datum=NAD83")
 
-railroads <- readOGR("Railroads.shp", layer = "Railroads")
+railroads <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Railroads.shp", layer = "Railroads")
 railroads <- spTransform(railroads,
                      CRS("+proj=utm +zone=16 +datum=NAD83")
                      )
                      
-water <- readOGR("Kmlchicagowaterfeatures.kml", layer = "WATER_FEATURES")
+water <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagowaterfeatures.kml", layer = "WATER_FEATURES")
 water <- spTransform(water,
                      CRS("+proj=utm +zone=16 +datum=NAD83")
                      )
 
-parks <- readOGR("Kmlchicagoparks.kml", layer = "Chicago Parks")
+parks <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagoparks.kml", layer = "Chicago Parks")
 parks <- spTransform(parks,
                      CRS("+proj=utm +zone=16 +datum=NAD83")
                      )
 
-rent <- readAsciiGrid("/home/fgregg/academic/boundaries/rent.ag")
+rent <- readAsciiGrid("/home/fgregg/academic/boundaries/intermediate_files/rent.ag")
 proj4string(rent) <- CRS("+proj=utm +zone=16 +datum=NAD83")
 crime <- readAsciiGrid("/home/fgregg/academic/boundaries/crime.ag")
 proj4string(crime) <- CRS("+proj=utm +zone=16 +datum=NAD83")
@@ -707,7 +707,7 @@ listings.narrow <- listings[listings@data$neighborhood %in%
                             "neighborhood"],]
 listings.narrow$neighborhood <- factor(listings.narrow$neighborhood)
 
-pdf("~/academic/boundaries/test.pdf", paper="letter", pointsize=5)
+pdf("~/academic/neighborhoods/code/test.pdf", paper="letter", pointsize=5)
 simplePlot(x.lim, y.lim)
 #basePlot(add=TRUE)
 points(listings.narrow,
@@ -717,7 +717,7 @@ points(listings.narrow,
 #labelPlot()
 dev.off()
 
-pdf("~/academic/boundaries/test1.pdf", paper="letter", pointsize=5)
+pdf("~/academic/neighborhoods/code/test1.pdf", paper="letter", pointsize=5)
 simplePlot(x.lim, y.lim)
 basePlot(add=TRUE)
 points(listings.narrow,
@@ -725,28 +725,28 @@ points(listings.narrow,
        pch=16,
        cex=.8)
 centroids.narrow <- centroids[regexpr("/", as.character(centroids@data$neighborhood)) < 1 & centroids@data$count >= 3,]
-labelPlot(centroids.narrow,
-          "neighborhood", .5,
-          color=rgb(0, 0, 0, genLogit(centroids.narrow$count,
-            A=0,
-            K=.6,
-            M=20,
-            B=.8,
-            Q=10,
-            v=10)))
+#labelPlot(centroids.narrow,
+#          "neighborhood", .5,
+#          color=rgb(0, 0, 0, genLogit(centroids.narrow$count,
+#            A=0,
+#            K=.6,
+#            M=20,
+#            B=.8,
+#            Q=10,
+#            v=10)))
 text(451000, 4650000, paste(dim(unique(listings.narrow@coords))[1], "locations,",
                             length(levels(listings.narrow$neighborhood)),
                             "places"))
 dev.off()
 
-pdf("~/academic/boundaries/test2.pdf", paper="letter", pointsize=5)
+pdf("~/academic/neighborhoods/code/test2.pdf", paper="letter", pointsize=5, bg="white")
 simplePlot(x.lim, y.lim)
 basePlot(add=TRUE)
 points(listings, pch=46, cex=.3)
 text(450000, 4650000, paste(dim(unique(listings@coords))[1], "locations"))
 dev.off()
 
-pdf("~/academic/boundaries/allTogether.pdf", paper="letter", pointsize=5)
+pdf("~/academic/neighborhoods/code/allTogether.pdf", paper="letter", pointsize=5)
 simplePlot(x.lim, y.lim)
 basePlot(add=TRUE)
 points(listings.narrow,
@@ -758,7 +758,7 @@ contour(rent, "rent.ag",
         add=TRUE, col="brown")
 dev.off()
 
-pdf("~/academic/boundaries/crime.pdf", paper="letter", pointsize=5)
+pdf("~/academic/neighborhoods/code/crime.pdf", paper="letter", pointsize=5)
 simplePlot(x.lim, y.lim)
 basePlot(add=TRUE)
 points(listings.narrow,
@@ -804,8 +804,8 @@ gangs <- gangs[gangs@data$gang %in%
                       gang.centroids@data[regexpr("/",
                       as.character(gang.centroids@data$gang)) < 1 &
                       gang.centroids@data$count >= 5, "gang"],]
-pdf("~/academic/boundaries/gangs.pdf", paper="letter", pointsize=5)
-#png("~/academic/boundaries/gangs.png", width=1000, height=3000)
+pdf("~/academic/neighborhoods/code/gangs.pdf", paper="letter", pointsize=5)
+#png("~/academic/neighborhoods/gangs.png", width=1000, height=3000)
 simplePlot(x.lim, y.lim)
 basePlot(add=TRUE)
 plot(gang.areas.ns, border="grey", add=TRUE, lwd=.1)
@@ -816,7 +816,7 @@ points(gangs, col=factorColor(gangs$gang),
 text(451000, 4650000, paste(dim(gangs)[1], "locations,",
                             length(levels(as.factor(gangs$gang)))-1,
                             "gangs"))
-contour(crime, "crime.ag",
+contour(crime, "/home/fgregg/academic/neighborhoods/intermediate_files/crime.ag",
         levels=c(.1, .2, .4, .6),
         add=TRUE, col="brown")
 legend(451000, 4648000,
