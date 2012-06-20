@@ -1,0 +1,54 @@
+Proposal:
+
+Can online real estate listings serve as a proxy for resident's
+perceptions of neighborhoods?
+
+In the long history of the ecological effects of neighborhood, we have
+faced the perennial problem of how to practically define the
+neighborhood as an object of study. Since we think about the
+neighborhood as an area defined by how people interact with it and
+within it, we have often been tempted to let people define
+neighborhoods for us.
+
+However, when we ask people to define their neighborhoods we run into
+a robust social fact. People have a very hard time drawing the
+boundaries of their neighborhood, and if we can elicit two definitions
+of neighborhood areas, they are are almost certain to disagree.
+
+Typically when faced with such variation, we respond by averaging
+responses together to estimate the central tendency. However, in the
+case of neighborhoods, we would need a very large sample in order to
+get a stable estimate given that the size of some named neighborhoods
+are quite small. As far as I know, no such a large sample has never
+been drawn.
+
+However, it may be possible to use data on where people claim a real
+estate listing is located as a measure of people's perceptions of
+neighborborhoods. The obvious virture of such data is their volume,
+and if it is not too inaccurate, it could allow for a very high
+resolution cognitive map of a city.
+
+For the past yeasr, every night, I download Chicago Craigslist
+apartment, rental, sublet and roommate listings. When a persons posts
+a listing, they have the option of putting in an address or
+intersection. This allows me to associate latitude and longitude with
+a posting. They also have the option of entering, in free text, the
+``Specific location'' of the posting.
+
+People interpret ``Specific location'' in different ways, but most
+people put in the name of a neighborhood.  With these data, I can
+estimate how likely that a listing will say that a location is in the
+neighborhood. 
+
+Clearly, we should expect there to be many biases in these data, but
+we do not know how extreme. If these data should prove usable, then we
+would have a powerful and inexpensive way of getting at how people
+divide up their cities. 
+
+In order to evaluate these data, we must compare it to data that we
+expect to be generally unbiased. In the 1994 Project on Human
+Development in Chicago Neighborhoods Community Survey, the second and
+third questions asked the respondents the name of the neighborhood and
+to define it's boundaries. If I had these, or similar data, I could
+characterized the nature and extent of bias of the real estatle
+listing data.
