@@ -60,16 +60,26 @@ cities = ["newyork",
           "asheville"
           ]
 
-feeds = [["sublet", "http://%s.craigslist.org/sub/index.rss"],
+std_feeds = [["sublet", "http://%s.craigslist.org/sub/index.rss"],
          ["room", "http://%s.craigslist.org/roo/index.rss"],
          ["apartment" , "http://%s.craigslist.org/apa/index.rss"]
         ]
+
+ny_feeds =  [["sublet", "http://%s.craigslist.org/sub/index.rss"],
+            ["room", "http://%s.craigslist.org/roo/index.rss"],
+            ["apartment" , "http://%s.craigslist.org/abo/index.rss"]
+            ]
 
 db = MySQLdb.connect(db="neighborhood",
                      read_default_file="~/.my.cnf")
 c = db.cursor()
 
 for city in cities :
+    if city == "newyork" :
+        feeds = nyfeeds
+    else :
+        feeds = std_feeds 
+
     for section, url in feeds :
         url = url % city
         try:
