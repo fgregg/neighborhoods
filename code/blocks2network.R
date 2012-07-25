@@ -151,10 +151,6 @@ neighborhoods <- c("lakeview","lincoln park", "roscoe village",
                    "east village", "noble square", "streeterville",
                    "west town", "magnificent mile", "gold coast")
 
-map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
-                   "#FB9A99", "#E31A1C", "#FDBF6F"),
-             length.out = length(neighborhoods))
-
 classes = trainKDE(listings,
                    neighborhoods,
                    centroids,
@@ -162,15 +158,150 @@ classes = trainKDE(listings,
                    ks.pi,
                    0.0000015)
 
+map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
+                   "#FB9A99", "#E31A1C", "#FDBF6F"),
+             length.out = length(neighborhoods))
 plot(blocks.poly,
      col = probColors(map.colors, classes),
      border=rgb(0,0,0,0.04),
      lwd=0.01)
                     
-#blocks <-poly2nb(blocks.poly,
-#                 foundInBox=gUnarySTRtreeQuery(blocks.poly))
+blocks <-poly2nb(blocks.poly,
+                 foundInBox=gUnarySTRtreeQuery(blocks.poly))
 
 
-#blocks <- nb2edgelist(blocks)
+blocks <- nb2edgelist(blocks)
+
+unary <- log(classes)
+minimum.val = min(unary[is.finite(unary)])
+unary[is.infinite(unary)] <- minimum.val
 #blocks <- graph.edgelist(blocks, directed=FALSE)
 
+write.csv(blocks, file="edges.csv", row.names=FALSE)
+write.csv(unary, file="unary.csv", row.names=FALSE)
+
+edge.weights <- rep(1, dim(blocks)[1])
+
+rail.weights <- as.numeric(railroad.intersects)
+write.csv(rail.weights, file="rail_intersects.csv", row.names=FALSE)
+rail.weights <- (rail.weights - 1) * -1
+
+
+highway.weights <- as.numeric(highway.intersects)
+write.csv(highway.weights, file="highway_intersects.csv", row.names=FALSE)
+highway.weights <- (highway.weights - 1) * -1
+
+water.weights <- as.numeric(water.intersects)
+write.csv(water.weights, file="water_intersects.csv", row.names=FALSE)
+water.weights <- (water.weights - 1) * -1
+
+grid.street.weights <- as.numeric(grid.street.intersects)
+write.csv(grid.street.weights, file="grid_intersects.csv", row.names=FALSE)
+grid.street.weights <- (grid.street.weights -1) * -1
+
+
+
+edge.weights = grid.street.weights * rail.weights * highway.weights * water.weights
+
+write.csv(edge.weights, file="edge_weights.csv", row.names=FALSE)
+
+
+plabels <- read.csv("potts_labels.csv")
+plot(blocks.poly,
+     col = map.colors[plabels[,1]],
+#     border=rgb(0,0,0,0.04),
+#     border=0,
+#     lwd=0.005)
+     lty=0)
+
+plot(com.areas, border="grey", add=TRUE, lwd=.1)
+
+plot(water, col="#C0E7F3", border=0, add=TRUE)
+lines(railroads, lty=2, col="tan")
+
+plot(parks[sapply(slot(parks, "polygons"), slot, "area") > 100000,],
+     col="#DBEADC", border=0, add=TRUE)
+
+
+
+createEdgeToLine <- function(centroids, crs) {
+  edgeToLine <- function(edge) {
+    l <- rbind(centroids[edge[1],],
+               centroids[edge[2],])
+    l <- Line(l)
+    l <- SpatialLines(list(Lines(l, ID="l")),
+                      proj4string = CRS(crs))
+  }
+  return(edgeToLine)
+}
+
+edgesIntersect <- function(edges, centroids, barrier, crs) {
+  edgeToLine <- createEdgeToLine(centroids, crs)
+  apply(edges,
+        1,
+        FUN=function(x) {
+          gIntersects(edgeToLine(x), barrier)
+        }
+        )
+  
+}
+
+parks <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagoparks.kml", layer = "Chicago Parks")
+parks <- spTransform(parks,
+                     CRS(projection)
+                     )
+
+railroads <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Railroads.shp", layer = "Railroads")
+railroads <- spTransform(railroads,
+                     CRS(projection)
+                     )
+
+bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
+                                                          range[1,1],
+                                                          range[2,1],
+                                                          range[2,1],
+                                                          range[1,1]),
+                                                        c(range[1,2],
+                                                          range[2,2],
+                                                          range[2,2],
+                                                          range[1,2],
+                                                          range[1,2])))),
+                                     "p")),
+                       proj4string = CRS(projection))
+
+railroads <- gIntersection(railroads, bbx)
+
+railroad.intersects <- edgesIntersect(blocks, centroids, railroads, projection)
+
+streets <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Major_Streets.shp",
+                   layer="Major_Streets",
+                   p4s="+proj=utm +zone=16 +datum=NAD83")
+
+highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
+                                               "KENNEDY"),]
+
+grid.streets <- streets[!streets@data$STREET %in% c("LAKE SHORE",
+                                                    "KENNEDY"),]
+
+highways <- gIntersection(highways, bbx)
+grid.streets <- gIntersection(grid.streets, bbx)
+
+highway.intersects <- edgesIntersect(blocks, centroids, highways, projection)
+grid.street.intersects <- edgesIntersect(blocks, centroids, grid.streets, projection)
+
+water <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagowaterfeatures.kml", layer = "WATER_FEATURES")
+
+water <- spTransform(water,
+                     CRS(projection)
+                     )
+
+water <- gIntersection(water, bbx)
+
+water.intersects <- edgesIntersect(blocks, centroids, water, projection)
+
+com.areas <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/chicomm.shp",
+                     layer="chicomm",
+                     p4s="+proj=longlat")
+com.areas <- spTransform(com.areas,
+                         CRS(projection)
+                         )
