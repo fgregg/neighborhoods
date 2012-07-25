@@ -100,11 +100,86 @@ nb2edgelist <- function(nb) {
   return(el)
 }
 
-# Projection and Bounding Box Range
+createEdgeToLine <- function(centroids, crs) {
+  edgeToLine <- function(edge) {
+    l <- rbind(centroids[edge[1],],
+               centroids[edge[2],])
+    l <- Line(l)
+    l <- SpatialLines(list(Lines(l, ID="l")),
+                      proj4string = CRS(crs))
+  }
+  return(edgeToLine)
+}
+
+edgesIntersect <- function(edges, centroids, barrier, crs) {
+  edgeToLine <- createEdgeToLine(centroids, crs)
+  apply(edges,
+        1,
+        FUN=function(x) {
+          gIntersects(edgeToLine(x), barrier)
+        }
+        )
+  
+}
+
+# Map Projection
 projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=0.9999749999999999 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
 # Lat/Lon of Bounding Box
 range = cbind(c(-87.7, -87.6), c(41.89,41.98))
 range = project(range, projection)
+
+bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
+                                                          range[1,1],
+                                                          range[2,1],
+                                                          range[2,1],
+                                                          range[1,1]),
+                                                        c(range[1,2],
+                                                          range[2,2],
+                                                          range[2,2],
+                                                          range[1,2],
+                                                          range[1,2])))),
+                                     "p")),
+                       proj4string = CRS(projection))
+
+# Shape Files of Barriers that will effect edge weights
+railroads <- readOGR("../barriers/Railroads.shp",
+                     layer = "Railroads")
+railroads <- spTransform(railroads,
+                     CRS(projection)
+                     )
+railroads <- gIntersection(railroads, bbx)
+
+streets <- readOGR("../barriers/Major_Streets.shp",
+                   layer="Major_Streets",
+                   p4s="+proj=utm +zone=16 +datum=NAD83")
+
+highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
+                                               "KENNEDY"),]
+highways <- gIntersection(highways, bbx)
+
+grid.streets <- streets[!streets@data$STREET %in% c("LAKE SHORE",
+                                                    "KENNEDY"),]
+grid.streets <- gIntersection(grid.streets, bbx)
+
+water <- readOGR("../barriers/Kmlchicagowaterfeatures.kml",
+                 layer = "WATER_FEATURES")
+water <- spTransform(water,
+                     CRS(projection)
+                     )
+water <- gIntersection(water, bbx)
+
+# Shape Files For Context
+com.areas <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/chicomm.shp",
+                     layer="chicomm",
+                     p4s="+proj=longlat")
+com.areas <- spTransform(com.areas,
+                         CRS(projection)
+                         )
+parks <- readOGR("../barriers/Kmlchicagoparks.kml",
+                 layer = "Chicago Parks")
+parks <- spTransform(parks,
+                     CRS(projection)
+                     )
 
 # Load Block Data
 blocks.poly <- readOGR("../admin_areas/CensusBlockTIGER2010.shp",
@@ -120,6 +195,7 @@ blocks.poly <- blocks.poly[centroids[,1] > range[1,1] &
 centroids <- coordinates(blocks.poly)
 colnames(centroids) <- c("x", "y")
 
+# Import Neighborhood Label Point Data
 con <- dbConnect(MySQL(), dbname="neighborhood")
 listings <- dbGetQuery(con, "
 SELECT DISTINCT
@@ -151,6 +227,7 @@ neighborhoods <- c("lakeview","lincoln park", "roscoe village",
                    "east village", "noble square", "streeterville",
                    "west town", "magnificent mile", "gold coast")
 
+# Estimate KDE
 classes = trainKDE(listings,
                    neighborhoods,
                    centroids,
@@ -161,31 +238,48 @@ classes = trainKDE(listings,
 map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
                    "#FB9A99", "#E31A1C", "#FDBF6F"),
              length.out = length(neighborhoods))
+
+# Plot KDE
 plot(blocks.poly,
      col = probColors(map.colors, classes),
      border=rgb(0,0,0,0.04),
      lwd=0.01)
-                    
+
+# Topology of Block Connectivity
 blocks <-poly2nb(blocks.poly,
                  foundInBox=gUnarySTRtreeQuery(blocks.poly))
-
-
 blocks <- nb2edgelist(blocks)
+write.csv(blocks, file="edges.csv", row.names=FALSE)
 
+# Unary Potentials of Block Labels
 unary <- log(classes)
 minimum.val = min(unary[is.finite(unary)])
 unary[is.infinite(unary)] <- minimum.val
-#blocks <- graph.edgelist(blocks, directed=FALSE)
-
-write.csv(blocks, file="edges.csv", row.names=FALSE)
 write.csv(unary, file="unary.csv", row.names=FALSE)
+
+#Edge Weights 
+railroad.intersects <- edgesIntersect(blocks,
+                                      centroids,
+                                      railroads,
+                                      projection)
+highway.intersects <- edgesIntersect(blocks,
+                                     centroids,
+                                     highways,
+                                     projection)
+grid.street.intersects <- edgesIntersect(blocks,
+                                         centroids,
+                                         grid.streets,
+                                         projection)
+water.intersects <- edgesIntersect(blocks,
+                                   centroids,
+                                   water,
+                                   projection)
 
 edge.weights <- rep(1, dim(blocks)[1])
 
 rail.weights <- as.numeric(railroad.intersects)
 write.csv(rail.weights, file="rail_intersects.csv", row.names=FALSE)
 rail.weights <- (rail.weights - 1) * -1
-
 
 highway.weights <- as.numeric(highway.intersects)
 write.csv(highway.weights, file="highway_intersects.csv", row.names=FALSE)
@@ -199,13 +293,11 @@ grid.street.weights <- as.numeric(grid.street.intersects)
 write.csv(grid.street.weights, file="grid_intersects.csv", row.names=FALSE)
 grid.street.weights <- (grid.street.weights -1) * -1
 
-
-
 edge.weights = grid.street.weights * rail.weights * highway.weights * water.weights
 
 write.csv(edge.weights, file="edge_weights.csv", row.names=FALSE)
 
-
+# Import output of GCO and plot
 plabels <- read.csv("potts_labels.csv")
 plot(blocks.poly,
      col = map.colors[plabels[,1]],
@@ -224,84 +316,3 @@ plot(parks[sapply(slot(parks, "polygons"), slot, "area") > 100000,],
 
 
 
-createEdgeToLine <- function(centroids, crs) {
-  edgeToLine <- function(edge) {
-    l <- rbind(centroids[edge[1],],
-               centroids[edge[2],])
-    l <- Line(l)
-    l <- SpatialLines(list(Lines(l, ID="l")),
-                      proj4string = CRS(crs))
-  }
-  return(edgeToLine)
-}
-
-edgesIntersect <- function(edges, centroids, barrier, crs) {
-  edgeToLine <- createEdgeToLine(centroids, crs)
-  apply(edges,
-        1,
-        FUN=function(x) {
-          gIntersects(edgeToLine(x), barrier)
-        }
-        )
-  
-}
-
-parks <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagoparks.kml", layer = "Chicago Parks")
-parks <- spTransform(parks,
-                     CRS(projection)
-                     )
-
-railroads <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Railroads.shp", layer = "Railroads")
-railroads <- spTransform(railroads,
-                     CRS(projection)
-                     )
-
-bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
-                                                          range[1,1],
-                                                          range[2,1],
-                                                          range[2,1],
-                                                          range[1,1]),
-                                                        c(range[1,2],
-                                                          range[2,2],
-                                                          range[2,2],
-                                                          range[1,2],
-                                                          range[1,2])))),
-                                     "p")),
-                       proj4string = CRS(projection))
-
-railroads <- gIntersection(railroads, bbx)
-
-railroad.intersects <- edgesIntersect(blocks, centroids, railroads, projection)
-
-streets <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Major_Streets.shp",
-                   layer="Major_Streets",
-                   p4s="+proj=utm +zone=16 +datum=NAD83")
-
-highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
-                                               "KENNEDY"),]
-
-grid.streets <- streets[!streets@data$STREET %in% c("LAKE SHORE",
-                                                    "KENNEDY"),]
-
-highways <- gIntersection(highways, bbx)
-grid.streets <- gIntersection(grid.streets, bbx)
-
-highway.intersects <- edgesIntersect(blocks, centroids, highways, projection)
-grid.street.intersects <- edgesIntersect(blocks, centroids, grid.streets, projection)
-
-water <- readOGR("/home/fgregg/academic/neighborhoods/barriers/Kmlchicagowaterfeatures.kml", layer = "WATER_FEATURES")
-
-water <- spTransform(water,
-                     CRS(projection)
-                     )
-
-water <- gIntersection(water, bbx)
-
-water.intersects <- edgesIntersect(blocks, centroids, water, projection)
-
-com.areas <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/chicomm.shp",
-                     layer="chicomm",
-                     p4s="+proj=longlat")
-com.areas <- spTransform(com.areas,
-                         CRS(projection)
-                         )
