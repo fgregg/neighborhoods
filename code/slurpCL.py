@@ -76,7 +76,7 @@ c = db.cursor()
 
 for city in cities :
     if city == "newyork" :
-        feeds = nyfeeds
+        feeds = ny_feeds
     else :
         feeds = std_feeds 
 
