@@ -1,0 +1,42 @@
+\documentclass[11pt,letterpaper,oneside]{article}
+\usepackage{url}
+\begin{document}
+
+\section*{The Data}
+For the past year, I have been downloading Craigslist apartment,
+rental, sublet and roommate listings, nightly. When a persons posts a
+listing, they have the option of putting in an address or
+intersection. This allows me to associate latitude and longitude with
+a posting. They also have the option of entering, in free text, the
+``Specific location'' of the posting.  With these data, I can estimate
+how likely that a listing will say that a location is in a
+neighborhood (Figure 1).
+
+I have been downloading these data for Chicago since April 2011, and
+since December 2011 the following cities: New York, Los Angeles,
+Houston, Philadelphia, Phoenix, San Antonio, San Diego, Dallas,
+Jacksonville, Indianapolis, San Francisco, Austin, Columbus,
+Charlotte, Detroit, El Paso, Memphis, Baltimore, Boston, Seattle,
+Washington D.C., Nashville, Denver, Louisville, Milwaukee, Portland,
+Las Vegas, Oklahoma City, Albuquerque, Tucson, Fresno, Sacramento,
+Kansas City, Atlanta, Colorado Springs, Omaha, Raleigh, Miami,
+Cleveland, Tulsa, Minneapolis, Wichita, Knoxville, Asheville. These
+data are available through RSS feeds like
+\url{http://chicago.craigslist.org/sub/index.rss} or
+\url{http://memphis.craigslist.org/roo/index.rss}.
+
+\section*{Privacy Protection Measures}
+Going forward, I will take the following steps to protect the privacy
+of Craigslist posters. Every month, after identifying duplicates I will 
+\begin{enumerate}
+\item{randomly perturb locations that were identified by geocoding addresses,}
+\item{round the given price to the nearest hundred,}
+\item{record the posting data only to the month and year,}
+\item{and dispose of the title and text of the posting, and store only
+    a list of word pairs and how often they appear in a posting. Word
+    pairs that only appear in one posting will not be recorded}
+\end{enumerate}
+
+The collection process is completely automated, and this
+de-identification will be as well.
+\end{document}
