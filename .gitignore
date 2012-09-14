@@ -1,5 +1,9 @@
 kernelmap.tex
 
+gang_maps.zip
+gco/
+gco_python/
+code/*.csv
 *.py[co]
 *.aux
 *.pdf
