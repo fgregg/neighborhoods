@@ -5,28 +5,49 @@
 \usetikzlibrary{arrows}
 \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
 \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
-\newtheorem{factors}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{mydef}{Definition}
+
+
 \begin{document}
 
-Say, we are interested in whether city blocks in a city are majority
-black or white. We think the color of the block is directly affected
-by the neighboring blocks: a block that is surrounded by white blocks
-will tend to change to white and vice-versa. A block that is further
-away can only have influence through a directly neighboring block.
+Say we would like to think about patterns of racial segregation in a
+city, and we are willing to make a couple of simplifying
+assumptions. First, we'll assume that a city block is either all white
+or all black. Second, we'll assume that a white block that is
+surrounded by black blocks is likely to turn black and vice versa, and
+that only neighboring blocks have a direct influence. A block that is
+further away can influence a block, but only by influencing a directly
+neighboring block.
 
 How can we use these beliefs to reason about what kinds of patterns of
 segregation and integration are more or less likely? 
 
 \section*{Independence and Factoring}
-Let's start with a simple prototype. Let's look at four blocks, that
-we will call $A$, $B$, $C$, and $D$, that can be either black or
-white. These blocks have the neighbor structures shown in figure
-X. $A$ and $C$ are not neighbors and neither is $B$ and $D$.
+Let's look at four blocks, that we will call $A$, $B$, $C$, and $D$,
+Blocks $A$ and $C$ are not neighbors and neither is $B$ and $D$ (figure X).
 
-Now, let's say $x$ is the a particular pattern of black and white
+Now, let's say there is a particular pattern of black and white
 blocks, for example Block A--black, Block B--black, Block C--white,
-Block D--white. $\Pr(X=x)$ is the probability of any given pattern.
+Block D--white. We'll call this particular pattern $x$, and we'll say
+that $\Pr(X=x)$ is the probability of that pattern, and $\Pr(X)$ is
+the probability distribution over all possible patterns
 
+So that the model is clear enough to think with, we'd like to express
+this probability distribution only in terms of local interactions
+between neighboring blocks. We'll do this in two steps. First we'll
+show that any probability distribution over these four blocks can be
+expressed as a product of functions that only take in the value of
+neighboring blocks, i.e. :
+
+\begin{equation}
+  \Pr(X) = \phi_1(A,B)\phi_2(B,C)\phi_3(C,D)\phi_4(D,A) 
+\end{equation}
+
+Second, we'll choose functions that compactly express our assumptions
+about local interactions.
+
+\subsection*{Factorization}
 Because we think that blocks can only influence each other through a
 direct neighbor, we can say that $A$ and $C$ are independent of each
 other given their immediate neighbors $B$ and $D$, and that $B$ and
@@ -41,11 +62,12 @@ As I'll demonstrate these independencies imply that
 \Pr(X) = \phi_1(A,B)\phi_2(B,C)\phi_3(C,D)\phi_4(D,A) 
 \end{equation}
 
+
 \subsection*{Factorization}
 
-\begin{factors}
+\begin{theorem}
 Let $A$, $B$, and $C$ be three disjoint sets of variables such that
-$X = A \cup B \cup C$. $\Pr(X)$ satisfies $(A\independent B) \mid C)$
+$X = A \cup B \cup C$. $\Pr(X)$ satisfies $(A\independent B) \mid C$
 if and only if
 
 
@@ -53,11 +75,11 @@ if and only if
 \Pr(X) = \phi_1(A,C)\phi_2(B,C)
 \end{equation}
 
-for some $\phi_1$ and $\phi_2$.
-\end{factors}
+for some functions $\phi_1$ and $\phi_2$.
+\end{theorem}
 
 \begin{proof}
-Assume that $(A\independent B) \mid C)$
+Assume that $(A\independent B) \mid C$
 \begin{align}
 \Pr(A,B,C) &= \Pr(A,B \mid C)\Pr(C) \\
 &= \Pr(A \mid C)\Pr(B \mid C)\Pr(C) \\
@@ -93,7 +115,7 @@ From which we can see that
 Which was to be proven.
 \end{proof}
 
-Now, if let $\phi_5(A,B,D) = \phi_1(A,B)\phi_4(D,A)$, $\phi_6(C,B,D) = \phi_2(B,C)\phi_3(C,D)$ we can see that 
+Now, if we let $\phi_5(A,B,D) = \phi_1(A,B)\phi_4(D,A)$ and $\phi_6(C,B,D) = \phi_2(B,C)\phi_3(C,D)$ we can see that 
 
 \begin{align}
 \Pr(X) &= \phi_1(A,B)\phi_2(B,C)\phi_3(C,D)\phi_4(D,A) \\
@@ -101,7 +123,7 @@ Now, if let $\phi_5(A,B,D) = \phi_1(A,B)\phi_4(D,A)$, $\phi_6(C,B,D) = \phi_2(B,
 &= \phi_5(A,\left\{B,D\right\})\phi_6(C,\left\{B,D\right\})
 \end{align}
 
-implies $(A\independent C) \mid (B,D)$, and if we combine the factors 
+which implies $(A\independent C) \mid (B,D)$, and if we combine the factors 
 another way it also implies $(B\independent D) \mid (A,C)$.
 
 \section{Factors to Distributions}
@@ -118,8 +140,7 @@ direct, unmediated effect upon each other. Networks of this kind are
 called Markov networks, and what we saw for our example is true for
 all networks of this type.
 
-Let's set up some definitions.
-
+\begin{mydef}
 A distribution $\Pr_{\phi}$ is a Gibbs distribution defined by the factors
 $\left\{\phi_1(D_1),...,\phi_K(D_k)\right\}$ if
 
@@ -137,45 +158,132 @@ and
 \begin{equation}
 Z = \sum_{X_1,...,X_n}\tilde{P_{\phi}}(X_1,...,X_n)
 \end{equation}
+\end{mydef}
 
-We say that a distribution
+A Gibbs distribution is the probability distribution with maximum
+entropy given some constraint. For example, the uniform distribution
+is the maximum entropy distribution that has support on a given
+interval $[a,b]$, the exponential distribution is the maximum entropy
+distribution given a positive mean, and the normal distribution is the
+maximum entropy distribution given a mean and a standard
+deviation. The $\phi$'s can be thought of as Lagrangian encoding of
+constraints.
+
+\begin{mydef}
+A distribution
 $P(X)=\frac{1}{Z}\phi_1(D_1)\phi_2(D_2)...\phi_{K-1}(D_{K-1})\phi_K(D_k)$
 factorizes over a Markov network $H$ if each $D_k$ is a complete
-subgraph of $H$. 
+subgraph of $H$.
+\end{mydef}
+
+ As a reminder a complete subgraph is set of nodes in
+a network where there is a direct connection between all of the nodes,
+also called a clique.
+
+\begin{mydef}
+Let $H$ be a Markov network structure, and let $X_1--...--X_k$ be a
+path in $H$. Let $Z \in X$ be a set of observed variables. The path
+$X_1-...-X_k$ is active given $Z$ if none of the $X_i$'s, $i =
+1,...k$ is in $Z$.
+\end{mydef}
+
+\begin{mydef}
+A set of nodes $Z$ separates $X$ and $Y$ in $H$, which we denote
+$\operatorname{sep}_H(X;Y \mid Z)$ if there is no active path between
+nodes $X \in X$ and $Y \in Y$ given $Z$. We define the global
+independencies associated with $H$ to be $I(H) = \left\{(X \independent Y \mid Z) : \operatorname{sep}_H(X;Y \mid Z)\right\}$.
+\end{mydef}
+
+From a proof similar to the one above and the Hammersly-Clifford
+theorem, it turns out that the following theorems hold
+
+\begin{theorem}
+  If P is a Gibbs distribution, then P factorizes over a Markov network
+H if and only if every independency in P is encoded in H
+\end{theorem}
+
+\section{Parameterization}
+Returning to our four block example, we saw that we can express the
+probability of the pattern of an assignment to all the blocks can be
+factored into functions that only look at the interactions between
+neighboring blocks. But we still need to choose the form of the
+functions $\phi$.
+
+\begin{equation}
+\Pr(X) = \phi_1(A,B)\phi_2(B,C)\phi_3(C,D)\phi_4(D,A) 
+\end{equation}
+
+
+ 
+To return to our original assumptions, we said that we think that a
+black block has some influence on neighboring blocks to make them
+black. Let's call that influence $w$. And we'll assume that white
+blocks have the same influence, but in the opposite direction,
+i.e. $-w$.\footnote{I believe, but have not proven that this
+  assumption of 'symmetry of influence' is required if we want
+  represent the system as a Markov field.}
+
+
+For a particular block $i$, the balance of influence $h_I$ depends upon the
+number of white neighboring blocks, $n_W$ and black neighboring blocks $n_B$.
+
+\begin{equation}
+h_i = w(n_W - n_B)
+\end{equation}
+
+and we'll say that the probability the race of a block is
+
+\begin{align}
+\Pr(\text{block}_i = \text{white}) = \frac{e^{h_i}}{e^{h_i} + e^{-h_i}} \\
+\Pr(\text{block}_i = \text{black}) = \frac{e^{-h_i}}{e^{h_i} + e^{-h_i}} \\
+\end{align}
+
+And that the probability for any particular pattern of race is
+
+\begin{equation}
+\Pr(X) = \prod\frac{e^{R_ih_i}}{e^{h_i} + e^{-h_i}}
+\end{equation}
+
+Where $R_i$ is an indicator variable that takes a value of
+$1$ where the race of the block is white and a value of $-1$ if the
+block is black.
+
+We can also express this probability in terms of the pairwise interactions 
+of neighbors.
+
+\begin{align}
+\Pr(X) &= \prod_i\frac{e^{R_ih_i}}{e^{h_i} + e^{-h_i}} \\
+&= \prod_i\frac{\prod_{j \in <i j>}e^{R_iR_jw}}{e^{h_i} + e^{-h_i}} \\
+\end{align}
+
+Where $j \in <i j>$ are all the sites that are nearest neighbors of site $i$. Each pair will be appear in the numerator twice. So that 
+
+\begin{equation}
+\Pr(X) = \frac{1}{Z}\prod_{<i j>'}e^{R_iR_jw'} \\
+\end{equation}
+
+Where $Z$ is normalizing constant that is the sum of all possible assignments, 
+$<i j>'$ is every nearest neighbor only counted once, and $w' = w/2$.
+
+This model is classically called the Ising model. We can see that it
+is a Gibbs distribution and we can also see that it encodes the same
+independencies of our racial preference block model, so that this distribution
+factorizes over our  network of influence. 
+
+\end{document}
+
+The log probability can be expressed a good deal more simply. 
+
+
+ 
 
 
 
 
 
 
-It turns out that was true for our simple example is true for a whole
-class of networks called Markov Networks.
 
-
-
-
-We represented our four random variables as a network, where two variables
-shared an edge if and only if two variables were directly dependent. This graph is an instance of a class of graphs 
-
-
-It turns out that what was true for our simple example is true for all
-Markov networks. 
-
-Some definitions
-
-
-
-We can go further 
-and say that 
-
-we have seen that we can factor 
-
-
-Where $phi$ is special kind of function called a factor, which has the
-property that 
-
-These independencies allow us to begin 
-
+two neighboring blocks are both white or both black, then
 
 
 \begin{figure}
@@ -307,3 +415,84 @@ C$, but $(A\independent D) \mid (B,C)$, and $(B\independent C) \mid
 (A,D)$.
 
 \end{document}
+
+Let's set up some definitions.
+
+A distribution $\Pr_{\phi}$ is a Gibbs distribution defined by the factors
+$\left\{\phi_1(D_1),...,\phi_K(D_k)\right\}$ if
+
+\begin{equation}
+\Pr_{\phi}(X_1,...X_n) = \frac{1}{Z}\tilde{P_{\phi}}(X_1,...,X_n)
+\end{equation}
+
+where
+\begin{equation}
+\tilde{P_{\phi}}(X_1,...,X_n) = \phi_1(D_1)\phi_2(D_2)...\phi_{K-1}(D_{K-1})\phi_K(D_k)
+\end{equation}
+
+and
+
+\begin{equation}
+Z = \sum_{X_1,...,X_n}\tilde{P_{\phi}}(X_1,...,X_n)
+\end{equation}
+
+
+We say that a distribution
+$P(X)=\frac{1}{Z}\phi_1(D_1)\phi_2(D_2)...\phi_{K-1}(D_{K-1})\phi_K(D_k)$
+factorizes over a Markov network $H$ if each $D_k$ is a complete
+subgraph of $H$.
+
+Let $H$ be a Markov network structure, and let $X_1--...--X_k$ be a
+path in $H$. Let $Z \in X$ be a set of observed variables. The path
+$X_1--...--X_k$ is active given $Z$ if none of the $X_i$'s, $i =
+1,...k$ is in $Z$.
+
+
+
+A set of nodes $Z$ separates $X$ and $Y$ in $H$, which we denote
+$\operatorname{sep}_H(X;Y \mid Z)$ if there is no active path between
+nodes $X \in X$ and $Y \in Y$ given $Z$. We define the global
+independencies associated with $H$ to be
+
+
+I won't got proof now, but just emphasize the key point. Every Markov
+network represents 
+
+positive distribution P factorizes over a
+Markov network $H$ if and only if $H$ encodes every independency in P.
+
+This means that 
+
+
+
+
+It turns out that was true for our simple example is true for a whole
+class of networks called Markov Networks.
+
+
+
+
+We represented our four random variables as a network, where two variables
+shared an edge if and only if two variables were directly dependent. This graph is an instance of a class of graphs 
+
+
+It turns out that what was true for our simple example is true for all
+Markov networks. 
+
+Some definitions
+
+
+
+We can go further 
+and say that 
+
+we have seen that we can factor 
+
+
+Where $phi$ is special kind of function called a factor, which has the
+property that 
+
+These independencies allow us to begin 
+
+
+
