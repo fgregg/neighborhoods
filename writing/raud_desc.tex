@@ -7,38 +7,42 @@
 \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 \newtheorem{theorem}{Theorem}
 \newtheorem{mydef}{Definition}
-
-
+\title{Learning Neighborhoods: Method description part I -- The models}
+\author{Forest Gregg}
 \begin{document}
+\maketitle
+Say we would like to think how patterns of racial segregation in a
+city could arise from individual choices of residents. We think there
+is some process at the household level, that all else being equal,
+makes it more likely that neighbors will be of the same race than
+different races. We'd like to reason about what kinds of global patterns
+of segregation are likely to arise from these local processes.
 
-Say we would like to think about patterns of racial segregation in a
-city, and we are willing to make a couple of simplifying
-assumptions. First, we'll assume that a city block is either all white
-or all black. Second, we'll assume that a white block that is
-surrounded by black blocks is likely to turn black and vice versa, and
-that only neighboring blocks have a direct influence. A block that is
-further away can influence a block, but only by influencing a directly
-neighboring block.
+To get going, let's make a couple of simplifying assumptions. First,
+we'll assume there are only two races: black and white. Second, we'll
+assume that only direct neighbors affect whether a black or white
+family lives in a house. More distant neighbors can influence the
+house, but only by influencing a directly neighboring house.
 
-How can we use these beliefs to reason about what kinds of patterns of
-segregation and integration are more or less likely? 
+From these assumptions, we can build a probability distribution over
+all global patterns of racial segregation in a city, from complete
+segregation to complete integration.
 
-\section*{Independence and Factoring}
-Let's look at four blocks, that we will call $A$, $B$, $C$, and $D$,
-Blocks $A$ and $C$ are not neighbors and neither is $B$ and $D$ (figure X).
+
+Let's look at four houses, that we will call $A$, $B$, $C$, and $D$,
+Houses $A$ and $C$ are not neighbors and neither are $B$ and $D$ (figure X).
 
 Now, let's say there is a particular pattern of black and white
-blocks, for example Block A--black, Block B--black, Block C--white,
-Block D--white. We'll call this particular pattern $x$, and we'll say
+houses, for example House A--black, House B--black, House C--white,
+House D--white. We'll call this particular pattern $x$, and we'll say
 that $\Pr(X=x)$ is the probability of that pattern, and $\Pr(X)$ is
 the probability distribution over all possible patterns
 
-So that the model is clear enough to think with, we'd like to express
-this probability distribution only in terms of local interactions
-between neighboring blocks. We'll do this in two steps. First we'll
-show that any probability distribution over these four blocks can be
-expressed as a product of functions that only take in the value of
-neighboring blocks, i.e. :
+We'd like to express this probability distribution only in terms of
+local interactions between neighboring houses. We'll do this in two
+steps. First we'll show that any probability distribution over these
+four houses can be expressed as a product of functions that only take
+in the value of neighboring houses, i.e. :
 
 \begin{equation}
   \Pr(X) = \phi_1(A,B)\phi_2(B,C)\phi_3(C,D)\phi_4(D,A) 
@@ -47,8 +51,8 @@ neighboring blocks, i.e. :
 Second, we'll choose functions that compactly express our assumptions
 about local interactions.
 
-\subsection*{Factorization}
-Because we think that blocks can only influence each other through a
+\subsection*{Independence and Factorization}
+Because we think that houses can only influence each other through a
 direct neighbor, we can say that $A$ and $C$ are independent of each
 other given their immediate neighbors $B$ and $D$, and that $B$ and
 $D$ are independent given $A$ and $C$. This does not mean that $A$ can
@@ -134,8 +138,8 @@ have shown that a probability distribution with certain independencies
 can be factored into functions that have only directly dependent
 random variables in their scope.
 
-Remember that we represented the dependencies between the blocks as
-edges. We drew an edge between two blocks when the blocks had a
+Remember that we represented the dependencies between the houses as
+edges. We drew an edge between two houses when the houses had a
 direct, unmediated effect upon each other. Networks of this kind are
 called Markov networks, and what we saw for our example is true for
 all networks of this type.
@@ -203,10 +207,10 @@ H if and only if every independency in P is encoded in H
 \end{theorem}
 
 \section{Parameterization}
-Returning to our four block example, we saw that we can express the
-probability of the pattern of an assignment to all the blocks can be
+Returning to our four house example, we saw that we can express the
+probability of the pattern of an assignment to all the houses can be
 factored into functions that only look at the interactions between
-neighboring blocks. But we still need to choose the form of the
+neighboring houses. But we still need to choose the form of the
 functions $\phi$.
 
 \begin{equation}
@@ -216,26 +220,26 @@ functions $\phi$.
 
  
 To return to our original assumptions, we said that we think that a
-black block has some influence on neighboring blocks to make them
+black house has some influence on neighboring houses to make them
 black. Let's call that influence $w$. And we'll assume that white
-blocks have the same influence, but in the opposite direction,
+houses have the same influence, but in the opposite direction,
 i.e. $-w$.\footnote{I believe, but have not proven that this
   assumption of 'symmetry of influence' is required if we want
   represent the system as a Markov field.}
 
 
-For a particular block $i$, the balance of influence $h_I$ depends upon the
-number of white neighboring blocks, $n_W$ and black neighboring blocks $n_B$.
+For a particular house $i$, the balance of influence $h_I$ depends upon the
+number of white neighboring houses, $n_W$ and black neighboring houses $n_B$.
 
 \begin{equation}
 h_i = w(n_W - n_B)
 \end{equation}
 
-and we'll say that the probability the race of a block is
+and we'll say that the probability the race of a house is
 
 \begin{align}
-\Pr(\text{block}_i = \text{white}) = \frac{e^{h_i}}{e^{h_i} + e^{-h_i}} \\
-\Pr(\text{block}_i = \text{black}) = \frac{e^{-h_i}}{e^{h_i} + e^{-h_i}} \\
+\Pr(\text{house}_i = \text{white}) = \frac{e^{h_i}}{e^{h_i} + e^{-h_i}} \\
+\Pr(\text{house}_i = \text{black}) = \frac{e^{-h_i}}{e^{h_i} + e^{-h_i}} \\
 \end{align}
 
 And that the probability for any particular pattern of race is
@@ -245,8 +249,8 @@ And that the probability for any particular pattern of race is
 \end{equation}
 
 Where $R_i$ is an indicator variable that takes a value of
-$1$ where the race of the block is white and a value of $-1$ if the
-block is black.
+$1$ where the race of the house is white and a value of $-1$ if the
+house is black.
 
 We can also express this probability in terms of the pairwise interactions 
 of neighbors.
@@ -258,20 +262,81 @@ of neighbors.
 
 Where $j \in <i j>$ are all the sites that are nearest neighbors of site $i$. Each pair will be appear in the numerator twice. So that 
 
-\begin{equation}
-\Pr(X) = \frac{1}{Z}\prod_{<i j>'}e^{R_iR_jw'} \\
-\end{equation}
+\begin{align}
+\Pr(X) &= \frac{1}{Z}\prod_{<i j>'}e^{R_iR_jw'} \\
+&= \frac{1}{Z}\operatorname{exp}(\sum_{<i j>'}R_iR_jw') 
+\end{align}
 
 Where $Z$ is normalizing constant that is the sum of all possible assignments, 
 $<i j>'$ is every nearest neighbor only counted once, and $w' = w/2$.
 
-This model is classically called the Ising model. We can see that it
-is a Gibbs distribution and we can also see that it encodes the same
-independencies of our racial preference block model, so that this distribution
-factorizes over our  network of influence. 
+We can see that it is a Gibbs distribution and we can also see that it
+encodes the same independencies of our racial preference house model,
+so that this distribution factorizes over our network of influence.
+
+\section{Extensions}
+While we have shown how we can develop an relatively simple formula
+for the probability distribution over global patterns that arise from
+local interactions. In the model we worked through, the smallest unit
+is only influenced by it's immediate neighbors and can only take on
+two values--either the house is occupied by a black family or a white
+one. 
+
+Perhaps we think that there are some other differences among houses
+that make it more likely for one race to occupy it than another.
+We can naturally extend the model to include a house specific term $u_i$.
+
+\begin{align}
+\Pr(X) &= \frac{1}{Z}\operatorname{exp}(\sum_{<i j>'}R_iR_jw' + \sum_iu_iR_i) 
+\end{align}
+
+Indeed, we are not limited to multiplication, but can use choose any
+functions $\epsilon_{i,j}$ and $\epsilon_i$, and we will still have a valid 
+probability distribution over global patterns.
+
+\begin{equation}
+\Pr(X) = \frac{1}{Z}\operatorname{exp}(\sum_{<i j>'}\epsilon_{i,j}(R_i,R_j) + \sum_i\epsilon_i(R_i)) 
+\end{equation}
+
+A simple choice of $\epsilon_{i,j}$ that will allow us to deal with
+more than two races is
+
+\begin{equation}
+\epsilon_{i,j}(R_i,R_j) = \begin{cases}
+  0 \quad\quad R_i = R_j \\
+  \lambda_{i,j} \quad R_i \neq R_j
+\end{cases}
+\end{equation}
+
+Or the model can be extended so that $\epsilon_{i,j}$ is a
+site specific distance function between $x_i$ and $x_j$ so that
+likelihood of neighbors being the same race can be function of how
+similar they are in other ways. 
+
+\section{Neighborhoods}
+The time has come to leave discussion of racial segregation, and take
+up the phenomena we are really interested in here: neighborhoods.
+
+If we make the assumption that a household can belong to one and only
+one neighborhood, we can use all the machinery of Markov Random Fields
+we just developed to try to learn what are the features, block by
+block that cohere into a neighborhood. This is a very troublesome
+assumption, and we we'll return to it , but let's see what we can do
+if we make it.
+
+We'll use this machinery twice. First, we'll use it to help create a
+set of target ``neighborhoods'' and then we'll use it to learn what
+local features might have produced those neighborhoods. But to explain
+how we'll do that I need to explain how we go about getting real
+values from these beautiful equations. As it turns out this is a pretty 
+complicated question, which I'll take up in the next dispatch.
+
+
+
+
+
 
 \end{document}
-
 The log probability can be expressed a good deal more simply. 
 
 
@@ -283,7 +348,7 @@ The log probability can be expressed a good deal more simply.
 
 
 
-two neighboring blocks are both white or both black, then
+two neighboring houses are both white or both black, then
 
 
 \begin{figure}
