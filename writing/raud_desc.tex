@@ -11,12 +11,13 @@
 \author{Forest Gregg}
 \begin{document}
 \maketitle
-Say we would like to think how patterns of racial segregation in a
-city could arise from individual choices of residents. We think there
-is some process at the household level, that all else being equal,
-makes it more likely that neighbors will be of the same race than
-different races. We'd like to reason about what kinds of global patterns
-of segregation are likely to arise from these local processes.
+Say we would like to think about how patterns of racial segregation in
+a city could arise from the local interactions of neighbors. We think
+there may be some process at the household level, that all else being
+equal, makes it more likely that neighbors will be of the same race
+than different races. We'd like to reason about what kinds of global
+patterns of segregation are likely to arise from these local
+processes.
 
 To get going, let's make a couple of simplifying assumptions. First,
 we'll assume there are only two races: black and white. Second, we'll
@@ -25,17 +26,39 @@ family lives in a house. More distant neighbors can influence the
 house, but only by influencing a directly neighboring house.
 
 From these assumptions, we can build a probability distribution over
-all global patterns of racial segregation in a city, from complete
+every global patterns of racial segregation in a city, from complete
 segregation to complete integration.
 
 
 Let's look at four houses, that we will call $A$, $B$, $C$, and $D$,
-Houses $A$ and $C$ are not neighbors and neither are $B$ and $D$ (figure X).
+Houses $A$ and $C$ are not neighbors and neither are $B$ and $D$ (Figure \ref{fig:mdv}).
+
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
+
+  \node[main node] (1) {A};
+  \node[main node] (2) [below left of=1] {B};
+  \node[main node] (3) [below right of=2] {D};
+  \node[main node] (4) [below right of=1] {C};
+
+  \path[every node/.style={font=\sffamily\small}]
+    (1) edge node [left] {} (4)
+    (2) edge node [right] {} (1)
+    (3) edge node [right] {} (2)
+    (4) edge node [left] {} (3);
+\end{tikzpicture}
+\caption{Markovian Dependent Variables}
+\label{fig:mdv}
+\end{figure}
+
 
 Now, let's say there is a particular pattern of black and white
 houses, for example House A--black, House B--black, House C--white,
 House D--white. We'll call this particular pattern $x$, and we'll say
-that $\Pr(X=x)$ is the probability of that pattern, and $\Pr(X)$ is
+that $\Pr(X=x)$ is the probability of that pattern, while $\Pr(X)$ is
 the probability distribution over all possible patterns
 
 We'd like to express this probability distribution only in terms of
@@ -118,6 +141,11 @@ From which we can see that
 
 Which was to be proven.
 \end{proof}
+
+\begin{center}
+\line(1,0){250}
+\end{center}
+
 
 Now, if we let $\phi_5(A,B,D) = \phi_1(A,B)\phi_4(D,A)$ and $\phi_6(C,B,D) = \phi_2(B,C)\phi_3(C,D)$ we can see that 
 
@@ -208,8 +236,8 @@ H if and only if every independency in P is encoded in H
 
 \section{Parameterization}
 Returning to our four house example, we saw that we can express the
-probability of the pattern of an assignment to all the houses can be
-factored into functions that only look at the interactions between
+probability of the pattern of an assignment to all the houses as the
+product of functions that only look at the interactions between
 neighboring houses. But we still need to choose the form of the
 functions $\phi$.
 
@@ -275,7 +303,7 @@ encodes the same independencies of our racial preference house model,
 so that this distribution factorizes over our network of influence.
 
 \section{Extensions}
-While we have shown how we can develop an relatively simple formula
+We have shown how we can develop an relatively simple formula
 for the probability distribution over global patterns that arise from
 local interactions. In the model we worked through, the smallest unit
 is only influenced by it's immediate neighbors and can only take on
@@ -321,7 +349,7 @@ If we make the assumption that a household can belong to one and only
 one neighborhood, we can use all the machinery of Markov Random Fields
 we just developed to try to learn what are the features, block by
 block that cohere into a neighborhood. This is a very troublesome
-assumption, and we we'll return to it , but let's see what we can do
+assumption, and we we'll return to it, but let's see what we can do
 if we make it.
 
 We'll use this machinery twice. First, we'll use it to help create a
@@ -350,25 +378,6 @@ The log probability can be expressed a good deal more simply.
 
 two neighboring houses are both white or both black, then
 
-
-\begin{figure}
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
-
-  \node[main node] (1) {A};
-  \node[main node] (2) [below left of=1] {B};
-  \node[main node] (3) [below right of=2] {D};
-  \node[main node] (4) [below right of=1] {C};
-
-  \path[every node/.style={font=\sffamily\small}]
-    (1) edge node [left] {} (4)
-    (2) edge node [right] {} (1)
-    (3) edge node [right] {} (2)
-    (4) edge node [left] {} (3);
-\end{tikzpicture}
-\caption{Markovian Dependent Variables}
-\end{figure}
 
 
 

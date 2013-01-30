@@ -16,6 +16,7 @@ code/*.csv
 *.toc
 *.*#
 .#*
+*.Rout
 
 # Packages
 *.egg

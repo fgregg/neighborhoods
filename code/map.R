@@ -725,15 +725,15 @@ points(listings.narrow,
        pch=16,
        cex=.8)
 centroids.narrow <- centroids[regexpr("/", as.character(centroids@data$neighborhood)) < 1 & centroids@data$count >= 3,]
-#labelPlot(centroids.narrow,
-#          "neighborhood", .5,
-#          color=rgb(0, 0, 0, genLogit(centroids.narrow$count,
-#            A=0,
-#            K=.6,
-#            M=20,
-#            B=.8,
-#            Q=10,
-#            v=10)))
+labelPlot(centroids.narrow,
+          "neighborhood", .5,
+          color=rgb(0, 0, 0, genLogit(centroids.narrow$count,
+            A=0,
+            K=.6,
+            M=20,
+            B=.8,
+            Q=10,
+            v=10)))
 text(451000, 4650000, paste(dim(unique(listings.narrow@coords))[1], "locations,",
                             length(levels(listings.narrow$neighborhood)),
                             "places"))
