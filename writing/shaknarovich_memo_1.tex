@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{endnotes}
+\usepackage{tikz}
+\usepackage{subfigure}
+\title{Memo}
+\author{Forest Gregg}
+
+\begin{document}
+\maketitle
+
+On Wednesday, April 17, 2013, we discussed setting up the training of
+a MRF model for segmenting cities into neighborhoods. 
+
+From scraping Craigslist data, I have a large collections of points
+which are claimed to belong to particular neighborhoods. Estimating a
+separate KDE for each neighborhood, I can estimate a decision
+boundaries between neighborhoods. I take these decisions boundaries as
+the ``ground truth'' which I will use to train a model that segments a
+city.
+
+I had been thinking about a model where the nodes potentials
+correspond to blocks and the edge potentials are a function of linear
+combination of weighted similarities between blocks, where a
+similarity might be the difference between reported crimes, or some
+other attribute of a block.  However, it was not clear to me how to
+assign node potentials, since I didn't want to recover the names of
+neighborhoods, only the arbitrary segmentation.
+
+You suggested a dual model, where the nodes correspond to the edges
+between between blocks. The node potential is still a function of the
+similarity between blocks, but instead of assigning an arbitrary
+neighborhood name, the node is assigned to either be an ``boundary''
+or not. The edge potentials would then be smoothing function that
+would encourage contiguous boundaries and discourage some perverse
+boundaries patterns.
+
+
+\subsection*{Follow Up}
+
+You said that you would ask one of your students if he would be
+willing to give me some guidance in setting up a structured SVM
+learning.
+
+We discussed various loss functions, and you said you would send me a
+recent paper of yours related to this topic.
+
+\subsection*{Other Notes}
+For the inference step, I told you I have been using GCO library
+\url{http://vision.csd.uwo.ca/code/}. You said this looked like a good
+choice.
+
+
+\end{document}
+

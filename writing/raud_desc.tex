@@ -5,6 +5,8 @@
 \usetikzlibrary{arrows}
 \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
 \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 \newtheorem{theorem}{Theorem}
 \newtheorem{mydef}{Definition}
 \title{Learning Neighborhoods: Method description part I -- The models}
@@ -354,219 +356,106 @@ if we make it.
 
 We'll use this machinery twice. First, we'll use it to help create a
 set of target ``neighborhoods'' and then we'll use it to learn what
-local features might have produced those neighborhoods. But to explain
-how we'll do that I need to explain how we go about getting real
-values from these beautiful equations. As it turns out this is a pretty 
-complicated question, which I'll take up in the next dispatch.
+local features might have produced those neighborhoods.
 
+\subsection{MRF's as priors}
+I have a nightly updated database of geocoded Craigslist apartment
+rentals, sublet, and roommate listings. For most of these listings,
+the poster entered some text in the ``Specific Location'' field. With
+some minimal pre-processing, we can use these data as observations of
+claims that geographical points are in some neighborhood.
 
+Using kernel density estimation, we can use this point data to
+estimate a continuous probability distributions that any point in the
+city will be claimed to be in any of the neighborhoods (Figure
+\ref{fig:KDE}.
 
+\begin{figure}
+\includegraphics{/home/fgregg/sweave-cache/figs/fig-KSplot.pdf}
+\caption{KDE probability estimates of neighborhood claims on North Side}
+\label{fig:KDE}
+\end{figure}
 
+However, KDE and other smoothers are... smooth. The estimates may
+converge to true probability estimates as the amount of data
+increases, but in the meantime these methods will produce overly
+smooth decision boundaries between neighborhoods. 
 
+We can correct for these artifacts if we have valid prior beliefs
+about what kind of geographical features are likely to divide
+neighborhoods. For example, we might believe that major roads, the
+river, and railroad embankments are more likely to divide
+neighborhoods than residential streets. 
 
-\end{document}
-The log probability can be expressed a good deal more simply. 
+We can encode these beliefs in the following model
 
+\begin{equation}
+\Pr(Y) = \frac{1}{Z}\operatorname{exp}\left(\sum_{<i j>}\epsilon_{i,j}(\text{Name}_i,\text{Name}_j) + \sum_i\epsilon_i(\text{Name}_i)\right) 
+\end{equation}
 
- 
+Where $Y$ is a configuration of neighborhood names over census blocks,
+$i$ indexes census blocks and the function $\epsilon_{i,j}$ has the
+following form (blocks count as neighbors if they share any edge).
 
+\begin{equation}
+\epsilon_{i,j}(\text{Name}_i,\text{Name}_j) = \begin{cases}
+  0 \quad\quad \text{Name}_i = \text{Name}_j \\
+  0 \quad\quad \text{if $i$, $j$ are separated by a feature} \\
+  \lambda \quad R_i \neq R_j \text{and not separated}
+\end{cases}
+\end{equation}
 
+$\epsilon_i$ is just the estimated probabilities that a block $i$ will
+be claimed to belong to a neighborhood for every neighborhood in the
+city. This comes from calculating the densities kde estimates at the
+centroid of a census block.
 
-
-
-
-
-two neighboring houses are both white or both black, then
-
-
-
-
- be random variables, and let $X$ be the
-joint assignment of these four variables.
-
-
-
- that take
-on the values 1 or 0.
-
-
-
-These variables can take on $2^4$ permutations. In general, if we are
-interested in the probability of any these permutations we need to
-keep track of sixteen separate values.
+We'd like to find the assignment $Y$ that maximizes the $\Pr(Y)$. In
+other words, we'd like to find a labeling of every block in the city
+that is most likely given our data-driven estimates of labels and our
+beliefs about where boundaries should fall.
 
 \begin{align*}
-&\Pr(A=0,B=0,C=0,D=0) = P_1 \\
-&\Pr(A=1,B=0,C=0,D=0) = P_2 \\
-&\Pr(A=0,B=1,C=0,D=0) = P_3 \\
-&\vdots \\
-&\Pr(A=1,B=1,C=0,D=1) = P_{14} \\
-&\Pr(A=1,B=1,C=1,D=0) = P_{15} \\
-&\Pr(A=1,B=1,C=1,D=1) = P_{16} 
+&\argmax_Y \frac{1}{Z}\operatorname{exp}\left(\sum_{<i j>}\epsilon_{i,j}(\text{Name}_i,\text{Name}_j) + \sum_i\epsilon_i(\text{Name}_i)\right) \\
+&\argmax_Y \operatorname{exp}\left(\sum_{<i j>}\epsilon_{i,j}(\text{Name}_i,\text{Name}_j) + \sum_i\epsilon_i(\text{Name}_i)\right) \\
+&\argmax_Y \sum_{<i j>}\epsilon_{i,j}(\text{Name}_i,\text{Name}_j) + \sum_i\epsilon_i(\text{Name}_i)
 \end{align*}
 
-However, if these variables are independent, then we only need to know
-four values -- the probability of each random variable taking a value.
-
-Independence means that the probability of realizing a permutation of
-values factors into the product of each value taking on the
-corresponding value.
-
-\begin{equation}
-\Pr(A,B,C,D) = \Pr(A)\Pr(B)\Pr(C)\Pr(D)
-\end{equation}
-
-\section*{Representing Dependence}
-
-We can represent the dependence and independence relations between random
-variables in a graph. If the four variables are independent, then we draw
-the variables as nodes with no edges between them.
+Unfortunately, our typical approaches to finding the maximum of a
+distribution cannot help us here. Configurations are discrete, so
+derivative based methods won't work. The number of possible, discrete
+configurations of neighborhood labels is $(\text{\# of neighborhood
+names})^{\text{\# of census blocks}}$ so we cannot search the space. Markov
+Chain Monte Carlo approaches are also intractable because they require
+estimating the normalizing constant $Z$ which can is the sum of
+probability of the  $(\text{\# of neighborhood names})^{\text{\# of census blocks}}$ 
+configurations.
 
 
-\begin{figure}[!ht]
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
+Surprisingly, when there are only two labels, we can exactly find the
+$Y$ that maximizes get $\Pr(Y)$, and we can typically get very good
+approximations of $Y$ in the general case. It turns out that, in the
+binary case, we can create a auxillary graph with a node corresponding
+to every block in our mode, with two additional special nodes called
+the source and the sink. This graph has a directed edge from the
+source node to every normal node and every normal node has a directed
+node to the target node. If we set the capacity of flow between nodes
+correctly, then finding the minimum number of cuts to separate the
+source and target nodes will correspond to finding the assignment
+labels to nodes that maximizes $\Pr(Y)$. Finding this minimum cut of
+graph can be done in polynomial time. There are extensions of this
+minimum cut method to the multi-label case that do not guarantee
+optimality, but perform very well in practice. The details of all this
+are fascinating, and perhaps takes us too far afield.
 
-  \node[main node] (1) {A};
-  \node[main node] (2) [below left of=1] {B};
-  \node[main node] (3) [below right of=2] {D};
-  \node[main node] (4) [below right of=1] {C};
-
-
-\end{tikzpicture}
-\caption{Completely Independent Variables}
-\end{figure}
-
-On the other hand, if each variable is dependent on all the others,
-then the graph is completely connected. 
+Using one of these graph-cut extensions, we find the segmentaion shown in 
+Figure \ref{fig:graphcut} 
 
 \begin{figure}
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
-
-  \node[main node] (1) {A};
-  \node[main node] (2) [below left of=1] {B};
-  \node[main node] (3) [below right of=2] {D};
-  \node[main node] (4) [below right of=1] {C};
-
-  \path[every node/.style={font=\sffamily\small}]
-    (1) edge node [left] {} (4)
-        edge node [left] {} (3)
-    (2) edge node [right] {} (1)
-        edge node {} (4)
-    (3) edge node [right] {} (2)
-    (4) edge node [left] {} (3);
-\end{tikzpicture}
-\caption{Completely Dependent Variables}
+\includegraphics{respect_grid.pdf}
+\caption{MAP estimate of neighborhood labels}
+\label{fig:graphcut}
 \end{figure}
-
-Now, let's consider an intermediate graph. In this graph, conditional
-on its neighbors, a random value is independent of all other values. 
-
-\begin{figure}
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
-
-  \node[main node] (1) {A};
-  \node[main node] (2) [below left of=1] {B};
-  \node[main node] (3) [below right of=2] {D};
-  \node[main node] (4) [below right of=1] {C};
-
-  \path[every node/.style={font=\sffamily\small}]
-    (1) edge node [left] {} (4)
-    (2) edge node [right] {} (1)
-    (3) edge node [right] {} (2)
-    (4) edge node [left] {} (3);
-\end{tikzpicture}
-\caption{Markovian Dependent Variables}
-\end{figure}
-
-Unlike the first case. $A\not\independent D$ and $B\not\independent
-C$, but $(A\independent D) \mid (B,C)$, and $(B\independent C) \mid
-(A,D)$.
 
 \end{document}
-
-Let's set up some definitions.
-
-A distribution $\Pr_{\phi}$ is a Gibbs distribution defined by the factors
-$\left\{\phi_1(D_1),...,\phi_K(D_k)\right\}$ if
-
-\begin{equation}
-\Pr_{\phi}(X_1,...X_n) = \frac{1}{Z}\tilde{P_{\phi}}(X_1,...,X_n)
-\end{equation}
-
-where
-\begin{equation}
-\tilde{P_{\phi}}(X_1,...,X_n) = \phi_1(D_1)\phi_2(D_2)...\phi_{K-1}(D_{K-1})\phi_K(D_k)
-\end{equation}
-
-and
-
-\begin{equation}
-Z = \sum_{X_1,...,X_n}\tilde{P_{\phi}}(X_1,...,X_n)
-\end{equation}
-
-
-We say that a distribution
-$P(X)=\frac{1}{Z}\phi_1(D_1)\phi_2(D_2)...\phi_{K-1}(D_{K-1})\phi_K(D_k)$
-factorizes over a Markov network $H$ if each $D_k$ is a complete
-subgraph of $H$.
-
-Let $H$ be a Markov network structure, and let $X_1--...--X_k$ be a
-path in $H$. Let $Z \in X$ be a set of observed variables. The path
-$X_1--...--X_k$ is active given $Z$ if none of the $X_i$'s, $i =
-1,...k$ is in $Z$.
-
-
-
-A set of nodes $Z$ separates $X$ and $Y$ in $H$, which we denote
-$\operatorname{sep}_H(X;Y \mid Z)$ if there is no active path between
-nodes $X \in X$ and $Y \in Y$ given $Z$. We define the global
-independencies associated with $H$ to be
-
-
-I won't got proof now, but just emphasize the key point. Every Markov
-network represents 
-
-positive distribution P factorizes over a
-Markov network $H$ if and only if $H$ encodes every independency in P.
-
-This means that 
-
-
-
-
-It turns out that was true for our simple example is true for a whole
-class of networks called Markov Networks.
-
-
-
-
-We represented our four random variables as a network, where two variables
-shared an edge if and only if two variables were directly dependent. This graph is an instance of a class of graphs 
-
-
-It turns out that what was true for our simple example is true for all
-Markov networks. 
-
-Some definitions
-
-
-
-We can go further 
-and say that 
-
-we have seen that we can factor 
-
-
-Where $phi$ is special kind of function called a factor, which has the
-property that 
-
-These independencies allow us to begin 
-
-
 
