@@ -1,5 +1,5 @@
 import numpy as np
-from pygco import cut_simple, cut_from_graph_smoothness_fun, cut_from_graph
+from pygco import cut_simple, cut_from_graph, energy_of_graph_assignment
 import csv
 
 def constantEdges() :
@@ -9,7 +9,7 @@ def constantEdges() :
         reader.next()
         for row in reader :
             edges.append(row)
-    edges = np.array(edges, dtype='int32')
+    edges = np.array(edges, dtype='int32', ndmin=2)
     edges = edges - 1
 
     unary = []
@@ -32,8 +32,6 @@ def constantEdges() :
     edge_weights = np.array(edge_weights, dtype = "int32")
     edge_weights.shape = (len(edges),)
 
-    print edge_weights.shape
-
     
     num_blocks, num_labels = unary.shape
 
@@ -45,8 +43,17 @@ def constantEdges() :
 
     print pairwise
 
-    result_graph = cut_from_graph(edges, unary, pairwise, edge_weights, algorithm="swap", n_iter = -1)
-    #result_graph = cut_from_graph_smoothness_fun(edges, unary, algorithm="swap")
+
+    edge_weights.shape = (len(edge_weights), 1)
+    
+    edges = np.concatenate((edges, edge_weights), axis=1)
+
+
+    (result_graph, energy) = cut_from_graph(edges, unary, pairwise, algorithm="swap", n_iter = -1)
+
+    print energy
+
+    print energy_of_graph_assignment(edges, unary, pairwise, result_graph)
 
     with open('potts_labels.csv', 'wb') as f:
         writer = csv.writer(f)
