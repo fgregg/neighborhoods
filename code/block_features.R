@@ -1,4 +1,4 @@
-library(RJSONIO)
+
 library(rgdal)
 library(rgeos)
 library(spdep)
@@ -20,93 +20,62 @@ nb2edgelist <- function(nb) {
 }
 
 
-censusData <- function(json_file, variables=NULL) {
-  json_data <- fromJSON(json_file)
-
-  data <- do.call(rbind.data.frame, json_data[2:length(json_data)])
-  names(data) <- json_data[[1]]
-
-  data[, variables] <- apply(data[, variables],
-                             2,
-                             FUN=function(x) {as.numeric(as.character(x))})
-
-  return(data)
-}
-
-blockData <- function(state, county, data) {
-  state_county <- paste("&in=state:",
-                        state,
-                        "+county:",
-                        county,
-                        sep = "")
-
-  data <- paste(data, collapse=",")
-                        
-  tract_name_url <- paste(base_url,
-                          "&get=NAME&for=tract:*",
-                          state_county,
-                          sep="")
-
-
-  tract_names <- censusData(tract_name_url)$tract
-
-  block_urls <- paste(base_url,
-                      "&get=NAME,",
-                      data,
-                      "&for=block:*",
-                      state_county,
-                      "+tract:",
-                      tract_names,
-                      sep="")
-
-  print(block_urls)
-  
-  return(do.call(rbind.data.frame,
-                 lapply(block_urls,
-                        FUN=function(x) {
-                          censusData(x, variables)
-                          })))
-}
-
-variables <- c("P0040001", # total population,
-               "P0040003", # Hispanic,
-               "P0050003", # Non Hispanic White
-               "P0050004", # Non Hispanic Black,
-               "P0050005", # American Indian,
-               "P0050006", # Asian,
-               "P0050007", # Pacific Islander,
-               "P0050008", # Some Other Race alone
-               "P0050009" # Two or more races
-               )
-
-chicago_blocks <- blockData('17', '031', variables)
-chicago_blocks$TRACT_BLOC = paste(chicago_blocks$tract,
-                                  chicago_blocks$block,
-                                  sep="")
-               
 # Load Block Data
 blocks.poly <- readOGR("../admin_areas/CensusBlockTIGER2010.shp",
                        "CensusBlockTIGER2010")
 
+# Map Projection
+projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=0.9999749999999999 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
+# Lat/Lon of Bounding Box
+range = cbind(c(-87.7, -87.6), c(41.89,41.98))
+range = project(range, projection)
+
+
+# Subset Blocks
+centroids <- coordinates(blocks.poly)
+blocks.poly <- blocks.poly[centroids[,1] > range[1,1] &
+                           centroids[,1] < range[2,1] &
+                           centroids[,2] > range[1,2] &
+                           centroids[,2] < range[2,2],]
+
+
+chicago_blocks <- read.csv("census_data_blocks.csv",
+                           colClasses=c("TRACT_BLOC"="factor",
+                                        "state"="factor",
+                                        "tract"="factor",
+                                        "block"="factor",
+                                        "county"="factor"))
+
+
+
+alignment <- match(blocks.poly@data$TRACT_BLOC, 
+                   chicago_blocks$TRACT_BLOC)
+
+
 # Merge Census data with Geo Spatial Data Frame
-blocks.poly@data = data.frame(blocks.poly@data,
-                              chicago_blocks[match(blocks.poly@data[,c("TRACT_BLOC")],
-                                                   chicago_blocks[, c("TRACT_BLOC")]),])
+blocks.poly@data = data.frame(blocks.poly@data, chicago_blocks[alignment,])
+
+# Merge labels 
+plabels <- read.csv("potts_labels.csv")
+blocks.poly@data = data.frame(blocks.poly@data, plabels)
 
 
 # Topology of Block Connectivity
 neighbors <-poly2nb(blocks.poly,
                     foundInBox=gUnarySTRtreeQuery(blocks.poly))
+# plot(blocks.poly, col=colors()[blocks.poly@data$label]) # check alignment of potts labels
 
-edgelist <- nb2edgelist(neighbors)
 
+write(c(), file="edge_features.txt")
 
 for (i in 1:length(neighbors)) {
+  label_i <- blocks.poly@data[i, "label"]
   p <- blocks.poly@data[i, c("P0040003", "P0050003", "P0050004",
                              "P0050005", "P0050006", "P0050007",
                              "P0050008", "P0050009")] + 1
   p <- p/(blocks.poly@data[i, "P0040001"] + 8)
   for (j in neighbors[[i]]) {
+    label_j <- blocks.poly@data[j, "label"]
     q <- blocks.poly@data[j, c("P0040003", "P0050003", "P0050004",
                              "P0050005", "P0050006", "P0050007",
                              "P0050008", "P0050009")] + 1
@@ -117,8 +86,18 @@ for (i in 1:length(neighbors)) {
     m <- 0.5 * (p + q)
     js <- (0.5 * sum(unlist(ifelse(p==0, 0, log(p/m)*p)))
            + 0.5 * sum(unlist(ifelse(q==0, 0, log(q/m)*q))))
-    print(js)
+    border <- ifelse(label_i == label_j, 0, 1)
+    write(c(i, j, js, border), file="edge_features.txt", append=TRUE)
   }
-  break
 }
+
+edgelist <- nb2edgelist(neighbors)
+
+primal_graph <- graph.data.frame(edgelist, directed=FALSE)
+line_graph <- line.graph(primal_graph)
+
+write.graph(line_graph,
+            "line_graph_edges.txt",
+            format="edgelist")
+
 
