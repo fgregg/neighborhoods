@@ -4,9 +4,6 @@ library(rgeos)
 library(spdep)
 library(igraph)
 
-base_url <- "http://api.census.gov/data/2010/sf1?key=ac94ba69718a7e1da4f89c6d218b8f6b5ae9ac49"
-
-
 nb2edgelist <- function(nb) {
   el <- c()
   for (i in 1:length(nb)) {
@@ -45,8 +42,13 @@ chicago_blocks <- read.csv("census_data_blocks.csv",
                                         "tract"="factor",
                                         "block"="factor",
                                         "county"="factor"))
+race <-  c("P0040003", "P0050003", "P0050004",
+           "P0050005", "P0050006", "P0050007",
+           "P0050008", "P0050009")
 
-
+chicago_blocks[, race] <- ((1 + chicago_blocks[, race])
+                           /
+                           (chicago_blocks[, "P0040001"] + 8))
 
 alignment <- match(blocks.poly@data$TRACT_BLOC, 
                    chicago_blocks$TRACT_BLOC)
@@ -65,33 +67,26 @@ neighbors <-poly2nb(blocks.poly,
                     foundInBox=gUnarySTRtreeQuery(blocks.poly))
 # plot(blocks.poly, col=colors()[blocks.poly@data$label]) # check alignment of potts labels
 
-
-write(c(), file="edge_features.txt")
-
-for (i in 1:length(neighbors)) {
-  label_i <- blocks.poly@data[i, "label"]
-  p <- blocks.poly@data[i, c("P0040003", "P0050003", "P0050004",
-                             "P0050005", "P0050006", "P0050007",
-                             "P0050008", "P0050009")] + 1
-  p <- p/(blocks.poly@data[i, "P0040001"] + 8)
-  for (j in neighbors[[i]]) {
-    label_j <- blocks.poly@data[j, "label"]
-    q <- blocks.poly@data[j, c("P0040003", "P0050003", "P0050004",
-                             "P0050005", "P0050006", "P0050007",
-                             "P0050008", "P0050009")] + 1
-    q <- q/(blocks.poly@data[j, "P0040001"] + 8)
-
-    # Jensen-Shannon divergence
-    # http://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
-    m <- 0.5 * (p + q)
-    js <- (0.5 * sum(unlist(ifelse(p==0, 0, log(p/m)*p)))
-           + 0.5 * sum(unlist(ifelse(q==0, 0, log(q/m)*q))))
-    border <- ifelse(label_i == label_j, 0, 1)
-    write(c(i, j, js, border), file="edge_features.txt", append=TRUE)
-  }
-}
-
 edgelist <- nb2edgelist(neighbors)
+
+
+p <- blocks.poly@data[edgelist[,1], race]
+q <- blocks.poly@data[edgelist[,2], race]
+
+m <- 0.5 * (p + q)
+
+js <- (0.5 * rowSums(log(p/m) * p)
+       +
+       0.5 * rowSums(log(q/m)*q))
+
+labels <- (blocks.poly@data[edgelist[,1], "label"]
+           != 
+           blocks.poly@data[edgelist[,2], "label"])
+labels <- as.numeric(labels)
+           
+write.table(data.frame(edgelist, js, labels),
+            file="edge_features.txt",
+            row.names=FALSE)
 
 primal_graph <- graph.data.frame(edgelist, directed=FALSE)
 line_graph <- line.graph(primal_graph)
@@ -99,5 +94,3 @@ line_graph <- line.graph(primal_graph)
 write.graph(line_graph,
             "line_graph_edges.txt",
             format="edgelist")
-
-
