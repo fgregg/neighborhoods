@@ -6,6 +6,9 @@ library(igraph)
 library(RMySQL)
 library(ks)
 
+source('utils.R')
+source('common_data.R')
+
 alpha.levels <- function(probs) {
   return(as.numeric(cut(probs, breaks=seq(0, 1.1, .1)/11)))
        }
@@ -88,18 +91,6 @@ ks.pi <- function(points, test.points) {
 }
 
 
-nb2edgelist <- function(nb) {
-  el <- c()
-  for (i in 1:length(nb)) {
-    neighbors <- blocks[[i]]
-    new.neighbors <- neighbors[neighbors > i]
-    if (length(new.neighbors) > 0) {
-      el <- rbind(el, cbind(i, new.neighbors))
-    }
-  }
-  return(el)
-}
-
 createEdgeToLine <- function(centroids, crs) {
   edgeToLine <- function(edge) {
     l <- rbind(centroids[edge[1],],
@@ -110,63 +101,6 @@ createEdgeToLine <- function(centroids, crs) {
   }
   return(edgeToLine)
 }
-
-edgesIntersect <- function(edges, centroids, barrier, crs) {
-  edgeToLine <- createEdgeToLine(centroids, crs)
-  apply(edges,
-        1,
-        FUN=function(x) {
-          gIntersects(edgeToLine(x), barrier)
-        }
-        )
-  
-}
-
-# Map Projection
-projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=0.9999749999999999 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
-# Lat/Lon of Bounding Box
-range = cbind(c(-87.7, -87.6), c(41.89,41.98))
-range = project(range, projection)
-
-bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
-                                                          range[1,1],
-                                                          range[2,1],
-                                                          range[2,1],
-                                                          range[1,1]),
-                                                        c(range[1,2],
-                                                          range[2,2],
-                                                          range[2,2],
-                                                          range[1,2],
-                                                          range[1,2])))),
-                                     "p")),
-                       proj4string = CRS(projection))
-
-# Shape Files of Barriers that will effect edge weights
-railroads <- readOGR("../barriers/Railroads.shp",
-                     layer = "Railroads")
-railroads <- spTransform(railroads,
-                     CRS(projection)
-                     )
-railroads <- gIntersection(railroads, bbx)
-
-streets <- readOGR("../barriers/Major_Streets.shp",
-                   layer="Major_Streets",
-                   p4s="+proj=utm +zone=16 +datum=NAD83")
-
-highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
-                                               "KENNEDY"),]
-highways <- gIntersection(highways, bbx)
-
-grid.streets <- streets[!streets@data$STREET %in% c("LAKE SHORE",
-                                                    "KENNEDY"),]
-grid.streets <- gIntersection(grid.streets, bbx)
-
-water <- readOGR("../barriers/Kmlchicagowaterfeatures.kml",
-                 layer = "WATER_FEATURES")
-water <- spTransform(water,
-                     CRS(projection)
-                     )
-water <- gIntersection(water, bbx)
 
 # Shape Files For Context
 com.areas <- readOGR("/home/fgregg/academic/neighborhoods/admin_areas/chicomm.shp",
@@ -181,19 +115,6 @@ parks <- spTransform(parks,
                      CRS(projection)
                      )
 
-# Load Block Data
-blocks.poly <- readOGR("../admin_areas/CensusBlockTIGER2010.shp",
-                       "CensusBlockTIGER2010")
-
-# Subset Blocks
-centroids <- coordinates(blocks.poly)
-blocks.poly <- blocks.poly[centroids[,1] > range[1,1] &
-                           centroids[,1] < range[2,1] &
-                           centroids[,2] > range[1,2] &
-                           centroids[,2] < range[2,2],]
-
-centroids <- coordinates(blocks.poly)
-colnames(centroids) <- c("x", "y")
 
 # Import Neighborhood Label Point Data
 con <- dbConnect(MySQL(), dbname="neighborhood")
