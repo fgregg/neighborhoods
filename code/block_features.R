@@ -64,8 +64,19 @@ border <- (blocks.poly@data[edgelist[,1], "label"]
            != 
            blocks.poly@data[edgelist[,2], "label"])
 border <- as.numeric(border)
+
+railroad.intersects <- as.numeric(railroad.intersects)
+highway.intersects <- as.numeric(highway.intersects)
+grid.street.intersects <- as.numeric(grid.street.intersects)
+water.intersects <- as.numeric(water.intersects)
            
-write.table(data.frame(edgelist, js, border),
+write.table(data.frame(edgelist,
+                       js,
+                       railroad.intersects,
+                       highway.intersects,
+                       grid.street.intersects,
+                       water.intersects,
+                       border),
             file="edge_features.txt",
             row.names=FALSE)
 

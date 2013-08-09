@@ -10,6 +10,7 @@ nb2edgelist <- function(nb) {
   return(el)
 }
 
+# Could certainly be sped up by creating all the lines once
 edgesIntersect <- function(edges, centroids, barrier, crs) {
   edgeToLine <- createEdgeToLine(centroids, crs)
   apply(edges,
@@ -18,6 +19,17 @@ edgesIntersect <- function(edges, centroids, barrier, crs) {
           gIntersects(edgeToLine(x), barrier)
         }
         )
-  
 }
+  
+createEdgeToLine <- function(centroids, crs) {
+  edgeToLine <- function(edge) {
+    l <- rbind(centroids[edge[1],],
+               centroids[edge[2],])
+    l <- Line(l)
+    l <- SpatialLines(list(Lines(l, ID="l")),
+                      proj4string = CRS(crs))
+  }
+  return(edgeToLine)
+}
+
 

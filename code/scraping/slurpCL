@@ -1,5 +1,5 @@
 
 export PYTHONPATH=$PYTHONPATH:$HOME/lib64/python2.4/site-packages:$HOME/lib/python2.6/site-packages
-/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/download_feeds.py
-/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/extract_listings.py
-/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/geocode_labels.py
+/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/download_feeds.py -v
+/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/extract_listings.py -v
+/usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/geocode_labels.py -v
