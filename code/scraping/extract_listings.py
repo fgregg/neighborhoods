@@ -22,7 +22,7 @@ logging.basicConfig(level=log_level)
 
 
 def getListing(url) :
-    soup = BeautifulSoup(urllib2.urlopen(url).read())
+    soup = BeautifulSoup(urllib2.urlopen(url, timeout=60).read())
     return str(soup.find('article', {"id" : "pagecontainer"}))
     
 

@@ -36,7 +36,7 @@ for city in config.cities :
         logging.info('%s', url)
 
         try:
-            listing = urllib2.urlopen(url).read()
+            listing = urllib2.urlopen(url, timeout=60).read()
         except urllib2.HTTPError as e:
             print e
             print url
