@@ -137,16 +137,16 @@ def geocode(place) :
     except Exception as e :
         georeference = None
         if "Didn't find exactly one placemark!" in str(e) :
-            logging.info(e)
+            logging.debug(e)
         elif "successful but returned no results." in str(e) :
-            logging.info(e)
+            logging.debug(e)
         else:
             raise
 
     time.sleep(20)
 
-    logging.info("  Geocoded")
-    logging.info(georeference)
+    logging.debug("  Geocoded")
+    logging.debug(georeference)
 
     return georeference
 
@@ -195,8 +195,17 @@ c = db.cursor()
 # Get the listings from rss feeds that are more recent than the
 # rss that contained the last location we inserted
 
-for city in config.cities :
-    logging.info(city)
+num_cities = len(config.cities)
+
+for k, city in enumerate(config.cities) :
+    c.execute("""SELECT COUNT(*) FROM label""")
+    num_labels_start = c.fetchone()[0]
+
+    logging.info("%(city)s: %(i)d / %(total)d : %(time)s",
+                 {'city' : city, 
+                  'i' : k, 
+                  'total' : num_cities,
+                  'time' : time.strftime("%Y-%m-%d %H:%M:%S")})
     city_name, state = config.cities[city]
 
     c.execute("""SELECT IFNULL(MIN(published),0) """
@@ -215,9 +224,9 @@ for city in config.cities :
 
 
     if min_published != 0 :
-        logging.info(min_published)
+        logging.debug(min_published)
     else :
-        logging.info("No 'latest' listing can't be found, starting from beginning'")
+        logging.debug("No 'latest' listing can't be found, starting from beginning'")
 
     c.execute("""SELECT listing_id, content """
               """FROM listing """
@@ -229,16 +238,16 @@ for city in config.cities :
 
     listings = c.fetchall()
 
-    places = parseListings(listings, city, state)
+    places = parseListings(listings, city_name, state)
 
     geo = geocoders.MapQuest('Fmjtd%7Cluub2q0bnl%2C80%3Do5-9u7xhu')
 
     for i, place in enumerate(places) :
-        logging.info(" Place: %(i)i: %(place)s", {'i':i, 'place':place})
+        logging.debug(" Place: %(i)i: %(place)s", {'i':i, 'place':place})
 
         location_id = localLookup(c, place)
         if location_id :
-            logging.info("  place found place in db")
+            logging.debug("  place found place in db")
         else :
             georeference = geocode(place)
             if georeference is None :
@@ -247,7 +256,7 @@ for city in config.cities :
             location_id = deduplicateGeoreference(c, georeference)
 
             if location_id :
-                logging.info("  location found in db")
+                logging.debug("  location found in db")
                 updateLookup(c, location_id, place)
 
             else :
@@ -257,13 +266,19 @@ for city in config.cities :
 
         # Now update the label table
         for label in places[place] :
-            logging.info("  label: %(label)s", {"label" :label})
+            logging.debug("  label: %(label)s", {"label" :label})
             for listing_id in places[place][label] :
                 c.execute(""" REPLACE INTO label """
                           """(location_id, listing_id, label) """
                           """VALUES (%s, %s, %s) """, 
                           (location_id, listing_id, label))
                 db.commit()
+
+    c.execute("""SELECT COUNT(*) FROM label""")
+    num_labels_end = c.fetchone()[0]
+    
+    logging.info("%(new labels)d new labels", 
+                 {'new labels' : num_labels_end - num_labels_start})
 
             
 c.close()

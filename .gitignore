@@ -6,9 +6,11 @@ gco_python/
 code/*.csv
 *.py[co]
 *.aux
+*.txt
 *.pdf
+*.ps
 *.log
-*.*~
+*~
 *.map
 *.out
 *.snm
@@ -17,6 +19,7 @@ code/*.csv
 *.*#
 .#*
 *.Rout
+*.Rdata
 
 # Packages
 *.egg
