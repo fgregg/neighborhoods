@@ -4,6 +4,7 @@ import time
 import logging
 import optparse
 import config
+import sys
 
 optp = optparse.OptionParser()
 optp.add_option('-v', '--verbose', dest='verbose', action='count',

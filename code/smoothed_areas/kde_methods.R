@@ -58,6 +58,56 @@ trainKDE <- function(listings,
 }
 
 
+
+rasterTrainKDE <- function(listings,
+                           hoods,
+                           range,
+                           n.points,
+                           no.hood.prior) {
+  
+  class.matrices <- array(, c(n.points, 
+                              n.points, 
+                              length(hoods)+1
+                              )
+                          )
+  resolution = 10
+  freq.hood <- matrix(0, resolution*resolution, length(hoods))
+  
+  total.listings = 0
+  
+  for (i in 1:length(hoods)) {
+    hood.listings <- listings[listings@data$neighborhood == hoods[i],]
+    hood.listings <- hampelOutliers(hood.listings, .90)
+#    hood.listings$x <- jitter(hood.listings$x, amount=.001)
+#    hood.listings$y <- jitter(hood.listings$y, amount=.001)
+
+    num.listings <- dim(hood.listings)[1]
+    
+    p.density <- ks.pi.raster(hood.listings@coords, n.points, range)
+    class.matrices[,,i] <- p.density * num.listings
+    total.listings = total.listings + num.listings
+  }
+  
+  class.matrices <- class.matrices/total.listings
+  class.matrices[,,length(hoods)+1] <- matrix(no.hood.prior, 
+                                              n.points, 
+                                              n.points)
+  class.matrices
+}
+
+
+ks.pi.raster <- function(points, n.points, range) {
+  H <- Hpi.diag(x=points)
+  fhat <- kde(x=points, 
+              H=H, 
+              gridsize=c(n.points, n.points),
+              xmin = range[1,],
+              xmax = range[2,]
+              )
+  fhat$estimate/(sum(colSums(fhat$estimate)))
+}
+
+
 ks.pi <- function(points, test.points) {
   H.est <- Hpi.diag(x=points, binned=TRUE)
   fhat <- kde(x=points, 
@@ -67,5 +117,4 @@ ks.pi <- function(points, test.points) {
   
   return(fhat$estimate)
 }
-
 

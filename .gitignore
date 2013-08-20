@@ -6,6 +6,7 @@ gco_python/
 code/*.csv
 *.py[co]
 *.aux
+*.csv
 *.txt
 *.pdf
 *.ps

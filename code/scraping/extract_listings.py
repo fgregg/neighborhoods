@@ -7,6 +7,7 @@ from BeautifulSoup import BeautifulSoup
 import logging
 import optparse
 import config
+import sys
 
 optp = optparse.OptionParser()
 optp.add_option('-v', '--verbose', dest='verbose', action='count',
@@ -19,7 +20,7 @@ if opts.verbose == 1:
 elif opts.verbose >= 2:
     log_level = logging.DEBUG
 logging.basicConfig(level=log_level)
-
+logging.StreamHandler(sys.stdout)
 
 def getListing(url) :
     soup = BeautifulSoup(urllib2.urlopen(url, timeout=60).read())

@@ -8,6 +8,7 @@ import time
 import logging
 import optparse
 import config
+import sys
 
 
 
@@ -22,7 +23,7 @@ if opts.verbose == 1:
 elif opts.verbose >= 2:
     log_level = logging.DEBUG
 logging.basicConfig(level=log_level)
-
+logging.StreamHandler(sys.stdout)
 
 def placeFromCLTags(listing) :
     # Craigslists listings have very good meta data tags that

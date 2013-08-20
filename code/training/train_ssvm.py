@@ -35,10 +35,6 @@ svm.fit(X, Y)
 print X
 print svm.w
 predicted_borders = svm.predict(X)
-
-import code
-code.interact(local=locals())
-
                          
 with open('predicted_borders.csv', 'w') as f :
    writer = csv.writer(f, delimiter=' ')

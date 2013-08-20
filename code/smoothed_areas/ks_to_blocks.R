@@ -1,10 +1,11 @@
 library(RMySQL)
+library(devtools)
 
-source('utils.R')
-source('common_data.R')
+pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
+devtools::load_all(pkg)
+
 source('kde_methods.R')
-
-
+source("../preprocessing/normalizeNeighborhoods.R")
 
 # Import Neighborhood Label Point Data
 con <- dbConnect(MySQL(), dbname="neighborhood")
@@ -18,7 +19,6 @@ WHERE location.location_id = label.location_id"
                        ) 
 dbDisconnect(con)
 
-source("../code/normalizeNeighborhoods.R")
 
 listings$neighborhood <- cleanLabels(listings$neighborhood)
 
@@ -39,6 +39,8 @@ neighborhoods <- c("lakeview","lincoln park", "roscoe village",
                    "east village", "noble square", "streeterville",
                    "west town", "magnificent mile", "gold coast")
 
+
+centroids <- coordinates(blocks.poly)
 # Estimate KDE
 classes = trainKDE(listings,
                    neighborhoods,
@@ -51,22 +53,6 @@ classes = trainKDE(listings,
 unary <- log(classes)
 minimum.val = min(unary[is.finite(unary)])
 unary[is.infinite(unary)] <- minimum.val
-write.csv(unary, file="training/unary.csv", row.names=FALSE)
-
-
-#map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
-#                   "#FB9A99", "#E31A1C", "#FDBF6F"),
-#             length.out = length(neighborhoods))
-
-# Plot KDE
-#plot(blocks.poly,
-#     col = probColors(map.colors, classes),
-#     border=rgb(0,0,0,0.04),
-#     lwd=0.01)
-
-
-
-                   
-
+write.csv(unary, file="unary.csv", row.names=FALSE)
 
 
