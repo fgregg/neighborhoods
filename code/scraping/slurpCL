@@ -1,4 +1,4 @@
-cd /usr/bin/python2.6 /home/fgregg/academic/neighborhoods/code/scraping/
+cd /home/fgregg/academic/neighborhoods/code/scraping/
 
 rm *.log
 
