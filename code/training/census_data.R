@@ -1,4 +1,5 @@
 library(RJSONIO)
+library(RCurl)
 
 base_url ='http://api.census.gov/data/2010/sf1?'
 key = 'ac94ba69718a7e1da4f89c6d218b8f6b5ae9ac49'
@@ -6,8 +7,9 @@ key = 'ac94ba69718a7e1da4f89c6d218b8f6b5ae9ac49'
 base_url = paste(base_url, 'key=', key, sep='')
 
 censusData <- function(json_file, variables=NULL) {
-  json_data <- fromJSON(json_file)
-
+  json <- RCurl::getURLContent(json_file)
+  json_data <- RJSONIO::fromJSON(json, asText=TRUE)
+  
   data <- do.call(rbind.data.frame, json_data[2:length(json_data)])
   names(data) <- json_data[[1]]
 
@@ -18,7 +20,7 @@ censusData <- function(json_file, variables=NULL) {
   return(data)
 }
 
-blockData <- function(state, county, variables) {
+geogData <- function(geo, state, county, variables) {
   state_county <- paste("&in=state:",
                         state,
                         "+county:",
@@ -42,18 +44,22 @@ blockData <- function(state, county, variables) {
 
     tract_names <- censusData(tract_name_url)$tract
 
-    block_urls <- paste(base_url,
-                        "&get=NAME,",
-                        data,
-                        "&for=block:*",
-                        state_county,
-                        "+tract:",
-                        tract_names,
-                        sep="")
+    geo_urls <- paste(base_url,
+                      "&get=NAME,",
+                      data,
+                      "&for=",
+                      geo,
+                      ":*",
+                      state_county,
+                      "+tract:",
+                      tract_names,
+                      sep="")
+
+    #print(geo_urls)
 
   
     results[[i]] <- do.call(rbind.data.frame,
-                            lapply(block_urls,
+                            lapply(geo_urls,
                                    FUN=function(x) {
                                      censusData(x, var_chunk)
                                    }))
@@ -139,7 +145,7 @@ variables <- c("P0040001", # total population,
                "P0180009" # Female householder, living alone
                )
 
-chicago_blocks <- blockData('17', '031', variables)
+chicago_blocks <- geogData("block", '17', '031', variables)
 
 chicago_blocks$TRACT_BLOC = paste(chicago_blocks$tract,
                                   chicago_blocks$block,
@@ -148,3 +154,20 @@ chicago_blocks$TRACT_BLOC = paste(chicago_blocks$tract,
 write.csv(chicago_blocks,
           "census_data_blocks.csv",
           row.names=FALSE)
+
+write.csv(chicago_blocks,
+          "census_data_blocks.csv",
+          row.names=FALSE)
+
+
+chicago_block_groups <- geogData("block+group", '17', '031', variables)
+
+chicago_block_groups$TRACT_BLOC = paste(chicago_block_groups$tract,
+                                        chicago_block_groups$block.group,
+                                        sep="")
+
+kwrite.csv(chicago_block_groups,
+          "census_data_block_groups.csv",
+          row.names=FALSE)
+
+

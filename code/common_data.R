@@ -1,5 +1,8 @@
 library(rgdal)
 
+cur_dir = getwd()
+
+
 source('utils.R')
 
 projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=0.9999749999999999 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
@@ -20,21 +23,47 @@ bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
                                      "p")),
                        proj4string = CRS(projection))
 
+
+
 # Load Block Data
 if (file.exists("blocks_poly.Rdata")) {
   load("blocks_poly.Rdata")
 } else {
   blocks.poly <- readOGR("../admin_areas/CensusBlockTIGER2010.shp",
                          "CensusBlockTIGER2010")
+  # Subset Blocks
+  centroids <- coordinates(blocks.poly)
+  blocks.poly <- blocks.poly[centroids[,1] > range[1,1] &
+                             centroids[,1] < range[2,1] &
+                             centroids[,2] > range[1,2] &
+                             centroids[,2] < range[2,2],]
+
   save(blocks.poly, file="blocks_poly.Rdata")
 }
 
-# Subset Blocks
-centroids <- coordinates(blocks.poly)
-blocks.poly <- blocks.poly[centroids[,1] > range[1,1] &
-                           centroids[,1] < range[2,1] &
-                           centroids[,2] > range[1,2] &
-                           centroids[,2] < range[2,2],]
+
+# Load Block Data
+if (file.exists("block_groups_poly.Rdata")) {
+  load("block_groups_poly.Rdata")
+} else {
+  block.groups.poly <- readOGR("../admin_areas/tl_2010_17031_bg10.shp",
+                               "tl_2010_17031_bg10")
+  block.groups.poly <- spTransform(block.groups.poly,
+                                   CRS(projection)
+                                   )
+
+                                        # Subset Blocks
+  centroids <- coordinates(block.groups.poly)
+  block.groups.poly <- block.groups.poly[centroids[,1] > range[1,1] &
+                                         centroids[,1] < range[2,1] &
+                                         centroids[,2] > range[1,2] &
+                                         centroids[,2] < range[2,2],]
+  block.groups.poly$TRACT_BLKGRP <- paste(block.groups.poly$TRACTCE10,
+                                          block.groups.poly$BLKGRPCE10)
+
+  save(block.groups.poly, file="block_groups_poly.Rdata")
+}
+
 
 centroids <- coordinates(blocks.poly)
 colnames(centroids) <- c("x", "y")

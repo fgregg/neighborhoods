@@ -7,7 +7,7 @@ map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
 
 pdf("blocks.pdf")
 #Plot KDE
-plot(blocks.poly,
+plot(blocks.poly.groups,
      col = common::probColors(map.colors, classes),
      border=rgb(0,0,0,0.04),
      lwd=0.01)

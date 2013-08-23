@@ -9,11 +9,11 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 ##### Load Data
-chicago_blocks <- read.csv("census_data_blocks.csv",
+chicago_blocks <- read.csv("census_data_block_groups.csv",
                            colClasses=c("TRACT_BLOC"="factor",
                                         "state"="factor",
                                         "tract"="factor",
-                                        "block"="factor",
+                                        "block.group"="factor",
                                         "county"="factor"))
 # P0040003 : Hispanic or Latino
 # P0050003 : Not Hispanic or Latino : White alone
@@ -100,7 +100,7 @@ age <- c("P0120003", # Under 5, male
 
 chicago_blocks[, age] <- ((1 + chicago_blocks[, age])
                           /
-                          (chicago_blocks[, "P0040001"] + length(age))
+                          (chicago_blocks[, "P0040001"] + length(age)))
 
 family_type <- c("P0180003", # Husband-wife family
                  "P0180005", # Male householder, no wife present
@@ -115,52 +115,53 @@ chicago_blocks[, family_type] <- ((1 + chicago_blocks[, family_type])
 
 
 # Merge Census data with Geo Spatial Data Frame
-alignment <- match(blocks.poly@data$TRACT_BLOC, 
+alignment <- match(block.groups.poly@data$TRACT_BLKGRP, 
                    chicago_blocks$TRACT_BLOC)
-blocks.poly@data = data.frame(blocks.poly@data, chicago_blocks[alignment,])
+
+block.groups.poly@data = data.frame(block.groups.poly@data, chicago_blocks[alignment,])
 
 # Merge labels 
 plabels <- read.csv("../interchange/potts_labels.csv")
-blocks.poly@data = data.frame(blocks.poly@data, plabels)
+block.groups.poly@data = data.frame(block.groups.poly@data, plabels)
 
 ##### Calculate Features
 
 
 # Topology of Block Connectivity
-neighbors <-poly2nb(blocks.poly,
-                    foundInBox=gUnarySTRtreeQuery(blocks.poly))
-# plot(blocks.poly, col=colors()[blocks.poly@data$label]) # check alignment of potts labels
+neighbors <-poly2nb(block.groups.poly,
+                    foundInBox=gUnarySTRtreeQuery(block.groups.poly))
+# plot(block.groups.poly, col=colors()[block.groups.poly@data$label]) # check alignment of potts labels
 
 # Calculate 'edge features' will be node features in training
 edgelist <- nb2edgelist(neighbors)
 
 # Jensen Shannon Inequality for race distribution
-p <- blocks.poly@data[edgelist[,1], race]
-q <- blocks.poly@data[edgelist[,2], race]
+p <- block.groups.poly@data[edgelist[,1], race]
+q <- block.groups.poly@data[edgelist[,2], race]
 m <- 0.5 * (p + q)
 js_race <- (0.5 * rowSums(log(p/m) * p)
             +
             0.5 * rowSums(log(q/m)*q))
 
 # Jensen Shannon Inequality for household distribution
-p <- blocks.poly@data[edgelist[,1], housing_type]
-q <- blocks.poly@data[edgelist[,2], housing_type]
+p <- block.groups.poly@data[edgelist[,1], housing_type]
+q <- block.groups.poly@data[edgelist[,2], housing_type]
 m <- 0.5 * (p + q)
 js_housing <- (0.5 * rowSums(log(p/m) * p)
             +
             0.5 * rowSums(log(q/m)*q))
 
 # Jensen Shannon Inequality for family type distribution
-p <- blocks.poly@data[edgelist[,1], family_type]
-q <- blocks.poly@data[edgelist[,2], family_type]
+p <- block.groups.poly@data[edgelist[,1], family_type]
+q <- block.groups.poly@data[edgelist[,2], family_type]
 m <- 0.5 * (p + q)
 js_family <- (0.5 * rowSums(log(p/m) * p)
               +
               0.5 * rowSums(log(q/m)*q))
 
 # Jensen Shannon Inequality for age distribution
-p <- blocks.poly@data[edgelist[,1], age]
-q <- blocks.poly@data[edgelist[,2], age]
+p <- block.groups.poly@data[edgelist[,1], age]
+q <- block.groups.poly@data[edgelist[,2], age]
 m <- 0.5 * (p + q)
 js_age <- (0.5 * rowSums(log(p/m) * p)
               +
@@ -168,15 +169,16 @@ js_age <- (0.5 * rowSums(log(p/m) * p)
 
                           
 # Is the edge a border between two different 'hoods
-border <- (blocks.poly@data[edgelist[,1], "label"]
+border <- (block.groups.poly@data[edgelist[,1], "label"]
            != 
-           blocks.poly@data[edgelist[,2], "label"])
+           block.groups.poly@data[edgelist[,2], "label"])
 border <- as.numeric(border)
 
-railroad.intersects <- as.numeric(railroad.intersects)
-highway.intersects <- as.numeric(highway.intersects)
-grid.street.intersects <- as.numeric(grid.street.intersects)
-water.intersects <- as.numeric(water.intersects)
+railroad.intersects <- as.numeric(read.csv("../interchange/rail_intersects.csv")$x)
+
+highway.intersects <- as.numeric(read.csv("../interchange/highway_intersects.csv")$x)
+grid.street.intersects <- as.numeric(read.csv("../interchange/grid_intersects.csv")$x)
+water.intersects <- as.numeric(read.csv("../interchange/water_intersects.csv")$x)
            
 write.table(data.frame(edgelist,
                        js_race,

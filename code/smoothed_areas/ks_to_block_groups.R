@@ -56,36 +56,3 @@ unary[is.infinite(unary)] <- minimum.val
 write.csv(unary, file="unary.csv", row.names=FALSE)
 
 
-centroids <- coordinates(blocks.poly)
-# Estimate KDE
-block_classes = trainKDE(listings,
-                   neighborhoods,
-                   centroids,
-                   range,
-                   ks.pi,
-                   0.0000015)
-
-# Unary Potentials of Block Labels
-unary <- log(block_classes)
-minimum.val = min(unary[is.finite(unary)])
-unary[is.infinite(unary)] <- minimum.val
-write.csv(unary, file="unary.csv", row.names=FALSE)
-
-# Blog GROUP
-
-centroids <- coordinates(block.groups.poly)
-# Estimate KDE
-bg_classes = trainKDE(listings,
-                      neighborhoods,
-                      centroids,
-                      range,
-                      ks.pi,
-                      0.0000015)
-
-# Unary Potentials of Block Group Labels
-unary <- log(bg_classes)
-minimum.val = min(unary[is.finite(unary)])
-unary[is.infinite(unary)] <- minimum.val
-write.csv(unary, file="unary_bg.csv", row.names=FALSE)
-
-
