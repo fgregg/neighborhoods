@@ -100,7 +100,7 @@ age <- c("P0120003", # Under 5, male
 
 chicago_blocks[, age] <- ((1 + chicago_blocks[, age])
                           /
-                          (chicago_blocks[, "P0040001"] + length(age))
+                          (chicago_blocks[, "P0040001"] + length(age)))
 
 family_type <- c("P0180003", # Husband-wife family
                  "P0180005", # Male householder, no wife present
@@ -117,6 +117,7 @@ chicago_blocks[, family_type] <- ((1 + chicago_blocks[, family_type])
 # Merge Census data with Geo Spatial Data Frame
 alignment <- match(blocks.poly@data$TRACT_BLOC, 
                    chicago_blocks$TRACT_BLOC)
+                          
 blocks.poly@data = data.frame(blocks.poly@data, chicago_blocks[alignment,])
 
 # Merge labels 
@@ -173,10 +174,10 @@ border <- (blocks.poly@data[edgelist[,1], "label"]
            blocks.poly@data[edgelist[,2], "label"])
 border <- as.numeric(border)
 
-railroad.intersects <- as.numeric(railroad.intersects)
-highway.intersects <- as.numeric(highway.intersects)
-grid.street.intersects <- as.numeric(grid.street.intersects)
-water.intersects <- as.numeric(water.intersects)
+railroad.intersects <- as.numeric(read.csv('../interchange/rail_intersects.csv')$x)
+highway.intersects <- as.numeric(read.csv('../interchange/highway_intersects.csv')$x)
+grid.street.intersects <- as.numeric(read.csv('../interchange/grid_intersects.csv')$x)
+water.intersects <- as.numeric(read.csv('../interchange/water_intersects.csv')$x)
            
 write.table(data.frame(edgelist,
                        js_race,

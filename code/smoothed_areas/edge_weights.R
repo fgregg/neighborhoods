@@ -6,13 +6,34 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 # Topology of Block Connectivity
-blocks <-spdep::poly2nb(blocks.poly,
-                 foundInBox=rgeos::gUnarySTRtreeQuery(blocks.poly))
-blocks <- common::nb2edgelist(blocks)
+blocks <-spdep::poly2nb(block.groups.poly,
+                 foundInBox=rgeos::gUnarySTRtreeQuery(block.groups.poly))
+edgelist <- common::nb2edgelist(blocks)
 write.csv(blocks, file="../interchange/edges.csv", row.names=FALSE)
 
-
 edge.weights <- rep(1, dim(blocks)[1])
+
+railroad.intersects <- common::edgesIntersect(edgelist,
+                                              centroids,
+                                              railroads,
+                                              projection)
+
+highway.intersects <- common::edgesIntersect(edgelist,
+                                             centroids,
+                                             highways,
+                                             projection)
+  
+grid.street.intersects <- common::edgesIntersect(edgelist,
+                                                 centroids,
+                                                 grid.streets,
+                                                 projection)
+
+water.intersects <- common::edgesIntersect(edgelist,
+                                           centroids,
+                                           water,
+                                           projection)
+
+
 
 rail.weights <- as.numeric(railroad.intersects)
 write.csv(rail.weights, file="../interchange/rail_intersects.csv", row.names=FALSE)
@@ -23,7 +44,7 @@ write.csv(highway.weights, file="../interchange/highway_intersects.csv", row.nam
 highway.weights <- (highway.weights - 1) * -1
 
 water.weights <- as.numeric(water.intersects)
-write.csv(water.weights, file="../water_intersects.csv", row.names=FALSE)
+write.csv(water.weights, file="../interchange/water_intersects.csv", row.names=FALSE)
 water.weights <- (water.weights - 1) * -1
 
 grid.street.weights <- as.numeric(grid.street.intersects)
