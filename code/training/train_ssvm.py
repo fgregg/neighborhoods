@@ -14,8 +14,8 @@ with open("edge_features.txt") as f :
    reader.next()
    for row in reader :
        node_list.append((int(row[0]), int(row[1])))
-       node_attributes.append(tuple([float(atr) for atr in row[2:10]]))
-       node_labels.append(int(row[10]))
+       node_attributes.append(tuple([float(atr) for atr in row[2:11]]))
+       node_labels.append(int(row[11]))
 
 with open("line_graph_edges.txt") as f :
    reader = csv.reader(f, delimiter = ' ')
@@ -28,7 +28,7 @@ X = numpy.array(node_attributes)
 E = numpy.array(edges, dtype=numpy.int)
 X = ((X, E),)
 
-model = GraphCRF(n_features=8, n_states=2, inference_method='ad3')
+model = GraphCRF(n_features=9, n_states=2, inference_method='ad3')
 svm = OneSlackSSVM(model, verbose=3, n_jobs=10)
 
 svm.fit(X, Y)

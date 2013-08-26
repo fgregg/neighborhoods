@@ -178,6 +178,9 @@ railroad.intersects <- as.numeric(read.csv('../interchange/rail_intersects.csv')
 highway.intersects <- as.numeric(read.csv('../interchange/highway_intersects.csv')$x)
 grid.street.intersects <- as.numeric(read.csv('../interchange/grid_intersects.csv')$x)
 water.intersects <- as.numeric(read.csv('../interchange/water_intersects.csv')$x)
+
+footprint.diff <- read.table('../interchange/diff_footprints.txt',
+                             header=TRUE)$x
            
 write.table(data.frame(edgelist,
                        js_race,
@@ -188,6 +191,7 @@ write.table(data.frame(edgelist,
                        highway.intersects,
                        grid.street.intersects,
                        water.intersects,
+                       footprint.diff,
                        border),
             file="edge_features.txt",
             row.names=FALSE)
