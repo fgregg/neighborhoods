@@ -4,10 +4,10 @@ rm *.log
 
 export PYTHONPATH=$PYTHONPATH:$HOME/lib64/python2.4/site-packages:$HOME/lib/python2.6/site-packages
 /usr/bin/python2.6 download_feeds.py -v 2> download.log
-mail -s "RSS download log" fgregg@uchicago.edu < download.log
+# mail -s "RSS download log" fgregg@uchicago.edu < download.log
 
 /usr/bin/python2.6 extract_listings.py -v 2> extract.log
-mail -s "Listing Extraction log" fgregg@uchicago.edu < extract.log
+# mail -s "Listing Extraction log" fgregg@uchicago.edu < extract.log
 
 /usr/bin/python2.6 geocode_labels.py -v 2> geocode.log
 mail -s "Geocoding log" fgregg@uchicago.edu < geocode.log

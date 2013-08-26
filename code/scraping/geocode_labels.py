@@ -204,7 +204,7 @@ for k, city in enumerate(config.cities) :
 
     logging.info("%(city)s: %(i)d / %(total)d : %(time)s",
                  {'city' : city, 
-                  'i' : k, 
+                  'i' : k + 1, 
                   'total' : num_cities,
                   'time' : time.strftime("%Y-%m-%d %H:%M:%S")})
     city_name, state = config.cities[city]
