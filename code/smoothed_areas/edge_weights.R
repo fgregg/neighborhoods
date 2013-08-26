@@ -9,9 +9,12 @@ devtools::load_all(pkg)
 blocks <-spdep::poly2nb(block.groups.poly,
                  foundInBox=rgeos::gUnarySTRtreeQuery(block.groups.poly))
 edgelist <- common::nb2edgelist(blocks)
-write.csv(blocks, file="../interchange/edges.csv", row.names=FALSE)
+write.csv(edgelist, file="../interchange/edges.csv", row.names=FALSE)
 
-edge.weights <- rep(1, dim(blocks)[1])
+centroids <- coordinates(block.groups.poly)
+
+edge.weights <- rep(1, dim(edgelist)[1])
+
 
 railroad.intersects <- common::edgesIntersect(edgelist,
                                               centroids,
