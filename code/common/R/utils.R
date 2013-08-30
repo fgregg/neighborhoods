@@ -22,7 +22,17 @@ edgesIntersect <- function(edges, centroids, barrier, crs) {
         }
         )
 }
-  
+
+crossesPolygons <- function(edges, centroids, barrier, crs) {
+  edgeToLine <- createEdgeToLine(centroids, crs)
+  apply(edges,
+        1,
+        FUN=function(x) {
+          num_intersect <- sum(gIntersects(edgeToLine(x), barrier, byid=TRUE))
+        }
+        )
+}
+
 createEdgeToLine <- function(centroids, crs) {
   edgeToLine <- function(edge) {
     l <- rbind(centroids[edge[1],],
@@ -106,9 +116,54 @@ basePlot <- function(range) {
 }
 
 
+extractBorder <- function(border_edgelist, polys) {
+  border_lines <- apply(border_edgelist,
+                        1,
+                        FUN=function(x) {
+                          inter <- rgeos::gIntersection(polys[x[1],],                                                                       polys[x[2],])
+                        })
+  border_lines <- border_lines[unlist(lapply(border_lines, class)) != "SpatialPoints"]
+
+  border_lines <- lapply(border_lines,
+                         FUN=function(x) {
+                           sp::spChFIDs(x,
+                                        as.character(sample(10000000,
+                                                            length(x))))
+                         })
+
+  border_lines <- do.call(rbind, border_lines)
+
+  return(border_lines)
+}
+
+dissolve <- function(SP, by, types, new_type) {
+  SP <- SP[SP@data[, by] %in% types,]
+  neighbors <- spdep::poly2nb(SP, foundInBox=rgeos::gUnarySTRtreeQuery(SP))
+  subgraphs <- spdep::n.comp.nb(neighbors)
+  dissolved_SP <- maptools::unionSpatialPolygons(SP, subgraphs$comp.id)
+  dissolved_SPDF <- sp::SpatialPolygonsDataFrame(dissolved_SP,
+                                                 data.frame(type=rep(new_type,
+                                                              length(dissolved_SP))))
+  return(dissolved_SPDF)
+}
+
+
 
 projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=0.9999749999999999 +x_0=300000 +y_0=0 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
 # Lat/Lon of Bounding Box
 range = cbind(c(-87.7, -87.6), c(41.89,41.98))
 range = rgdal::project(range, projection)
+
+bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
+                                                          range[1,1],
+                                                          range[2,1],
+                                                          range[2,1],
+                                                          range[1,1]),
+                                                        c(range[1,2],
+                                                          range[2,2],
+                                                          range[2,2],
+                                                          range[1,2],
+                                                          range[1,2])))),
+                                     "l")),
+                       proj4string = CRS(projection))
 
