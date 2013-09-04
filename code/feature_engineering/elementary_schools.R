@@ -6,21 +6,29 @@ library(spdep)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-elementary_schools <- rgdal::readOGR("../../phenomena/CPS_ElementarySchool_AttendanceBoundaries_SY13_14.shp",
-                         "CPS_ElementarySchool_AttendanceBoundaries_SY13_14")
+elementarySchools <- function(nodes) {
 
-elementary_schools <- elementary_schools[as.vector(rgeos::gIntersects(elementary_schools, bbx, byid=TRUE)),]
+  elementary_schools <- rgdal::readOGR("/home/fgregg/academic/neighborhoods/phenomena/CPS_ElementarySchool_AttendanceBoundaries_SY13_14.shp",
+                                       "CPS_ElementarySchool_AttendanceBoundaries_SY13_14")
 
-block_neighbors <-spdep::poly2nb(blocks.poly,
-                                 foundInBox=rgeos::gUnarySTRtreeQuery(blocks.poly))
+  elementary_schools <- elementary_schools[as.vector(rgeos::gIntersects(elementary_schools, bbx, byid=TRUE)),]
 
-block_edgelist <- common::nb2edgelist(block_neighbors)
+  block_neighbors <-spdep::poly2nb(nodes,
+                                   foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
 
-crosses <- common::crossesPolygons(block_edgelist,
-                                   coordinates(blocks.poly),
-                                   elementary_schools,
-                                   common::projection)
+  block_edgelist <- common::nb2edgelist(block_neighbors)
 
-write.csv(as.numeric(crosses > 1),
-          file="../interchange/elementary_schools_crosses.csv", row.names=FALSE)
+  crosses <- common::crossesPolygons(block_edgelist,
+                                     coordinates(nodes),
+                                     elementary_schools,
+                                     common::projection)
+  return(crosses)
+}
+
+if (!common::from_source()) {
+  crosses <- elementarySchools(block.groups.poly)
+  write.csv(as.numeric(crosses > 1),
+            file="../interchange/elementary_schools_crosses.csv", row.names=FALSE)
+}
+
 

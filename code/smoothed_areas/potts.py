@@ -2,9 +2,11 @@ import numpy as np
 from pygco import cut_simple, cut_from_graph, energy_of_graph_assignment
 import csv
 
+PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
+
 def constantEdges() :
     edges = []
-    with open('../interchange/edges.csv', 'rb') as f :
+    with open(PATH + 'edges.csv', 'rb') as f :
         reader = csv.reader(f)
         reader.next()
         for row in reader :
@@ -13,7 +15,7 @@ def constantEdges() :
     edges = edges - 1
 
     unary = []
-    with open('unary.csv', 'rb') as f :
+    with open(PATH + 'unary.csv', 'rb') as f :
         reader = csv.reader(f)
         reader.next()
         for row in reader :
@@ -23,7 +25,7 @@ def constantEdges() :
     unary = (-100 * unary).copy("C").astype(np.int32)
 
     edge_weights = []
-    with open('edge_weights.csv', 'rb') as f :
+    with open(PATH + 'edge_weights.csv', 'rb') as f :
         reader = csv.reader(f)
         reader.next()
         for row in reader :
@@ -55,7 +57,7 @@ def constantEdges() :
 
     print energy_of_graph_assignment(edges, unary, pairwise, result_graph)
 
-    with open('potts_labels.csv', 'wb') as f:
+    with open(PATH + 'potts_labels.csv', 'wb') as f:
         writer = csv.writer(f)
         writer.writerow(['label'])
         for label in result_graph :

@@ -122,7 +122,7 @@ extractBorder <- function(border_edgelist, polys) {
                         FUN=function(x) {
                           inter <- rgeos::gIntersection(polys[x[1],],                                                                       polys[x[2],])
                         })
-  border_lines <- border_lines[unlist(lapply(border_lines, class)) != "SpatialPoints"]
+  border_lines <- border_lines[unlist(lapply(border_lines, class)) == "SpatialLines"]
 
   border_lines <- lapply(border_lines,
                          FUN=function(x) {
@@ -167,3 +167,6 @@ bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
                                      "l")),
                        proj4string = CRS(projection))
 
+from_source <- function() {
+  return(length(sys.frames()) >= 4 && sys.call(1)[[1]] == quote(source))
+}
