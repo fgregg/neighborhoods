@@ -49,6 +49,14 @@ write.csv(differences$family,
 write.csv(differences$housing,
           file="interchange/js_housing.csv", row.names=FALSE)
 
+if (identical(NODES, blocks.poly) || identical(NODES, populated.blocks)) {
+  source('feature_engineering/block_shapes.R')
+  angle_differences <- blockShapes(populated.blocks)
+  write.csv(angle_differences,
+            file="interchange/block_angles.csv", row.names=FALSE)
+}
+
+
 source('feature_engineering/line_graph.R')
 line_graph <- lineGraph(NODES)
 igraph::write.graph(line_graph,

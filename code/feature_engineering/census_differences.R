@@ -8,7 +8,7 @@ devtools::load_all(pkg)
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
 censusDifferences <- function(nodes) {
-  print(substitute(nodes))
+
   if (identical(nodes, blocks.poly) 
       || identical(nodes, populated.blocks)) {
     census_data = paste(PATH, 'census_data_blocks.csv', sep='')
@@ -47,17 +47,17 @@ censusDifferences <- function(nodes) {
   edgelist <- common::nb2edgelist(neighbors)
     
 
+  
   race <-  c("P0040003", # Hispanic or Latino
              "P0050003", # Not Hispanic or Latino : White alone
              "P0050004", # Not Hispanic or Latino : Black Alone
-             "P0050005", # Not Hispanic or Latino : American Indian and Alaska Native alone
-             "P0050006", # Not Hispanic or Latino : Asian alone
-             "P0050007", # Not Hispanic or Latino : Native Hawaiian and Other Pacific Islander alone
-             "P0050008", # Not Hispanic or Latino : Some other race alone
-             "P0050009") # Not Hispanic or Latino : Two or more races
-  nodes@data[, race] <- ((1 + nodes@data[, race])
+             "P0050006") # Not Hispanic or Latino : Asian alone
+
+  overall_proportion <- colSums(nodes@data[,race])/sum(nodes@data[,race])
+
+  nodes@data[, race] <- ((nodes@data[, race] + overall_proportion)
                          /
-                         (nodes@data[, "P0040001"] + 8))   # Total population
+                         (rowSums(nodes@data[, race]) + 1))   # Total population
 
   # Jensen Shannon Inequality for race distribution
   p <- nodes@data[edgelist[,1], race]
@@ -67,89 +67,108 @@ censusDifferences <- function(nodes) {
               +
               0.5 * rowSums(log(q/m)*q))
 
+  ### HOUSING
+  
+  all_units <- c("H0040001", # Occupied Units
+                 "H0050001") # Vacant Units
 
-  housing_type <- c("H0040002", # Owned with mortgage
-                    "H0040003", # Owned free and clear
-                    "H0040004", # Renter Occupied
-                    "H0050002", # For rent
-                    "H0050003", # Rented, not occupied
-                    "H0050004", # For sale only
-                    "H0050005", # Sold not occupied
-                    "H0050006", # For seasonal, recreational, or occasional use
-                    "H0050007", # For migrant workers
-                    "H0050008" # Other vacant
-                    )
+  rentals <- c("H0040004", # Renter Occupied
+               "H0050002", # For rent
+               "H0050003") # Rented, not occupied
 
-  nodes@data[, housing_type] <- ((1 + nodes@data[, housing_type])
-                                 /
-                                 (nodes@data[, "H0040001"]
-                                  + nodes@data[, "H0050001"]
-                                  + length(housing_type)))
+  overall_proportion <- sum(nodes@data[,rentals])/sum(nodes@data[,all_units])
 
+  nodes$rental_units <- ((rowSums(nodes@data[, rentals])
+                          + overall_proportion)
+                         /
+                         (rowSums(nodes@data[, all_units]) + 1))
+
+  overall_proportion <- sum(nodes$H0040001)/sum(nodes@data[,all_units])
+  
+  nodes$occupied_units <- ((nodes$H0040001 + overall_proportion)
+                           /(rowSums(nodes@data[, all_units]) + 1))
+
+
+                                  
   # Jensen Shannon Inequality for household distribution
-  p <- nodes@data[edgelist[,1], housing_type]
-  q <- nodes@data[edgelist[,2], housing_type]
+  p <- nodes@data[edgelist[,1], "rental_units"]
+  q <- nodes@data[edgelist[,2], "rental_units"]
   m <- 0.5 * (p + q)
-  js_housing <- (0.5 * rowSums(log(p/m) * p)
+  js_housing <- (0.5 * log(p/m) * p
                  +
-                 0.5 * rowSums(log(q/m)*q))
+                 0.5 * log(q/m)*q)
 
+  nodes$preschool <- rowSums(nodes@data[, c("P0120003", # Under 5, male
+                                            "P0120027")] # Under 5, female
+                             )
+  
+  nodes$school <- rowSums(nodes@data[, c("P0120004", # Under 5-9, male
+                                         "P0120005", # Under 10-14, male
+                                         "P0120006", # Under 15-17, male
+                                         "P0120028", # Under 5-9, female
+                                         "P0120029", # Under 10-14, female
+                                         "P0120030")] # Under 15-17, female
+                          )
 
-  age <- c("P0120003", # Under 5, male
-           "P0120004", # Under 5-9, male
-           "P0120005", # Under 10-14, male
-           "P0120006", # Under 15-17, male
-           "P0120007", # Under 18, 19, male
-           "P0120008", # Under 20, male
-           "P0120009", # Under 21, male
-           "P0120010", # Under 22-24, male
-           "P0120011", # Under 25-29, male
-           "P0120012", # Under 30-34, male
-           "P0120013", # Under 35-39, male
-           "P0120014", # Under 40-44, male
-           "P0120015", # Under 45-49, male
-           "P0120016", # Under 50-54, male
-           "P0120017", # Under 55-59, male
-           "P0120018", # Under 60,61, male
-           "P0120019", # Under 62-64, male
-           "P0120020", # Under 65,66, male
-           "P0120021", # Under 67-69, male
-           "P0120022", # Under 70-74, male
-           "P0120023", # Under 75-79, male
-           "P0120024", # Under 80-84, male
-           "P0120025", # Under 85+, male
-           "P0120027", # Under 5, female
-           "P0120028", # Under 5-9, female
-           "P0120029", # Under 10-14, female
-           "P0120030", # Under 15-17, female
-           "P0120031", # Under 18, 19, female
-           "P0120032", # Under 20, female
-           "P0120033", # Under 21, female
-           "P0120034", # Under 22-24, female
-           "P0120035", # Under 25-29, female
-           "P0120036", # Under 30-34, female
-           "P0120037", # Under 35-39, female
-           "P0120038", # Under 40-44, female
-           "P0120039", # Under 45-49, female
-           "P0120040", # Under 50-54, female
-           "P0120041", # Under 55-59, female
-           "P0120042", # Under 60,61, female
-           "P0120043", # Under 62-64, female
-           "P0120044", # Under 65,66, female
-           "P0120045", # Under 67-69, female
-           "P0120046", # Under 70-74, female
-           "P0120047", # Under 75-79, female
-           "P0120048", # Under 80-84, female
-           "P0120049" # Under 85+, female
-           )
+  nodes$college <- rowSums(nodes@data[, c("P0120007", # Under 18, 19, male
+                                          "P0120008", # Under 20, male
+                                          "P0120009", # Under 21, male
+                                          "P0120031", # Under 18, 19, female
+                                          "P0120032", # Under 20, female
+                                          "P0120033")] # Under 21, female
+                           )
 
-  nodes@data[, age] <- ((1 + nodes@data[, age])
-                        /
-                        (nodes@data[, "P0040001"] + length(age)))
+  nodes$young_adult <- rowSums(nodes@data[, c("P0120010", # Under 22-24, male
+                                              "P0120011", # Under 25-29, male
+                                              "P0120034", # Under 22-24, female
+                                              "P0120035")] # Under 25-29, female
+                               )
+
+  nodes$middle_age <- rowSums(nodes@data[, c("P0120012", # Under 30-34, male
+                                             "P0120013", # Under 35-39, male
+                                             "P0120014", # Under 40-44, male
+                                             "P0120015", # Under 45-49, male
+                                             "P0120016", # Under 50-54, male
+                                             "P0120017", # Under 55-59, male
+                                             "P0120018", # Under 60,61, male
+                                             "P0120019", # Under 62-64, male
+                                             "P0120036", # Under 30-34, female
+                                             "P0120037", # Under 35-39, female
+                                             "P0120038", # Under 40-44, female
+                                             "P0120039", # Under 45-49, female
+                                             "P0120040", # Under 50-54, female
+                                             "P0120041", # Under 55-59, female
+                                             "P0120042", # Under 60,61, female
+                                             "P0120043")] # Under 62-64, female
+                              )
+  
+
+  nodes$retired <- rowSums(nodes@data[, c("P0120020", # Under 65,66, male
+                                          "P0120021", # Under 67-69, male
+                                          "P0120022", # Under 70-74, male
+                                          "P0120023", # Under 75-79, male
+                                          "P0120024", # Under 80-84, male
+                                          "P0120025", # Under 85+, male
+                                          "P0120044", # Under 65,66, female
+                                          "P0120045", # Under 67-69, female
+                                          "P0120046", # Under 70-74, female
+                                          "P0120047", # Under 75-79, female
+                                          "P0120048", # Under 80-84, female
+                                          "P0120049")] # Under 85+, female
+                           )              
+
+  ages <- c("preschool", "school", "college",
+            "young_adult", "middle_age", "retired")
+
+  overall_proportion <- colSums(nodes@data[, ages])/sum(nodes$P0040001)
+  
+  nodes@data[, ages] <- ((nodes@data[, ages] + overall_proportion)
+                         / 
+                        (nodes$P0040001 + 1))
 
   # Jensen Shannon Inequality for age distribution
-  p <- nodes@data[edgelist[,1], age]
-  q <- nodes@data[edgelist[,2], age]
+  p <- nodes@data[edgelist[,1], ages]
+  q <- nodes@data[edgelist[,2], ages]
   m <- 0.5 * (p + q)
   js_age <- (0.5 * rowSums(log(p/m) * p)
              +
@@ -159,13 +178,15 @@ censusDifferences <- function(nodes) {
   family_type <- c("P0180003", # Husband-wife family
                    "P0180005", # Male householder, no wife present
                    "P0180006", # Female householder, no husband present
-                   "P0180008", # Male householder, living alone
-                   "P0180009" # Female householder, living alone
+                   "P0180008", # Householder, living alone
+                   "P0180009" # Householder, not living alone
                    )
 
-  nodes@data[, family_type] <- ((1 + nodes@data[, family_type])
+  overall_proportion <- colSums(nodes@data[, family_type])/sum(nodes$P0180001)
+
+  nodes@data[, family_type] <- ((nodes@data[, family_type] + overall_proportion)
                                 /
-                                (nodes@data[, "P0180001"] + length(family_type)))
+                                (nodes$P0180001 + 1))
 
 
 
@@ -189,7 +210,7 @@ censusDifferences <- function(nodes) {
 
 
 if (!common::from_source()) {
-  differences <- censusDifferences(block.groups.poly)
+  differences <- censusDifferences(populated.blocks)
   write.csv(differences$race,
             file="../interchange/js_race.csv", row.names=FALSE)
   write.csv(differences$age,
