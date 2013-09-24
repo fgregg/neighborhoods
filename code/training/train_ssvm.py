@@ -1,7 +1,7 @@
 import csv
 import numpy
 from pystruct.models import GraphCRF
-from pystruct.learners import OneSlackSSVM
+from pystruct.learners import NSlackSSVM as learner
 
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
@@ -20,6 +20,8 @@ elementary_school = numpy.loadtxt(PATH + 'elementary_schools_crosses.csv', skipr
 high_school = numpy.loadtxt(PATH + 'high_schools_crosses.csv', skiprows = 1)
 numpy
 
+block_angle = numpy.loadtxt(PATH + 'block_angles.csv', skiprows = 1)
+
 node_attributes = numpy.vstack((js_age, 
                                 js_family,
                                 js_race,
@@ -30,28 +32,35 @@ node_attributes = numpy.vstack((js_age,
                                 water,
                                 zoning,
                                 elementary_school,
-                                high_school)).transpose()
+                                high_school,
+                                block_angle)).transpose()
 
 node_labels = numpy.loadtxt(PATH + 'border.csv', skiprows = 1, dtype=int)
+penalties = numpy.loadtxt(PATH + 'penalty.csv', skiprows= 1)
 
 edges = numpy.loadtxt(PATH + 'line_graph_edges.txt', skiprows = 1, dtype=int)
 
 Y = (numpy.array(node_labels),)
 X = numpy.array(node_attributes)
 
-E = numpy.array(edges, dtype=numpy.int)
+E = numpy.empty((0, 2), dtype=numpy.int)
+#E = numpy.array(edges, dtype=numpy.int)
 X = ((X, E),)
 
-model = GraphCRF(n_features=node_attributes.shape[1], 
-                 n_states=2, inference_method='ad3')
-svm = OneSlackSSVM(model, verbose=3, n_jobs=10)
+
+model = GraphCRF(n_features=node_attributes.shape[1],
+                 #class_weight=[1, 0.001],
+                 n_states=2, inference_method='qpbo')
+
+
+svm = learner(model, verbose=3, n_jobs=5, max_iter=1000)
 
 svm.fit(X, Y)
 print X
 print svm.w
 predicted_borders = svm.predict(X)
                          
-with open(PATH + 'training/predicted_borders.csv', 'w') as f :
+with open('/home/fgregg/academic/neighborhoods/code/training/predicted_borders.csv', 'w') as f :
    writer = csv.writer(f, delimiter=' ')
    for edge in predicted_borders[0] :
       writer.writerow([edge])

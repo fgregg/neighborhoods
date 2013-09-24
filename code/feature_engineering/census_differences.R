@@ -7,6 +7,23 @@ devtools::load_all(pkg)
 
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
+if (interactive()) {
+  neighbors <- spdep::poly2nb(nodes,
+                              foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+  edgelist <- common::nb2edgelist(neighbors)
+  border_lines <- common::plotBorders(edgelist)
+}
+
+featurePlot <- function(feature, file_name) {
+  classes <- classInt::classIntervals(feature, 8, style="kmeans")
+  colcode <- classInt::findColours(classes, c("wheat", "red"))
+
+  png(file_name)
+  plot(nodes, col=colcode, border='transparent')
+  lines(border_lines)
+  dev.off()
+}
+
 censusDifferences <- function(nodes) {
 
   if (identical(nodes, blocks.poly) 
@@ -45,7 +62,14 @@ censusDifferences <- function(nodes) {
 
   # Calculate 'edge features' will be node features in training
   edgelist <- common::nb2edgelist(neighbors)
-    
+
+  pop_1 <- nodes@data[edgelist[,1], "P0040001"]
+  pop_2 <- nodes@data[edgelist[,2], "P0040001"]
+  min_pop <- apply(cbind(pop_1, pop_2), 1, min)
+
+  if (interactive()) {
+    featurePlot(nodes$P0040001, "population.png")
+  }
 
   
   race <-  c("P0040003", # Hispanic or Latino
@@ -66,6 +90,15 @@ censusDifferences <- function(nodes) {
   js_race <- (0.5 * rowSums(log(p/m) * p)
               +
               0.5 * rowSums(log(q/m)*q))
+
+  if (interactive()) {
+    featurePlot(nodes$P0040003, "hispanic.png")
+    featurePlot(nodes$P0050003, "white.png")
+    featurePlot(nodes$P0050004, "black.png")
+    featurePlot(nodes$P0050006, "asian.png")
+  }
+
+
 
   ### HOUSING
   
@@ -97,6 +130,10 @@ censusDifferences <- function(nodes) {
   js_housing <- (0.5 * log(p/m) * p
                  +
                  0.5 * log(q/m)*q)
+
+  if (interactive()) {
+    featurePlot(nodes$rental_units, "rentals.png")
+  }
 
   nodes$preschool <- rowSums(nodes@data[, c("P0120003", # Under 5, male
                                             "P0120027")] # Under 5, female
@@ -174,6 +211,19 @@ censusDifferences <- function(nodes) {
              +
              0.5 * rowSums(log(q/m)*q))
 
+  if (interactive()) {
+
+    featurePlot(nodes$preschool, "preschool.png")
+    featurePlot(nodes$school, "school.png")
+    featurePlot(nodes$college, "college.png")
+    featurePlot(nodes$young_adult, "young_adult.png")
+    featurePlot(nodes$middle_age, "middle_age.png")
+    featurePlot(nodes$retired, "retired.png")
+
+  }
+
+
+
 
   family_type <- c("P0180003", # Husband-wife family
                    "P0180005", # Male householder, no wife present
@@ -199,10 +249,24 @@ censusDifferences <- function(nodes) {
                 +
                 0.5 * rowSums(log(q/m)*q))
 
-  differences <- list(race=js_race,
+  if (interactive()) {
+    
+    featurePlot(nodes$P0180003, "husband_wife.png")
+    featurePlot(nodes$P0180005, "single_dad.png")
+    featurePlot(nodes$P0180006, "single_mom.png")
+    featurePlot(nodes$P0180008, "living_along.png")
+    featurePlot(nodes$P0180009, "roommates.png")
+
+  }
+
+
+  differences <- list(population=min_pop,
+                      race=js_race,
                       age=js_age,
                       housing=js_housing,
                       family=js_family)
+
+
 
   return(differences)
 
@@ -210,7 +274,7 @@ censusDifferences <- function(nodes) {
 
 
 if (!common::from_source()) {
-  differences <- censusDifferences(populated.blocks)
+  differences <- censusDifferences(blocks.poly)
   write.csv(differences$race,
             file="../interchange/js_race.csv", row.names=FALSE)
   write.csv(differences$age,

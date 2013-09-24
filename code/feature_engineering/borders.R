@@ -1,6 +1,7 @@
 library(rgeos)
 library(spdep)
 library(devtools)
+library(igraph)
 
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
@@ -24,11 +25,23 @@ borders <- function(nodes) {
              nodes@data[edgelist[,2], "label"])
   border <- as.numeric(border)
 
-  return(border)
+  # Line graph, the 'edges' between the edges
+  primal_graph <- igraph::graph.data.frame(edgelist, directed=FALSE)
+
+  nabes <- unlist(igraph::neighborhood(primal_graph, 2))
+
+  penalties <- border
+  penalties[nabes] <- 0.5
+
+
+
+  return(list(border=border, penalty=penalties))
 }
 
 if (!common::from_source()) {
-  border <- borders(block.groups.poly)
-  write.csv(border,
+  border <- borders(populated.blocks)
+  write.csv(border$border,
             file="../interchange/border.csv", row.names=FALSE)
+  write.csv(border$penalty,
+            file="../interchange/penalty.csv", row.names=FALSE)
 }

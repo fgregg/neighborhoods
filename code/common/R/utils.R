@@ -111,29 +111,28 @@ basePlot <- function(range) {
        xlab="",
        ylab="")
   #plot(com.areas, border="grey", add=TRUE, lwd=.1)
-  plot(water, col="#C0E7F3", border=0, add=TRUE)
+  #plot(water, col="#C0E7F3", border=0, add=TRUE)
   lines(railroads, lty=2, col="tan")
 }
 
-
 extractBorder <- function(border_edgelist, polys) {
-  border_lines <- apply(border_edgelist,
-                        1,
-                        FUN=function(x) {
-                          inter <- rgeos::gIntersection(polys[x[1],],                                                                       polys[x[2],])
-                        })
-  border_lines <- border_lines[unlist(lapply(border_lines, class)) == "SpatialLines"]
+  borders <- apply(border_edgelist,
+                   1,
+                   FUN=function(x) {
+                     inter <- rgeos::gIntersection(polys[x[1],],                                                                       polys[x[2],])
+                   })
 
-  border_lines <- lapply(border_lines,
-                         FUN=function(x) {
-                           sp::spChFIDs(x,
-                                        as.character(sample(10000000,
-                                                            length(x))))
-                         })
+  spatial_lines <- unlist(lapply(borders, class)) == "SpatialLines"
+  border_lines <- borders[spatial_lines]
+
+  border_lines <- mapply(sp::spChFIDs,
+                         border_lines,
+                         as.character(1:length(border_lines)))
 
   border_lines <- do.call(rbind, border_lines)
 
-  return(border_lines)
+  return(list(lines=border_lines,
+              spatial_lines=spatial_lines))
 }
 
 dissolve <- function(SP, by, types, new_type) {
@@ -170,3 +169,79 @@ bbx <- SpatialPolygons(list(Polygons(list(Polygon(cbind(c(range[1,1],
 from_source <- function() {
   return(length(sys.frames()) >= 4 && sys.call(1)[[1]] == quote(source))
 }
+
+plotBorders <- function(edgelist) {
+    predicted <- read.table("/home/fgregg/academic/neighborhoods/code/interchange/border.csv", skip=1)
+    borders <- edgelist[predicted == TRUE,]
+    border_lines <- common::extractBorder(borders, nodes)
+    return(border_lines)
+}
+
+# http://richardburcher.com/2012/05/01/minumum-bounding-rectangle-as-proxy-for-internal-metrics-of-drumlins-or-other-geometries/
+
+minimum_bounding_box <- function(points) {
+  points <- points[chull(points),]
+
+  n_points <- nrow(points)
+  
+  # Complete the ring
+  points <- rbind(points, points[1,])
+
+  minimum_box_area <- Inf
+  minimum_rotated_points <- NA
+
+  for (i in 1:n_points) {
+    theta <- pi - atan2(points[i+1,2]-points[i,2],
+                        points[i+1,1]-points[i,1])
+    rotated_points <- rotate(points, theta)
+    box_area <- (diff(range(rotated_points[,1]))
+                 * diff(range(rotated_points[,2]))
+                 )
+    if (box_area < minimum_box_area) {
+      minimum_box <- cbind(
+        c(min(rotated_points[,1]),max(rotated_points[,1]),
+          max(rotated_points[,1]),min(rotated_points[,1])),
+        c(min(rotated_points[,2]),min(rotated_points[,2]),
+          max(rotated_points[,2]),max(rotated_points[,2]))
+        )
+      minimum_box <- rbind(minimum_box,
+                           minimum_box[1,])
+      minimum_box <- rotate(minimum_box, -theta)
+
+      minimum_rotated_points <- rotated_points
+      minimum_box_area <- box_area
+    }
+  }
+
+  dist_1 <- ((minimum_box[2,2]-minimum_box[1,2])^2
+             +
+             (minimum_box[2,1]-minimum_box[1,1])^2)
+
+  theta_1 <- pi - atan2(minimum_box[2,2]-minimum_box[1,2],
+                        minimum_box[2,1]-minimum_box[1,1])
+ 
+  dist_2 <- ((minimum_box[3,2]-minimum_box[2,2])^2
+             +
+             (minimum_box[3,1]-minimum_box[2,1])^2)
+ 
+  if (dist_1 > dist_2) {
+    minimum_box_theta = theta_1
+  } else {
+    minimum_box_theta <- pi - atan2(minimum_box[3,2]-minimum_box[2,2],
+                                    minimum_box[3,1]-minimum_box[2,1])
+  }
+  
+  
+  return(list(minbba=minimum_box_area,
+              theta=minimum_box_theta,
+              pts=minimum_rotated_points,
+              box=minimum_box))
+}
+
+
+rotate = function(pts,angle){
+  co = cos(angle)
+  si = sin(angle)
+  cbind(co * pts[,1] - si * pts[,2], si * pts[,1] + co * pts[,2])
+}
+

@@ -27,7 +27,8 @@ trainKDE <- function(listings,
                      centroids,
                      range,
                      kde,
-                     no.hood.prior) {
+                     no.hood.prior,
+                     id="neighborhood") {
   
   class.matrix <- array(, c(dim(centroids)[1],
                             length(hoods)+1
@@ -36,11 +37,11 @@ trainKDE <- function(listings,
   total.listings = 0
   
   for (i in 1:length(hoods)) {
-    hood.listings <- listings[listings@data$neighborhood == hoods[i],]
+    hood.listings <- listings[listings@data[, id] == hoods[i],]
     hood.listings <- hampelOutliers(hood.listings, .90)
 
     num.listings <- dim(hood.listings)[1]
-    
+
     p.density <- kde(hood.listings@coords, centroids)
     
     class.matrix[,i] <- p.density * num.listings
@@ -63,7 +64,8 @@ rasterTrainKDE <- function(listings,
                            hoods,
                            range,
                            n.points,
-                           no.hood.prior) {
+                           no.hood.prior,
+                           id="neighborhood") {
   
   class.matrices <- array(, c(n.points, 
                               n.points, 
@@ -76,8 +78,8 @@ rasterTrainKDE <- function(listings,
   total.listings = 0
   
   for (i in 1:length(hoods)) {
-    hood.listings <- listings[listings@data$neighborhood == hoods[i],]
-    hood.listings <- hampelOutliers(hood.listings, .90)
+    hood.listings <- listings[listings@data[, id] == hoods[i],]
+    hood.listings <- hampelOutliers(hood.listings, .10)
 #    hood.listings$x <- jitter(hood.listings$x, amount=.001)
 #    hood.listings$y <- jitter(hood.listings$y, amount=.001)
 

@@ -4,7 +4,7 @@ library(igraph)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-NODES=populated.blocks
+NODES=blocks.poly
 
 
 source("smoothed_areas/ks_to_blocks.R")
@@ -34,7 +34,7 @@ write.csv(as.numeric(crosses > 1),
           file="interchange/elementary_schools_crosses.csv", row.names=FALSE)
 
 source('feature_engineering/high_schools.R')
-crosses <- elementarySchools(NODES)
+crosses <- highSchools(NODES)
 write.csv(as.numeric(crosses > 1),
           file="interchange/high_schools_crosses.csv", row.names=FALSE)
 
@@ -48,6 +48,10 @@ write.csv(differences$family,
           file="interchange/js_family.csv", row.names=FALSE)
 write.csv(differences$housing,
           file="interchange/js_housing.csv", row.names=FALSE)
+write.csv(differences$population,
+          file="interchange/min_population.csv", row.names=FALSE)
+
+
 
 if (identical(NODES, blocks.poly) || identical(NODES, populated.blocks)) {
   source('feature_engineering/block_shapes.R')

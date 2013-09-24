@@ -22,13 +22,19 @@ elementarySchools <- function(nodes) {
                                      coordinates(nodes),
                                      elementary_schools,
                                      common::projection)
-  return(crosses)
+
+  distances <- common::distanceFromBorder(nodes, block_edgelist, crosses)
+
+  return(list(crosses=crosses,
+              distances=distances))
 }
 
 if (!common::from_source()) {
-  crosses <- elementarySchools(block.groups.poly)
-  write.csv(as.numeric(crosses > 1),
+  results <- elementarySchools(blocks.poly)
+  write.csv(as.numeric(results$crosses > 1),
             file="../interchange/elementary_schools_crosses.csv", row.names=FALSE)
+  write.csv(results$distances,
+            file="../interchange/elementary_schools_distances.csv", row.names=FALSE)
 }
 
 
