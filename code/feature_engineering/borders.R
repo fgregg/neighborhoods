@@ -7,12 +7,7 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 borders <- function(nodes) {
-  # Topology of Block Connectivity
-  neighbors <- spdep::poly2nb(nodes,
-                              foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-
-  # Calculate 'edge features' will be node features in training
-  edgelist <- common::nb2edgelist(neighbors)
+  edgelist <- common::edgeList(nodes)
 
 
   # Merge labels 

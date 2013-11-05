@@ -7,8 +7,9 @@ devtools::load_all(pkg)
 
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
-if (interactive()) {
+if (interactive() & !common::from_source()) {
   neighbors <- spdep::poly2nb(nodes,
+                              queen=FALSE,
                               foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
   edgelist <- common::nb2edgelist(neighbors)
   border_lines <- common::plotBorders(edgelist)
@@ -24,7 +25,7 @@ featurePlot <- function(feature, file_name) {
   dev.off()
 }
 
-censusDifferences <- function(nodes) {
+censusDifferences <- function(nodes, make_plots=FALSE) {
 
   if (identical(nodes, blocks.poly) 
       || identical(nodes, populated.blocks)) {
@@ -56,18 +57,14 @@ censusDifferences <- function(nodes) {
 
   nodes@data = data.frame(nodes@data, chicago_blocks[alignment,])
 
-  # Topology of Block Connectivity
-  neighbors <- spdep::poly2nb(nodes,
-                              foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-
   # Calculate 'edge features' will be node features in training
-  edgelist <- common::nb2edgelist(neighbors)
+  edgelist <- common::edgeList(nodes)
 
   pop_1 <- nodes@data[edgelist[,1], "P0040001"]
   pop_2 <- nodes@data[edgelist[,2], "P0040001"]
   min_pop <- apply(cbind(pop_1, pop_2), 1, min)
 
-  if (interactive()) {
+  if (make_plots) {
     featurePlot(nodes$P0040001, "population.png")
   }
 
@@ -91,7 +88,7 @@ censusDifferences <- function(nodes) {
               +
               0.5 * rowSums(log(q/m)*q))
 
-  if (interactive()) {
+  if (make_plots) {
     featurePlot(nodes$P0040003, "hispanic.png")
     featurePlot(nodes$P0050003, "white.png")
     featurePlot(nodes$P0050004, "black.png")
@@ -131,7 +128,7 @@ censusDifferences <- function(nodes) {
                  +
                  0.5 * log(q/m)*q)
 
-  if (interactive()) {
+  if (make_plots) {
     featurePlot(nodes$rental_units, "rentals.png")
   }
 
@@ -211,7 +208,7 @@ censusDifferences <- function(nodes) {
              +
              0.5 * rowSums(log(q/m)*q))
 
-  if (interactive()) {
+  if (make_plots) {
 
     featurePlot(nodes$preschool, "preschool.png")
     featurePlot(nodes$school, "school.png")
@@ -249,7 +246,7 @@ censusDifferences <- function(nodes) {
                 +
                 0.5 * rowSums(log(q/m)*q))
 
-  if (interactive()) {
+  if (make_plots) {
     
     featurePlot(nodes$P0180003, "husband_wife.png")
     featurePlot(nodes$P0180005, "single_dad.png")

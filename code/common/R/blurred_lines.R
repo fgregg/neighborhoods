@@ -14,12 +14,6 @@ bufferNodes <- function(feature_edges, nodes) {
   return(buffer_nodes)
 }
 
-edgeList <- function(nodes) {
-  node_neighbors <-spdep::poly2nb(nodes,
-                                  foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-  node_edgelist <- common::nb2edgelist(node_neighbors)
-  return(node_edgelist)
-}
 
 minDistance <- function(nodes, features) {
   min_distance <- rep(0, length(nodes$angles))
@@ -44,13 +38,15 @@ distanceFromBorder <- function(nodes, node_edgelist, intersections) {
                                          nodes)$lines
   features <- edgeStatistics(feature_edges)
 
-  buffer_nodes <- bufferNodes(feature_edges, nodes)
-  buffer_node_edgelist <- edgeList(buffer_nodes)
+  buffer_nodes <- bufferNodes(feature_edges,
+                              nodes)
+  buffer_node_edgelist <- edgeList(buffer_nodes, all_blocks=FALSE)
 
   results <- common::extractBorder(buffer_node_edgelist,
                                    buffer_nodes)
+  
 
-  node_edges <- edgeStatistics(results$line)
+  node_edges <- edgeStatistics(results$lines)
   spatial_lines <- results$spatial_lines
 
   buffer_distance <- rep(1, length(spatial_lines))

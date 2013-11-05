@@ -106,6 +106,15 @@ if (file.exists("barrier_intersects.Rdata")) {
        file="barrier_intersects.Rdata")
 }
 
+nodes = blocks.poly
+node_neighbors <-spdep::poly2nb(nodes,
+                                queen=FALSE,
+                                foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+node_edgelist <- common::nb2edgelist(node_neighbors)
+
+all_edges <- common::extractBorder(node_edgelist, nodes) 
+save(all_edges, file='common/data/all_edges.Rdata')
+
 
 
   

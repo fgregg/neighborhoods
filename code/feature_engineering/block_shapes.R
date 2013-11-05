@@ -6,7 +6,7 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 
-blockShapes <- function(nodes) {
+blockShapes <- function(nodes, make_plots=FALSE) {
 
   coords <- lapply(slot(nodes, "polygons"), function(x) {
     lapply(slot(x, "Polygons"), slot, "coords")}
@@ -18,17 +18,13 @@ blockShapes <- function(nodes) {
 
 
 
-  # Topology of Block Connectivity
-  neighbors <- spdep::poly2nb(nodes,
-                              foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-
   # Calculate 'edge features' will be node features in training
-  edgelist <- common::nb2edgelist(neighbors)
+  edgelist <- common::edgeList(nodes)
     
 
   angle_difference <- abs(angles[edgelist[,1]] - angles[edgelist[,2]])
 
-  if (interactive() & !common::from_source()) {
+  if (make_plots) {
     png("block_orientation.png")
     classes <- classInt::classIntervals(angles, 8, style="kmeans")
     colcode <- classInt::findColours(classes, c("wheat", "red"))

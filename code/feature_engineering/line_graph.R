@@ -6,22 +6,24 @@ library(igraph)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-lineGraph <- function(nodes) {
-  neighbors <-spdep::poly2nb(nodes,
-                             foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+adjacentEdges <- function(nodes) {
+  if (exists('all_edges')) {
+    edges <- all_edges$lines
+  } else {
+    node_neighbors <-spdep::poly2nb(nodes,
+                                    queen=FALSE,
+                                    foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+    node_edgelist <- common::nb2edgelist(node_neighbors)
 
-  edgelist <- common::nb2edgelist(neighbors)
+    edges <- common::extractBorder(node_edgelist, nodes)$lines
+  }
 
-  # Line graph, the 'edges' between the edges
-  primal_graph <- igraph::graph.data.frame(edgelist, directed=FALSE)
-  line_graph <- igraph::line.graph(primal_graph)
+  buffered_edges <- rgeos::gBuffer(edges, byid=TRUE)
 
-  return(line_graph)
-}
+  edge_neighbors <- spdep::poly2nb(buffered_edges,
+                                   queen=FALSE,
+                                   foundInBox=rgeos::gUnarySTRtreeQuery(buffered_edges),
+                                   snap=0.01)
 
-if (!common::from_source()) {
-  line_graph <- lineGraph(block.groups.poly)
-  igraph::write.graph(line_graph,
-                      "../interchange/line_graph_edges.txt",
-                      format="edgelist")
+  return(edge_neighbors)
 }

@@ -7,13 +7,12 @@ devtools::load_all(pkg)
 
 physicalBarriers <- function(nodes) {
   centroids <- sp::coordinates(nodes)
-  
-  # Topology of Block Connectivity
-  edges <-spdep::poly2nb(nodes,
-                         foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-  edgelist <- common::nb2edgelist(edges)
+
+  edgelist <- common::edgeList(nodes)
 
   edge.weights <- rep(1, dim(edgelist)[1])
+
+  print("RAIL")
 
   railroad.intersects <- common::edgesIntersect(edgelist,
                                                 centroids,
@@ -22,6 +21,8 @@ physicalBarriers <- function(nodes) {
   rail.distance <- common::distanceFromBorder(nodes,
                                               edgelist,
                                               as.numeric(railroad.intersects) + 1)
+  print("HIGHWAY")
+  
 
   highway.intersects <- common::edgesIntersect(edgelist,
                                                centroids,
@@ -32,6 +33,7 @@ physicalBarriers <- function(nodes) {
                                                  edgelist,
                                                  as.numeric(highway.intersects) + 1)
 
+  print("GRID STREET")
   
   grid.street.intersects <- common::edgesIntersect(edgelist,
                                                    centroids,
@@ -43,10 +45,10 @@ physicalBarriers <- function(nodes) {
                                               as.numeric(grid.street.intersects) + 1)
   
 
-  water.intersect <- common::edgesIntersect(edgelist,
-                                            centroids,
-                                            water,
-                                            projection)
+  water.intersects <- common::edgesIntersect(edgelist,
+                                             centroids,
+                                             water,
+                                             projection)
 
   water.distance <- common::distanceFromBorder(nodes,
                                                edgelist,

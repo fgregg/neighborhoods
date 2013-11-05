@@ -38,7 +38,9 @@ trainKDE <- function(listings,
   
   for (i in 1:length(hoods)) {
     hood.listings <- listings[listings@data[, id] == hoods[i],]
+
     hood.listings <- hampelOutliers(hood.listings, .90)
+
 
     num.listings <- dim(hood.listings)[1]
 

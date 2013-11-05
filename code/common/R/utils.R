@@ -1,5 +1,23 @@
 library(rgdal)
 
+  
+edgeList <- function(nodes, all_blocks=TRUE) {
+  node_neighbors <-spdep::poly2nb(nodes,
+                                  queen=FALSE,
+                                  foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+  node_edgelist <- common::nb2edgelist(node_neighbors)
+
+  if (exists('all_edges') & all_blocks) {
+    results <- all_edges
+  }
+  else {
+    results <- common::extractBorder(node_edgelist, nodes)
+  }
+
+  return(node_edgelist[results$spatial_lines,])
+}
+
+
 nb2edgelist <- function(nb) {
   el <- c()
   for (i in 1:length(nb)) {
@@ -115,19 +133,38 @@ basePlot <- function(range) {
   lines(railroads, lty=2, col="tan")
 }
 
+
+
 extractBorder <- function(border_edgelist, polys) {
-  borders <- apply(border_edgelist,
-                   1,
-                   FUN=function(x) {
-                     inter <- rgeos::gIntersection(polys[x[1],],                                                                       polys[x[2],])
-                   })
+  borders <- rep(list(NA), dim(border_edgelist)[1])
+  id = 1
+  for (i in 1:length(borders)) {
+    edge <- border_edgelist[i,]
+    inter <- rgeos::gIntersection(polys[edge[1],],
+                                  polys[edge[2],])
+    if (class(inter) == "SpatialPoints") {
+      borders[i] <- inter
+    }
+    else if (class(inter) == "SpatialCollections") {
+      inter <- attr(inter, 'lineobj')
+      inter <- inter[which.max(SpatialLinesLengths(inter))]
+      borders[i] <- sp::spChFIDs(inter, as.character(id))
+      id <- id + 1
+    }
+    else if (class(inter) == "SpatialPolygons") {
+      inter <- as(inter, 'SpatialLines')
+      borders[i] <- sp::spChFIDs(inter, as.character(id))
+      id <- id + 1
+    }
+    else {
+      borders[i] <- sp::spChFIDs(inter, as.character(id))
+      id <- id + 1
+    }
+  }
 
-  spatial_lines <- unlist(lapply(borders, class)) == "SpatialLines"
+  spatial_lines <- unlist(lapply(borders, class)) != "SpatialPoints"
+
   border_lines <- borders[spatial_lines]
-
-  border_lines <- mapply(sp::spChFIDs,
-                         border_lines,
-                         as.character(1:length(border_lines)))
 
   border_lines <- do.call(rbind, border_lines)
 

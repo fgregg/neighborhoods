@@ -13,10 +13,7 @@ elementarySchools <- function(nodes) {
 
   elementary_schools <- elementary_schools[as.vector(rgeos::gIntersects(elementary_schools, bbx, byid=TRUE)),]
 
-  block_neighbors <-spdep::poly2nb(nodes,
-                                   foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-
-  block_edgelist <- common::nb2edgelist(block_neighbors)
+  block_edgelist <- common::edgeList(nodes)
 
   crosses <- common::crossesPolygons(block_edgelist,
                                      coordinates(nodes),

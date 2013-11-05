@@ -15,7 +15,8 @@ labelNodes <- function(nodes) {
   Y(lat_long) AS x,
   label.label AS neighborhood
   FROM location, label
-  WHERE location.location_id = label.location_id"
+  WHERE location.location_id = label.location_id
+  AND city = 'chicago'"
                          ) 
   dbDisconnect(con)
 
@@ -40,7 +41,7 @@ labelNodes <- function(nodes) {
                      "west town", "magnificent mile", "gold coast")
 
   centroids <- sp::coordinates(nodes)
-                                        # Estimate KDE
+  # Estimate KDE
   classes = common::trainKDE(listings,
     neighborhoods,
     centroids,
@@ -57,5 +58,10 @@ labelNodes <- function(nodes) {
   
 if (!common::from_source()) {
   unary <- labelNodes(blocks.poly)
+
   write.csv(unary, file="unary.csv", row.names=FALSE)
+
+  write.csv(unary, file="../interchange/unary.csv", row.names=FALSE)
+
+  write.csv(apply(unary, 1, which.max), file="../interchange/ks_label.csv", row.names=FALSE)
 }
