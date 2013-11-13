@@ -1,14 +1,21 @@
 \documentclass[12pt,draft,letter]{article}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{bayesnet}
+
 \begin{document}
-\section{Introduction}
+
+\section*{Introduction}
 Social scientists have collected a wide and sophisticated arsenal of
 ways to group similar elements of network. However, except in simplest
 cases, what determines the output is the simple, iterative algorithm
 of the researcher fiddling with weights until the groupings look how
 she wants them to. Our methods to group similar elements depends on us
-knowing how to measure similarity, and we usually don't.
+knowing what similarity means in our network. We usually don't.
 
-As long as a measure of similarity is binary, i.e. did ego nominate
+When our similarity is binary, i.e. did ego nominate
 alter as friend, life is easy. But, as soon as a variable has more
 than two possible values then the researcher must decide how to turn
 those values into similarities. Different, reasonable choices will
@@ -21,10 +28,10 @@ In the end, we adjust the various weights until the groupings come out
 looking about right. We would have been better off just drawing what
 we wanted in the first place.
 
-We would be better off because we humans are better apprehending an
-assortment of things as a group than we are at assigning importance to
-variables by manually assigning weights, which we are very, very bad
-at.
+We would be better off because we humans are all too good at
+apprehending an assortment of things as a group than we are at
+assigning importance to variables by manually assigning weights, which
+we are very, very bad at.
 
 While the interestingness of apprehended unities may vary 
 unfairly between individual sociologists (not every one has Weberian gift),
@@ -39,12 +46,174 @@ collections of people will group themselves.
 
 In this paper I discuss how to do learn about similarity using the
 case of city neighborhoods. 
-\section{Neighborhood Model Representation}
 
-\section{Mathematics}
+\section*{Neighborhood Model Representation}
+Let's image a very small city consisting of four blocks. We can
+represent this tiny town as a network where each block is connected
+to the blocks that share a street segment as a block face. In this
+representation, blocks that are kitty corner are not directly
+connected. We'll index the blocks as $1$, $2$, $3$, and $4$.
 
-\section{Results}
+\begin{figure}
+\centering
+\tikz{
+\draw[help lines] (0,0) grid (2,2);
+\node at (0.5, 0.5) {3} ;
+\node at (1.5, 1.5) {2} ;
+\node at (0.5, 1.5) {1} ;
+\node at (1.5, 0.5) {4} ;
+}
+\end{figure}
 
-\section{Conclusion}
+\begin{figure}
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$1$} ; %
+  \node[latent, below left=of 1] (2) {$2$} ; %
+  \node[latent, below right=of 1] (3) {$3$} ; %
+  \node[latent, below left=of 3] (4) {$4$} ; %
+  \edge[-] {2,3} {1} ; %
+  \edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+In our city, there are two neighborhoods. Each block belongs to either
+one or the other of these neighborhoods. Neighboring blocks that are
+similar are more apt to belong to the same neighborhood and
+neighboring blocks that are different are more apt to belong to
+different neighborhoods.
+
+We'll denote the neighborhood that the $i$th block belongs to as
+$y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
+
+\begin{figure}[!h]
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$y_1$} ; %
+  \node[latent, below left=of 1] (2) {$y_2$} ; %
+  \node[latent, below right=of 1] (3) {$y_3$} ; %
+  \node[latent, below left=of 3] (4) {$y_4$} ; %
+  \factor[below left=of 1] {1-2} {$\phi_{1,2}$} {} {} ;
+  \factor[below right=of 1] {1-3} {$\phi_{1,3}$} {} {} ;
+  \factor[below right=of 2] {2-4} {$\phi_{2,4}$} {} {} ;
+  \factor[below left=of 3] {3-4} {$\phi_{3,4}$} {} {} ;
+  \factoredge[-] {1} {1-2} {2} ; %
+  \factoredge[-] {1} {1-3} {3} ; %
+  \factoredge[-] {2} {2-4} {4} ; %
+  \factoredge[-] {3} {3-4} {4} ; %
+  %\edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+We want similar, neighboring blocks to belong to the same
+neighborhood. One way to formalize this is is to score every possible
+assignment of neighborhoods in such a way that our preferred patterns
+have the best score.
+
+Let's call a pattern of assignment of blocks to neighborhoods as $Y$.
+The score of $Y$ will be $\operatorname{E}(Y)$ which will take the
+following form:
+
+\begin{align}
+\operatorname{E}(Y) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\end{align}
+
+Where $\mathcal{N}$ is the set of 2-tuples of indices of neighboring
+blocks and the index of the first block is smaller than the index of
+the second block. Also, where
+
+\begin{equation}
+\epsilon_{i,j}(y_i,y_j\phi_{i,j}) = \begin{cases}
+  0 \quad\quad y_i = y_j \\
+  \phi_{i,j} \quad y_i \neq y_j
+\end{cases}
+\end{equation}
+
+Let's say that we want the lowest score. If we have $\phi_{i,j}$ be
+positive when blocks are similar and negative when blocks are
+different we will encourage neighboring blocks to belong to the same
+neighborhood. Let's say that our city has the following $\phi$'s.
+
+\begin{align*}
+&\phi_{1,2} = 1 \\
+&\phi_{1,3} = -1 \\
+&\phi_{2,4} = -1 \\
+&\phi_{3,4} = 1
+\end{align} 
+
+Then, the lowest energy assignments are the assignments that put
+blocks $1$ and $2$ in one neighborhood and $3$ and $4$ in the other
+neighborhood.
+
+\begin{figure}[!h]
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$y_1$} ; %
+  \node[latent, below left=of 1] (2) {$y_2$} ; %
+  \node[latent, below right=of 1] (3) {$y_3$} ; %
+  \node[latent, below left=of 3] (4) {$y_4$} ; %
+  \factor[below left=of 1] {1-2} {$1$} {} {} ;
+  \factor[below right=of 1] {1-3} {$-1$} {} {} ;
+  \factor[below right=of 2] {2-4} {$-1$} {} {} ;
+  \factor[below left=of 3] {3-4} {$1$} {} {} ;
+  \factoredge[-] {1} {1-2} {2} ; %
+  \factoredge[-] {1} {1-3} {3} ; %
+  \factoredge[-] {2} {2-4} {4} ; %
+  \factoredge[-] {3} {3-4} {4} ; %
+  %\edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+\input{energy_table.tex}
+
+in oe said above,   e want to encode 
+
+
+For each block, we will assign it one of KTo each block, we will assign it to some neighborhood
+
+
+We we don't know exactly what makes blocks similar or
+different. However, for each block we do know about a number of
+attributes that we can associate with the block. We can start with
+attributes that have proven to be sociological salient like such as
+number of people who live on the block, their racial and ethnic
+composition, and distribution of age of the housing stock.
+
+Between blocks, we can define a variety of similarity functions for
+these attributes, like the absolute difference in the percentage of 
+white people, or the Jensen-Shannon divergence in the age of the
+housing stock. We can assign these measures to the edges between blocks.
+
+We also may know some things about the edges themselves
+
+To the edges between blocks, we can assign measures of the similarity
+of the these block features. 
+
+[[new figure here]]
+
+
+
+
+This representation of the city is also a representation of a Markov
+Random Field.
+
+
+
+To the edges between blocks, we can associate 
+
+ and can assign our blocks 
+
+
+\section*{Mathematics}
+
+\section*{Results}
+
+\section*{Conclusion}
 
 \end{document}
