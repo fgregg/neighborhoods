@@ -1,9 +1,14 @@
 \documentclass[12pt,draft,letter]{article}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage{adjustbox}
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{bayesnet}
+
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+
 
 \begin{document}
 
@@ -114,12 +119,12 @@ neighborhood. One way to formalize this is is to score every possible
 assignment of neighborhoods in such a way that our preferred patterns
 have the best score.
 
-Let's call a pattern of assignment of blocks to neighborhoods as $Y$.
-The score of $Y$ will be $\operatorname{E}(Y)$ which will take the
-following form:
+Let's call a pattern of assignment of blocks to neighborhoods as
+$\mathbf{y}$.  The score of $\mathbf{y}$ will be
+$\operatorname{E}(\mathbf{y})$ which will take the following form:
 
 \begin{align}
-\operatorname{E}(Y) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\operatorname{E}() = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
 \end{align}
 
 Where $\mathcal{N}$ is the set of 2-tuples of indices of neighboring
@@ -133,10 +138,11 @@ the second block. Also, where
 \end{cases}
 \end{equation}
 
-Let's say that we want the lowest score. If we have $\phi_{i,j}$ be
-positive when blocks are similar and negative when blocks are
-different we will encourage neighboring blocks to belong to the same
-neighborhood. Let's say that our city has the following $\phi$'s.
+Let's say that we want the lowest score. If we have our similarity
+measures $\phi_{i,j}$ be positive when blocks are similar and negative
+when blocks are different we will encourage neighboring blocks to
+belong to the same neighborhood. Let's say that our city has the
+following $\phi$'s.
 
 \begin{align*}
 &\phi_{1,2} = 1 \\
@@ -172,42 +178,273 @@ neighborhood.
 
 \input{energy_table.tex}
 
-in oe said above,   e want to encode 
+In general, for a given set of similarity measures between blocks
+there are one or more assignment that have a lowest score. For small
+networks, we can find these best assignments by checking all possible
+patterns of assignments. Unfortunately, this becomes quickly
+impractical for larger cities. With two possible neighborhoods, the
+number of possible assignments is $2^N$ where N is the number of
+blocks.
+
+However, even if we have many blocks, if we have similarities
+between the blocks we can find a lowest scoring assignment
+approximately using the QPBO algorithm.\footnote{Minimizing
+  non-submodular functions with graph cuts – a review (are there any
+  bounds worth mentioning}. As we'll see, this will allow us to go in
+the opposite direction. If we know the correct assignment, we can find
+similarities.
+
+\section*{Learning similarities}
+Let's consider similarity measures that take the following linear form
+
+\begin{align}
+\phi_{i,j} = w_0 + w_1\operatorname{S_1}(x_{i,1}, x_{j,1}) +
+w_2\operatorname{S_2}(x_{i,2}, x_{j,2}) + ... +
+w_n\operatorname{S_z}(x_{i,m},x_{j,m})
+\end{align} 
+
+Where $x_{i,k}$ is the $k$th feature of block $i$. These
+features can be scalars or vectors of numbers and could correspond to
+attributes like population or distribution of race and ethnicity. A
+function $\operatorname{S}$ maps two features to some scalar. These
+will typically be similarity measures like the Jensen Shannon
+divergence or the absolute value. For each $S$ and features $a$ and
+$b$, $\operatorname{S}(a,b) = \operatorname{S}(b,a)$.
+
+With this choice of form, learning the similarities between blocks
+means finding the set of weights $w_0, w_1, ..., w_n$ that produce
+similarities $\phi$'s that give a particular, target neighborhood
+assignment the lowest score of all possible ways of assigning blocks
+to neighborhoods. 
+
+However, this problem does not have a unique solution. In the above
+four block assignment, the lowest score assignments would have the
+lowest scores if the similarities were 2, -2, -2, 2 or 1000, -1000,
+-1000, 1000. So, we will say that we want the lowest scoring
+assignment to not just have the lowest score, but we want to find the
+weights that give the target assignment a lower score to the next
+lowest scoring assignment by the widest possible margin. We will also
+have to add some additional constraint on $w$. We can do that by
+requiring that $||\mathbf{w}||=1$.
+
+So, now we can state the problem as 
+%
+\begin{align*}
+&\argmax_{\mathbf{w}:||\mathbf{w}||=1} \mathbf{\gamma} \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+%
+
+Here $\mathbf{y}*$ is the target neighborhood assignment and \mathbf{s}
+are similarity measures between blocks. 
 
 
-For each block, we will assign it one of KTo each block, we will assign it to some neighborhood
+In turns out, in a way that I need to better understand that this is
+equivalent to the following quadratic program.
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 \\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
 
 
-We we don't know exactly what makes blocks similar or
-different. However, for each block we do know about a number of
-attributes that we can associate with the block. We can start with
-attributes that have proven to be sociological salient like such as
-number of people who live on the block, their racial and ethnic
-composition, and distribution of age of the housing stock.
+\subsection{Learning Sketch}
+We usually can't directly solve that quadratic program because there
+are so many possible assignments , however we can still find the
+optimal weights through the following procedure.
 
-Between blocks, we can define a variety of similarity functions for
-these attributes, like the absolute difference in the percentage of 
-white people, or the Jensen-Shannon divergence in the age of the
-housing stock. We can assign these measures to the edges between blocks.
+Initialize the weights to some starting value. Create an empty set of
+constraints $\mathcal{S}$. Then, find the neighborhood assignment that
+has the lowest score given those weights. Call this assignment
+$\mathbf{y}_1$ and add it to the constraint set $\mathcal{S}$.
 
-We also may know some things about the edges themselves
+Update the weights by solving the quadratic program: 
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 \\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in } \mathcal{S}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+%
 
-To the edges between blocks, we can assign measures of the similarity
-of the these block features. 
+Now find the lowest energy neighborhood assignment given the updated
+weights. Call this assignment $\mathbf{y}_2$ and add it to the
+constraint set $\mathcal{S}$. Continue until the either the lowest
+energy assignment given the weights is either the target assignment.
 
-[[new figure here]]
+See Szummer, Learning CRFs using Graph Cuts for a more thorough
+explanation.
+
+\subsection*{Relaxations}
+Some readers may have noticed that the our four-city block example
+doesn't have a solution for the learning problem we have set up. There
+are two different neighborhood assignments that have the same lowest
+score, and they both achieve our goal of putting similar blocks in the 
+same neighborhood and dissimilar blocks in different neighborhoods.
+
+One way to see why this happens is to condense the four block network
+into a two neighborhood graph. 
+
+\begin{tabular}{cc}
+  \adjustbox{valign=c}{
+  \tikz{ %
+    \node[latent] (1) {$1$} ; %
+    \node[latent, below left=of 1] (2) {$2$} ; %
+    \node[latent, below right=of 1] (3) {$3$} ; %
+    \node[latent, below left=of 3] (4) {$4$} ; %
+    \node[rectangle, rotate fit=45, draw=red, fit= (1) (2), text=red] {A};
+    \node[rectangle, draw=red, rotate fit=45, fit= (3) (4), text=red] {B};
+    \edge[-] {2,3} {1} ; %
+    \edge[-] {2,3} {4} ; %
+  }}
+  &
+  \begin{adjustbox}{valign=c}
+  \tikz{ %
+    \node[latent, draw=red, text=red] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+  \end{adjustbox}
+\end{tabular}
+
+To distinguish the two neighborhoods, we want to give each
+neighborhood a different color. In particular, we want to color the
+neighborhoods so that no two adjacent neighborhoods have the same
+color. We'll call such a color assignment a coloring. 
+
+With two colors there are two ways to color our neighborhood.
+
+\begin{tabular}{cc}
+  \tikz{ %
+    \node[latent, draw=red, text=red, fill=black] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+  &
+  \tikz{ %
+    \node[latent, draw=red, text=red] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A, fill=black] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+\end{tabular}
+
+If we had more than two neighborhoods, we might need more than two
+colors. Whether you can color the neighborhoods with a certain number
+of colors depends upon the number of neighborhood and how they are
+connected. The same is true for the number of different ways you can
+color neighborhoods with a given colors.\footnote{Every graph has a 
+chromatic polynomial that determines the number of possible
+n-colorings of vertices in the graph}
+
+For twenty or so city neighborhood, we will usually need four colors,
+and the number of different ways to four-color those neighborhoods
+will be well over a thousand. That means in a larger city, there are
+thousands of patterns of assigning neighborhood labels to blocks that 
+will put the same blocks together, and therefore have the same score.
+
+In theory, we could overcome this multiplicity of equivalent
+assignments by relaxing our learning objective. Instead of looking for
+the weights that makes our target assignment the lowest scoring
+assignment, we can look for the weights that makes our target
+assignment lower scoring than as many assignments as we'd like. 
+
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\sum\xi_i\\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi_i\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+
+This 'slack' formulation could validly specify that we seek the weights the
+target assignment and it's equivalent cousins the best
+solution. 
+
+However, this will be a hard problem to learn. For moderate values of
+$C$, the thousands of assignments that have equivalent scores to our
+target assignment and therefore $\xi_i$'s of $1$, will completely
+dominate the objective, and we will get effectively unregularized
+weights. If we set $C$ to be very small, we will also not
+appropriately penalize assignments that the target assignment should
+be lower than, and we will effectively overregularize the weights.
+
+A better formulation would be
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\sum\xi_i\\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi_i\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments,}\\
+&\mathbf{y} \not\in \mathcal{Y}^* \text{and } y \text{ is not equivalent to
+any other margin violating assignment.}
+\end{align*}
+%
+where $\mathcal{Y}^*$ is the set of assignments that are equivalent to
+$y^*$.\footnote{I need to try this}.
+
+Unfortunately, the efficiency of the learning algorithm depends upon
+the surprising ease of finding the lowest scoring assignment given a
+set of similarity scores (or approximately finding that assignment).
+If the lowest scoring assignment happens to be in forbidden set, there
+is no known efficient means for finding the next lowest scoring
+assignment. This means that there is efficient way to learn this more
+correct objective.\footnote{Is this true}
+
+
+
+there is no known means to efficiently 
+
+
+in practice, good performance in out of set prediction
+depends upon incorporating an empirical loss function into the
+objective function. 
+
+
+
+Unfortunately
+
+However, even here 
+
+
+
+(idea of seeding constraints with equivalent graphs)
+
+In practice, however it does not work. 
+
+
+However, in practice the learning will be much too slow. The learning
+algorithm may spend a great deal of time just finding equivalent 
+
+make family of equivalent  
+
+
+A multiplicity of solutions is not really such a problem,
+(hmm... could we 
 
 
 
 
-This representation of the city is also a representation of a Markov
-Random Field.
 
 
+. These graphs are 
 
-To the edges between blocks, we can associate 
-
- and can assign our blocks 
 
 
 \section*{Mathematics}
