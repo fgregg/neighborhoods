@@ -362,10 +362,10 @@ assignment, we can look for the weights that makes our target
 assignment lower scoring than as many assignments as we'd like. 
 
 \begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\sum\xi_i\\
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\xi\\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi_i\\ 
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
 &\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
   possible neighborhood assignments}\\
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
@@ -386,10 +386,10 @@ be lower than, and we will effectively overregularize the weights.
 A better formulation would be
 %
 \begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\sum\xi_i\\
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\xi\\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi_i\\ 
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
 &\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
   possible neighborhood assignments,}\\
 &\mathbf{y} \not\in \mathcal{Y}^* \text{and } y \text{ is not equivalent to
@@ -397,24 +397,38 @@ any other margin violating assignment.}
 \end{align*}
 %
 where $\mathcal{Y}^*$ is the set of assignments that are equivalent to
-$y^*$.\footnote{I need to try this}.
+$y^*$.\footnote{I need to try this... The efficiency of
+  the learning algorithm depends upon the surprising ease of finding
+  the lowest scoring assignment given a set of similarity scores (or
+  approximately finding that assignment).  If the lowest scoring
+  assignment happens to be in forbidden set, there is no known
+  efficient means for finding the next lowest scoring assignment. This
+  means that there is efficient way to learn this more correct
+  objective. Maybe, I'm not convinced by this argument.}.
 
-Unfortunately, the efficiency of the learning algorithm depends upon
-the surprising ease of finding the lowest scoring assignment given a
-set of similarity scores (or approximately finding that assignment).
-If the lowest scoring assignment happens to be in forbidden set, there
-is no known efficient means for finding the next lowest scoring
-assignment. This means that there is efficient way to learn this more
-correct objective.\footnote{Is this true}
-
-
-
-there is no known means to efficiently 
-
-
-in practice, good performance in out of set prediction
+Unfortunately, in practice, the good performance in out of set prediction seems to
 depends upon incorporating an empirical loss function into the
-objective function. 
+objective function, like below
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
+  C\cdot\ell(\mathbf{y}^*,\mathbf{s},\mathbf{w})\\
+&\text{where } \ell \text{ is an upper bound on the empirical loss $\Delta$.}\\
+&\ell(\mathbf{y}^*,\mathbf{s},\mathbf{w}) = \argmin_{\mathbf{y}} \Delta(\mathbf{y}^*, \mathbf{y}) + \operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+\end{align*}
+%
+
+
+
+
+Frequently, the hamming loss is the number of
+differences in block assignments between an assignment and a target
+assignment.  
+
+A key property of the hamming loss is that it decomposes over
+blocks. That is we can 
+
 
 
 
