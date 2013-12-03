@@ -381,29 +381,11 @@ assignment lower scoring than as many assignments as we'd like.
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
 \end{align*}
 
-This `slack' formulation validly specifies that we seek the
-weights that make target assignment and it's equivalent cousins the
-best solution. Algorithmically, this formulation could lead to many
-unnecessary considerations of equivalent constraints, so we might
-prefer the following:
-%
-\begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\cdot\xi\\
-&\text{such that} \\
-&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
-&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
-  possible neighborhood assignments,}\\
-&\mathbf{y} \not\in \mathcal{Y}^* \text{and } y \text{ is not equivalent to
-any other margin violating assignment.}
-\end{align*}
-%
-where $\mathcal{Y}^*$ is the set of assignments that are equivalent to
-$y^*$.\footnote{I need to try this... }.
-
-Unfortunately, in practice, the good performance in out of set prediction seems to
-depends upon incorporating an empirical loss function into the
-objective function, like below
+This `slack' formulation validly specifies that we seek the weights
+that make target assignment and it's equivalent cousins the best
+solution. Unfortunately, in practice, the good performance in out of
+set prediction seems to depends upon incorporating an empirical loss
+function into the objective function, like below
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
