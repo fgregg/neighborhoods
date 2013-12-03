@@ -124,7 +124,7 @@ $\mathbf{y}$.  The score of $\mathbf{y}$ will be
 $\operatorname{E}(\mathbf{y})$ which will take the following form:
 
 \begin{align}
-\operatorname{E}() = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
 \end{align}
 
 Where $\mathcal{N}$ is the set of 2-tuples of indices of neighboring
@@ -190,7 +190,17 @@ However, even if we have many blocks, if we have similarities
 between the blocks we can find a lowest scoring assignment
 approximately using the QPBO algorithm.\footnote{Minimizing
   non-submodular functions with graph cuts – a review (are there any
-  bounds worth mentioning}. As we'll see, this will allow us to go in
+  bounds worth mentioning}. This will be true for every scoring
+function that decomposes over blocks and edges, i.e. has the following
+form:
+
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+\end{align}
+
+
+
+As we'll see, this will allow us to go in
 the opposite direction. If we know the correct assignment, we can find
 similarities.
 
@@ -362,7 +372,7 @@ assignment, we can look for the weights that makes our target
 assignment lower scoring than as many assignments as we'd like. 
 
 \begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\xi\\
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\cdot\xi\\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
 - \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
@@ -371,22 +381,14 @@ assignment lower scoring than as many assignments as we'd like.
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
 \end{align*}
 
-This 'slack' formulation could validly specify that we seek the weights the
-target assignment and it's equivalent cousins the best
-solution. 
-
-However, this will be a hard problem to learn. For moderate values of
-$C$, the thousands of assignments that have equivalent scores to our
-target assignment and therefore $\xi_i$'s of $1$, will completely
-dominate the objective, and we will get effectively unregularized
-weights. If we set $C$ to be very small, we will also not
-appropriately penalize assignments that the target assignment should
-be lower than, and we will effectively overregularize the weights.
-
-A better formulation would be
+This `slack' formulation validly specifies that we seek the
+weights that make target assignment and it's equivalent cousins the
+best solution. Algorithmically, this formulation could lead to many
+unnecessary considerations of equivalent constraints, so we might
+prefer the following:
 %
 \begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\xi\\
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\cdot\xi\\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
 - \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
@@ -397,14 +399,7 @@ any other margin violating assignment.}
 \end{align*}
 %
 where $\mathcal{Y}^*$ is the set of assignments that are equivalent to
-$y^*$.\footnote{I need to try this... The efficiency of
-  the learning algorithm depends upon the surprising ease of finding
-  the lowest scoring assignment given a set of similarity scores (or
-  approximately finding that assignment).  If the lowest scoring
-  assignment happens to be in forbidden set, there is no known
-  efficient means for finding the next lowest scoring assignment. This
-  means that there is efficient way to learn this more correct
-  objective. Maybe, I'm not convinced by this argument.}.
+$y^*$.\footnote{I need to try this... }.
 
 Unfortunately, in practice, the good performance in out of set prediction seems to
 depends upon incorporating an empirical loss function into the
@@ -412,12 +407,55 @@ objective function, like below
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
-  C\cdot\ell(\mathbf{y}^*,\mathbf{s},\mathbf{w})\\
-&\text{where } \ell \text{ is an upper bound on the empirical loss $\Delta$.}\\
-&\ell(\mathbf{y}^*,\mathbf{s},\mathbf{w}) = \argmin_{\mathbf{y}} \Delta(\mathbf{y}^*, \mathbf{y}) + \operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+  C\cdot\xi\\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and where } \Delta \text{ is an empirical loss.}\\
 \end{align*}
 %
+
+The key to solving this problem is finding assignments that have the
+lowest score, where the score incorporates the empirical loss: i.e.
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(y*, y)
+\end{align}
+%
+If the loss can be decomposed over the blocks like
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\sum_i^N\Delta(y_i*, y_i)
+\end{align}
+%
+then the objective has the form that allows us to use an algorithm
+like QPBO to find a quick minimum assignment. If the loss function does not
+decompose we have to check an exponentially many possible assignment,
+typically an intractable problem.
+
+Among the loss functions that do decompose over blocks, a common
+choice is the Hamming loss, $\sum_i^N\begin{cases}
+  0 \quad y_i^* = y_i \\
+  1 \quad y_i^* \neq y_i
+\end{cases}$. It is completely inappropriate for our problem a
+
+
+
+
+
+
+
+
+
+
+admits a quick, approximi
+
+Which is of the form that can be quickly approxmately solved by QPBO. 
+
 
 
 
