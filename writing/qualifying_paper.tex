@@ -423,7 +423,79 @@ Among the loss functions that do decompose over blocks, a common
 choice is the Hamming loss, $\sum_i^N\begin{cases}
   0 \quad y_i^* = y_i \\
   1 \quad y_i^* \neq y_i
-\end{cases}$. It is completely inappropriate for our problem a
+\end{cases}$. This loss, and its cousins, are completely inappropriate
+for our problem, as we have currently posed it.
+
+We want a loss function that increases the further we are from our
+target assignment. If two assignments group the same sets of blocks
+together we would like the hamming loss to be 0. However, with the
+Hamming loss, the assignments with the highest possible
+losses are assignments that assign the same blocks to the same
+neighborhoods as our target assignment, but assigns different labels
+to those neighborhoods. 
+
+There are loss functions that behave as we would like, like the Rand
+Index. However, I know of no such loss function that decomposes over
+blocks or edges. Without that property, the learning problem is
+computationally intractable. Under some restricted circumstances, the
+higher order loss functions can be used by introducing auxillary
+variables into the problem, but these approaches are computationally
+infeasible for cities with realistic number of
+neighborhoods. {citations here}
+
+The ultimate impediment is that for every way of labeling blocks into
+neighborhoods, there are large number of equivalent groupings that
+differ only in the value of the labels, and they each have the same
+score. So, we might proceed, by arbitrarily giving one of those
+equivalent labelings priority.
+
+One way to do that is to change our energy function to include seeds. 
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_k^{\mathcal{S}}\epsilon_k(y_k) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,w)
+\end{align}
+%
+Where $\mathcal{S}$ is a subset of all the blocks, and 
+%
+\begin{align}
+\epsilon_k(y_k) = \begin{cases}
+  0 \quad y_k^* = y_k \\
+  P \quad y_i^* \neq y_j
+\end{cases}
+\end{align}
+
+But how do we determine the subset of blocks and P. If the we assigned
+this cost to every block, then this would be equivalent to 
+
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
+  C\cdot\xi\\
+&\text{such that} \\
+&\sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+   - \sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i^*,y_j^*)  \geq (1-P)\cdot\sum_i^N\Delta(y_i*, y_i) - \xi\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and where } \Delta \text{ is an empirical loss.}\\
+\end{align*}
+
+
+Notice that the contributions of the block scores does not depend upon
+w. 
+
+
+Ideally, we would 
+
+
+
+
+neighborhoods there are large nu
+
+
+
+
+
+
 
 
 
