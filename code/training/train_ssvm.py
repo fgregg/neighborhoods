@@ -20,6 +20,8 @@ markers[:,1] = node_labels[markers[:,0]]
 
 print markers
 
+raise
+
 # js_age = numpy.loadtxt(PATH + 'js_age.csv', skiprows = 1)
 # js_family = numpy.loadtxt(PATH + 'js_family.csv', skiprows = 1)
 # js_race = numpy.loadtxt(PATH + 'js_race.csv', skiprows = 1)
