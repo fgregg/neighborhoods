@@ -1,0 +1,432 @@
+\section*{Neighborhood Model Representation}
+Let's image a very small city consisting of four blocks. We can
+represent this tiny town as a network where each block is connected
+to the blocks that share a street segment as a block face. In this
+representation, blocks that are kitty corner are not directly
+connected. We'll index the blocks as $1$, $2$, $3$, and $4$.
+
+\begin{figure}
+\centering
+\tikz{
+\draw[help lines] (0,0) grid (2,2);
+\node at (0.5, 0.5) {3} ;
+\node at (1.5, 1.5) {2} ;
+\node at (0.5, 1.5) {1} ;
+\node at (1.5, 0.5) {4} ;
+}
+\end{figure}
+
+\begin{figure}
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$1$} ; %
+  \node[latent, below left=of 1] (2) {$2$} ; %
+  \node[latent, below right=of 1] (3) {$3$} ; %
+  \node[latent, below left=of 3] (4) {$4$} ; %
+  \edge[-] {2,3} {1} ; %
+  \edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+In our city, there are two neighborhoods. Each block belongs to either
+one or the other of these neighborhoods. Neighboring blocks that are
+similar are more apt to belong to the same neighborhood and
+neighboring blocks that are different are more apt to belong to
+different neighborhoods.
+
+We'll denote the neighborhood that the $i$th block belongs to as
+$y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
+
+\begin{figure}[!h]
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$y_1$} ; %
+  \node[latent, below left=of 1] (2) {$y_2$} ; %
+  \node[latent, below right=of 1] (3) {$y_3$} ; %
+  \node[latent, below left=of 3] (4) {$y_4$} ; %
+  \factor[below left=of 1] {1-2} {$\phi_{1,2}$} {} {} ;
+  \factor[below right=of 1] {1-3} {$\phi_{1,3}$} {} {} ;
+  \factor[below right=of 2] {2-4} {$\phi_{2,4}$} {} {} ;
+  \factor[below left=of 3] {3-4} {$\phi_{3,4}$} {} {} ;
+  \factoredge[-] {1} {1-2} {2} ; %
+  \factoredge[-] {1} {1-3} {3} ; %
+  \factoredge[-] {2} {2-4} {4} ; %
+  \factoredge[-] {3} {3-4} {4} ; %
+  %\edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+We want similar, neighboring blocks to belong to the same
+neighborhood. One way to formalize this is is to score every possible
+assignment of neighborhoods in such a way that our preferred patterns
+have the best score.
+
+Let's call a pattern of assignment of blocks to neighborhoods as
+$\mathbf{y}$.  The score of $\mathbf{y}$ will be
+$\operatorname{E}(\mathbf{y})$ which will take the following form:
+
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\end{align}
+
+Where $\mathcal{N}$ is the set of 2-tuples of indices of neighboring
+blocks and the index of the first block is smaller than the index of
+the second block. Also, where
+
+\begin{equation}
+\epsilon_{i,j}(y_i,y_j\phi_{i,j}) = \begin{cases}
+  0 \quad\quad y_i = y_j \\
+  \phi_{i,j} \quad y_i \neq y_j
+\end{cases}
+\end{equation}
+
+Let's say that we want the lowest score. If we have our similarity
+measures $\phi_{i,j}$ be positive when blocks are similar and negative
+when blocks are different we will encourage neighboring blocks to
+belong to the same neighborhood. Let's say that our city has the
+following $\phi$'s.
+
+\begin{align*}
+&\phi_{1,2} = 1 \\
+&\phi_{1,3} = -1 \\
+&\phi_{2,4} = -1 \\
+&\phi_{3,4} = 1
+\end{align*} 
+
+Then, the lowest energy assignments are the assignments that put
+blocks $1$ and $2$ in one neighborhood and $3$ and $4$ in the other
+neighborhood.
+
+\begin{figure}[!h]
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$y_1$} ; %
+  \node[latent, below left=of 1] (2) {$y_2$} ; %
+  \node[latent, below right=of 1] (3) {$y_3$} ; %
+  \node[latent, below left=of 3] (4) {$y_4$} ; %
+  \factor[below left=of 1] {1-2} {$1$} {} {} ;
+  \factor[below right=of 1] {1-3} {$-1$} {} {} ;
+  \factor[below right=of 2] {2-4} {$-1$} {} {} ;
+  \factor[below left=of 3] {3-4} {$1$} {} {} ;
+  \factoredge[-] {1} {1-2} {2} ; %
+  \factoredge[-] {1} {1-3} {3} ; %
+  \factoredge[-] {2} {2-4} {4} ; %
+  \factoredge[-] {3} {3-4} {4} ; %
+  %\edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+\input{energy_table.tex}
+
+In general, for a given set of similarity measures between blocks
+there are one or more assignment that have a lowest score. For small
+networks, we can find these best assignments by checking all possible
+patterns of assignments. Unfortunately, this becomes quickly
+impractical for larger cities. With two possible neighborhoods, the
+number of possible assignments is $2^N$ where N is the number of
+blocks.
+
+However, even if we have many blocks, if we have similarities
+between the blocks we can find a lowest scoring assignment
+approximately using the QPBO algorithm.\footnote{Minimizing
+  non-submodular functions with graph cuts – a review (are there any
+  bounds worth mentioning}. This will be true for every scoring
+function that decomposes over blocks and edges, i.e. has the following
+form:
+
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+\end{align}
+
+
+
+As we'll see, this will allow us to go in
+the opposite direction. If we know the correct assignment, we can find
+similarities.
+
+\section*{Learning similarities}
+Let's consider similarity measures that take the following linear form
+
+\begin{align}
+\phi_{i,j} = w_0 + w_1\operatorname{S_1}(x_{i,1}, x_{j,1}) +
+w_2\operatorname{S_2}(x_{i,2}, x_{j,2}) + ... +
+w_n\operatorname{S_z}(x_{i,m},x_{j,m})
+\end{align} 
+
+Where $x_{i,k}$ is the $k$th feature of block $i$. These
+features can be scalars or vectors of numbers and could correspond to
+attributes like population or distribution of race and ethnicity. A
+function $\operatorname{S}$ maps two features to some scalar. These
+will typically be similarity measures like the Jensen Shannon
+divergence or the absolute value. For each $S$ and features $a$ and
+$b$, $\operatorname{S}(a,b) = \operatorname{S}(b,a)$.
+
+With this choice of form, learning the similarities between blocks
+means finding the set of weights $w_0, w_1, ..., w_n$ that produce
+similarities $\phi$'s that give a particular, target neighborhood
+assignment the lowest score of all possible ways of assigning blocks
+to neighborhoods. 
+
+However, this problem does not have a unique solution. In the above
+four block assignment, the lowest score assignments would have the
+lowest scores if the similarities were 2, -2, -2, 2 or 1000, -1000,
+-1000, 1000. So, we will say that we want the lowest scoring
+assignment to not just have the lowest score, but we want to find the
+weights that give the target assignment a lower score to the next
+lowest scoring assignment by the widest possible margin. We will also
+have to add some additional constraint on $w$. We can do that by
+requiring that $||\mathbf{w}||=1$.
+
+So, now we can state the problem as 
+%
+\begin{align*}
+&\argmax_{\mathbf{w}:||\mathbf{w}||=1} \mathbf{\gamma} \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+%
+
+Here $\mathbf{y}*$ is the target neighborhood assignment and $\mathbf{s}$
+are similarity measures between blocks. 
+
+
+In turns out, in a way that I need to better understand that this is
+equivalent to the following quadratic program.
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 \\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+
+
+\subsection{Learning Sketch}
+We usually can't directly solve that quadratic program because there
+are so many possible assignments , however we can still find the
+optimal weights through the following procedure.
+
+Initialize the weights to some starting value. Create an empty set of
+constraints $\mathcal{S}$. Then, find the neighborhood assignment that
+has the lowest score given those weights. Call this assignment
+$\mathbf{y}_1$ and add it to the constraint set $\mathcal{S}$.
+
+Update the weights by solving the quadratic program: 
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 \\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in } \mathcal{S}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+%
+
+Now find the lowest energy neighborhood assignment given the updated
+weights. Call this assignment $\mathbf{y}_2$ and add it to the
+constraint set $\mathcal{S}$. Continue until the either the lowest
+energy assignment given the weights is either the target assignment.
+
+See Szummer, Learning CRFs using Graph Cuts for a more thorough
+explanation.
+
+\subsection*{Relaxations}
+Some readers may have noticed that the our four-city block example
+doesn't have a solution for the learning problem we have set up. There
+are two different neighborhood assignments that have the same lowest
+score, and they both achieve our goal of putting similar blocks in the 
+same neighborhood and dissimilar blocks in different neighborhoods.
+
+One way to see why this happens is to condense the four block network
+into a two neighborhood graph. 
+
+\begin{tabular}{cc}
+  \adjustbox{valign=c}{
+  \tikz{ %
+    \node[latent] (1) {$1$} ; %
+    \node[latent, below left=of 1] (2) {$2$} ; %
+    \node[latent, below right=of 1] (3) {$3$} ; %
+    \node[latent, below left=of 3] (4) {$4$} ; %
+    \node[rectangle, rotate fit=45, draw=red, fit= (1) (2), text=red] {A};
+    \node[rectangle, draw=red, rotate fit=45, fit= (3) (4), text=red] {B};
+    \edge[-] {2,3} {1} ; %
+    \edge[-] {2,3} {4} ; %
+  }}
+  &
+  \begin{adjustbox}{valign=c}
+  \tikz{ %
+    \node[latent, draw=red, text=red] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+  \end{adjustbox}
+\end{tabular}
+
+To distinguish the two neighborhoods, we want to give each
+neighborhood a different color. In particular, we want to color the
+neighborhoods so that no two adjacent neighborhoods have the same
+color. We'll call such a color assignment a coloring. 
+
+With two colors there are two ways to color our neighborhood.
+
+\begin{tabular}{cc}
+  \tikz{ %
+    \node[latent, draw=red, text=red, fill=black] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+  &
+  \tikz{ %
+    \node[latent, draw=red, text=red] (A) {A} ; %
+    \node[latent, draw=red, text=red, below right=of A, fill=black] (B) {B} ; %
+    \edge[-] {A} {B} ; %
+  }
+\end{tabular}
+
+If we had more than two neighborhoods, we might need more than two
+colors. Whether you can color the neighborhoods with a certain number
+of colors depends upon the number of neighborhood and how they are
+connected. The same is true for the number of different ways you can
+color neighborhoods with a given colors.\footnote{Every graph has a 
+chromatic polynomial that determines the number of possible
+n-colorings of vertices in the graph}
+
+For twenty or so city neighborhood, we will usually need four colors,
+and the number of different ways to four-color those neighborhoods
+will be well over a thousand. That means in a larger city, there are
+thousands of patterns of assigning neighborhood labels to blocks that 
+will put the same blocks together, and therefore have the same score.
+
+In theory, we could overcome this multiplicity of equivalent
+assignments by relaxing our learning objective. Instead of looking for
+the weights that makes our target assignment the lowest scoring
+assignment, we can look for the weights that makes our target
+assignment lower scoring than as many assignments as we'd like. 
+
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\cdot\xi\\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and } \mathbf{y} \neq \mathbf{y}^*
+\end{align*}
+
+This `slack' formulation validly specifies that we seek the weights
+that make target assignment and it's equivalent cousins the best
+solution. Unfortunately, in practice, the good performance in out of
+set prediction seems to depends upon incorporating an empirical loss
+function into the objective function, like below
+%
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
+  C\cdot\xi\\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and where } \Delta \text{ is an empirical loss.}\\
+\end{align*}
+%
+
+The key to solving this problem is finding assignments that have the
+lowest score, where the score incorporates the empirical loss: i.e.
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(y*, y)
+\end{align}
+%
+If the loss can be decomposed over the blocks like
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\sum_i^N\Delta(y_i*, y_i)
+\end{align}
+%
+then the objective has the form that allows us to use an algorithm
+like QPBO to find a quick minimum assignment. If the loss function does not
+decompose we have to check an exponentially many possible assignment,
+typically an intractable problem.
+
+Among the loss functions that do decompose over blocks, a common
+choice is the Hamming loss, $\sum_i^N\begin{cases}
+  0 \quad y_i^* = y_i \\
+  1 \quad y_i^* \neq y_i
+\end{cases}$. This loss, and its cousins, are completely inappropriate
+for our problem, as we have currently posed it.
+
+We want a loss function that increases the further we are from our
+target assignment. If two assignments group the same sets of blocks
+together we would like the hamming loss to be 0. However, with the
+Hamming loss, the assignments with the highest possible
+losses are assignments that assign the same blocks to the same
+neighborhoods as our target assignment, but assigns different labels
+to those neighborhoods. 
+
+There are loss functions that behave as we would like, like the Rand
+Index. However, I know of no such loss function that decomposes over
+blocks or edges. Without that property, the learning problem is
+computationally intractable. Under some restricted circumstances, the
+higher order loss functions can be used by introducing auxillary
+variables into the problem, but these approaches are computationally
+infeasible for cities with realistic number of
+neighborhoods. {citations here}
+
+The ultimate impediment is that for every way of labeling blocks into
+neighborhoods, there are large number of equivalent groupings that
+differ only in the value of the labels, and they each have the same
+score. So, we might proceed, by arbitrarily giving one of those
+equivalent labelings priority.
+
+One way to do that is to change our energy function so that labelings 
+closer to our target labeling have a lower score.
+%
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,w)
+\end{align}
+%
+Where  
+%
+\begin{align}
+\epsilon_i(y_i) = \begin{cases}
+  0 \quad y_i^* = y_i \\
+  P \quad y_i^* \neq y_i
+\end{cases}
+\end{align}
+
+If we use this energy function than our objective function ends up being 
+
+\begin{align*}
+&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
+  C\cdot\xi\\
+&\text{such that} \\
+&\sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+   - \sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i^*,y_j^*)  \geq (1-P)\cdot\sum_i^N\Delta(y_i*, y_i) - \xi\\ 
+&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
+  possible neighborhood assignments}\\
+&\text{and where } \Delta \text{ is an empirical loss.}\\
+\end{align*}
+
+As long as $0 \leq P \leq 1$, then this is just scales the margin
+constraint, and in practice $P$ can be very close to 0.
+
+Which is exactly what we should hope for.
+

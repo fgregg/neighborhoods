@@ -14,11 +14,13 @@ edge_attributes = numpy.loadtxt('model.matrix', skiprows=1)
 markers = numpy.loadtxt(PATH + 'markers.csv', skiprows=1, delimiter=',',
                         dtype=numpy.int)
 
-markers[:,0] -= 1
-markers[:,1] = node_labels[markers[:,0]]
+#markers[:,0] -= 1
+#markers[:,1] = node_labels[markers[:,0]]
 
+print node_labels
+print len(node_labels)
 
-print markers
+markers = numpy.arange(0, len(node_labels))
 
 raise
 
