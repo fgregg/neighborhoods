@@ -20,9 +20,7 @@ markers = numpy.loadtxt(PATH + 'markers.csv', skiprows=1, delimiter=',',
 print node_labels
 print len(node_labels)
 
-markers = numpy.arange(0, len(node_labels))
-
-raise
+makers = numpy.vstack((numpy.arange(0,len(node_labels)), node_labels))
 
 # js_age = numpy.loadtxt(PATH + 'js_age.csv', skiprows = 1)
 # js_family = numpy.loadtxt(PATH + 'js_family.csv', skiprows = 1)

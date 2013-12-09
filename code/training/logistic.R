@@ -1,5 +1,6 @@
 library(rgeos)
 library(spdep)
+library(ngspatial)
 
 library(devtools)
 
@@ -42,6 +43,8 @@ node_labels <- read.csv('../interchange/border.csv')$x
 # Spatial Lags
 adjacent_edges <- adjacentEdges(blocks.poly)
 
+attr(adjacent_edges, 'region.id') <- as.character(1:length(node_labels))
+
 A <- matrix(0, nrow=length(node_labels), ncol=length(node_labels))
 
 for (i in 1:length(node_labels)) {
@@ -69,7 +72,7 @@ lags <- sapply(1:length(adjacent_edges),
 
 lags[is.nan(lags)] <- 0
 
-group <- rep("1", length(node_labels))
+group <- as.character(1:length(node_labels))
 
 features <- data.frame(sufficent_pop,
                        js_age,
@@ -85,6 +88,7 @@ features <- data.frame(sufficent_pop,
                        block_angle,
                        lags,
                        node_labels,
+                       grid_street,
                        group)
 
 best_F = 0
@@ -120,7 +124,43 @@ for (w in seq(0.1, 1, .1)) {
   }
 }
 
+M <- model.matrix(node_labels ~ sufficent_pop:(
+                                  js_age + 
+                                  js_family +
+                                  js_race +
+                                  js_housing) +
+                                sufficent_pop*( 
+                                  rail +
+                                  water +
+                                  #zoning +
+                                  elementary_school +
+                                  high_school +
+                                  block_angle),
+                  data=features)
+
+
+
+K <- sparse.sglmm(node_labels ~ sufficent_pop:(
+                                  js_age + 
+                                  js_family +
+                                  js_race +
+                                  js_housing) +
+                                sufficent_pop*( 
+                                  rail +
+                                  water +
+                                  #zoning +
+                                  elementary_school +
+                                  high_school +
+                                  block_angle) +
+                                highway,
+                  data=features,
+                  family=binomial,
+                  A=A,
+                  verbose=TRUE)
+
 write.csv(m1$fitted.values, "costs.csv", row.names=FALSE)
+
+write.csv(K$fitted.values, "costs.csv", row.names=FALSE)
 
 nodes = blocks.poly
 
@@ -138,6 +178,7 @@ plot(nodes,
      border="transparent",
      lwd=0.01)
 
+true_border <- read.csv("../interchange/border.csv")
 
 border_lines <- all_edges$lines[m1$fitted.values > 0.3,]
 
@@ -169,5 +210,24 @@ lines(segment_lines)
 dev.off()
 
 
+labels <- read.table("predicted_borders.csv")$V1+1
+
+plot(blocks.poly, col=sample(colors())[labels], border="transparent")
 
 
+
+X <- model.matrix(node_labels ~ sufficent_pop:(
+                                  js_age + 
+                                  js_family +
+                                  js_race +
+                                  js_housing) +
+                                sufficent_pop*( 
+                                  rail +
+                                  grid_street +
+                                  water +
+                                  #zoning +
+                                  elementary_school +
+                                  high_school +
+                                  block_angle) +
+                                highway,
+                  data=features)
