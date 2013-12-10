@@ -1,0 +1,141 @@
+\documentclass[12pt,letter]{article}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{adjustbox}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{bayesnet}
+
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+
+\begin{document}
+
+<<include=FALSE>>=
+opts_chunk$set(echo=FALSE, 
+               fig.width=4.5, 
+               fig.height=4.75, 
+               fig.align="center",
+               fig.pos="h!",
+               fig.path='/home/fgregg/sweave-cache/figs/', 
+               prefix.cache='/home/fgregg/sweave-cache/values', 
+               dev='tikz',
+               cache=TRUE) 
+
+inline_hook <- function(x) {
+    if(is.numeric(x)) {
+      x <- formatC(round(x, 2), big.mark=",", format="d")
+      paste(x, collapse=", ")
+    }
+    else {
+      x
+    }
+  }
+knit_hooks$set(inline = inline_hook)
+@
+
+
+<<preamble, cache=FALSE>>= 
+setwd('/home/fgregg/academic/neighborhoods/writing/')
+default_margins = par("mar")
+@ 
+
+
+
+\section*{Introduction}
+Social scientists have collected a wide and sophisticated arsenal of
+ways to group similar elements of network. However, except in simplest
+cases, what determines the output is the simple, iterative algorithm
+of the researcher fiddling with weights until the groupings look how
+she wants them to. Our methods to group similar elements depends on us
+knowing what similarity means in our network. We usually don't.
+
+When our similarity is binary, i.e. did ego nominate
+alter as friend, life is easy. But, as soon as a variable has more
+than two possible values then the researcher must decide how to turn
+those values into similarities. Different, reasonable choices will
+lead to different groupings. A careful researcher may check
+her choices for robustness, but may only learn that her errors are
+robust. The difficulties grow combinatorially if we decide that
+a second, third, or more variable might be of some interest.
+
+In the end, we adjust the various weights until the groupings come out
+looking about right. We would have been better off just drawing what
+we wanted in the first place.
+
+We would be better off because we humans are all too good at
+apprehending an assortment of things as a group than we are at
+assigning importance to variables by manually assigning weights, which
+we are very, very bad at.
+
+While the interestingness of apprehended unities may vary 
+unfairly between individual sociologists (not every one has Weberian gift),
+we are professionally required to be interested in the way that a
+collection of people groups themselves.
+
+If we can collect information on how people group themselves, then we
+can learn what counts for similarity for these people. Understanding
+what similarity means for is not only scientifically interesting in
+itself, it will also allow for principles prediction of how similar
+collections of people will group themselves.
+
+In this paper I discuss how to do learn about similarity using the
+case of city neighborhoods. 
+
+\input{theory_and_math.tex}
+
+\section*{Results}
+So much for theory, let's see how this works in practice. Let's take
+the case of Chicago neighborhoods.  
+
+\subsection*{Data}
+
+I have a nightly updated database of geocoded Craigslist apartment
+rentals, sublet, and roommate listings. For most of these listings,
+the poster entered some text in a ``Specific Location'' field. With
+some minimal pre-processing, we can use these data as observations of
+claims that geographical points are in some neighborhood.
+
+Using kernel density estimation, we can use this point data to
+estimate a continuous probability distributions that any point in the
+city will be claimed to be in any of the neighborhoods (Figure
+\ref{fig:KDE}). The gray lines indicate the best guess about the
+neighborhood boundaries.
+
+
+\begin{figure}
+\includegraphics{/home/fgregg/academic/neighborhoods/writing/probability}
+\caption{KDE probability estimates of neighborhood claims on North Side}
+\label{fig:KDE}
+\end{figure}
+
+Using information about the location of rivers, railroad embankments,
+highways, and major streets, we can smooth this estimate. 
+
+\begin{figure}
+\includegraphics{./respect_grid.pdf}
+\caption{Hand tuned smoothed neighborhoods}
+\end{figure}
+
+I would like to treat this measure as a kind of `averaged neighborhood
+perception.' Of course, it's biased measure of that. There are
+enormous selection effects, but perhaps more troublesome is that
+listers are likely to choose neighborhood claims strategically in
+order to make a listing maximally desirable. I have been looking for
+scientific samples of neighborhood perception that I can compare
+against so as to get a sense of magnitude of the biases.
+
+However, I think it's possible that these data, with their biases
+might be good enough, and we'll have ways of checking that. 
+
+In addition to these data about neighborhood perception, we also have
+block level census data as well as a trove of unaggregated data from
+the City of Chicago on the built environment, crimes, 311 reports,
+zoning, and the similar. We'd like to set them in relation to each
+other.
+
+\section*{Conclusion}
+
+
+\end{document}
