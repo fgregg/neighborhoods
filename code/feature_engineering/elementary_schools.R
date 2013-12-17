@@ -6,14 +6,14 @@ library(spdep)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-elementarySchools <- function(nodes) {
+elementarySchools <- function(nodes, cached_edges) {
 
   elementary_schools <- rgdal::readOGR("/home/fgregg/academic/neighborhoods/phenomena/CPS_ElementarySchool_AttendanceBoundaries_SY13_14.shp",
                                        "CPS_ElementarySchool_AttendanceBoundaries_SY13_14")
 
   elementary_schools <- elementary_schools[as.vector(rgeos::gIntersects(elementary_schools, bbx, byid=TRUE)),]
 
-  block_edgelist <- common::edgeList(nodes)
+  block_edgelist <- common::edgeList(nodes, edges=cached_edges)
 
   crosses <- common::crossesPolygons(block_edgelist,
                                      coordinates(nodes),

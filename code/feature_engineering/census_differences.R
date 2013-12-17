@@ -25,7 +25,7 @@ featurePlot <- function(feature, file_name) {
   dev.off()
 }
 
-censusDifferences <- function(nodes, make_plots=FALSE) {
+censusDifferences <- function(nodes, make_plots=FALSE, cached_edges) {
 
   if (identical(nodes, blocks.poly) 
       || identical(nodes, populated.blocks)) {
@@ -58,7 +58,7 @@ censusDifferences <- function(nodes, make_plots=FALSE) {
   nodes@data = data.frame(nodes@data, chicago_blocks[alignment,])
 
   # Calculate 'edge features' will be node features in training
-  edgelist <- common::edgeList(nodes)
+  edgelist <- common::edgeList(nodes, edges=cached_edges)
 
   pop_1 <- nodes@data[edgelist[,1], "P0040001"]
   pop_2 <- nodes@data[edgelist[,2], "P0040001"]

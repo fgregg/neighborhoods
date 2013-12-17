@@ -1,14 +1,14 @@
 library(rgdal)
 
   
-edgeList <- function(nodes, all_blocks=TRUE) {
+edgeList <- function(nodes, all_blocks=TRUE, edges=NULL) {
   node_neighbors <-spdep::poly2nb(nodes,
                                   queen=FALSE,
                                   foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
   node_edgelist <- common::nb2edgelist(node_neighbors)
 
-  if (exists('all_edges') & all_blocks) {
-    results <- all_edges
+  if (!is.null(edges) & all_blocks) {
+    results <- edges
   }
   else {
     results <- common::extractBorder(node_edgelist, nodes)

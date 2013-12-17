@@ -146,5 +146,5 @@ chicago_blocks$TRACT_BLOC = paste(chicago_blocks$tract,
                                   sep="")
 
 write.csv(chicago_blocks,
-          "census_data_blocks.csv",
+          "../interchange/census_data_blocks.csv",
           row.names=FALSE)

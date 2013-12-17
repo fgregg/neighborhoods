@@ -6,7 +6,7 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 
-blockShapes <- function(nodes, make_plots=FALSE) {
+blockShapes <- function(nodes, cached_edges, make_plots=FALSE) {
 
   coords <- lapply(slot(nodes, "polygons"), function(x) {
     lapply(slot(x, "Polygons"), slot, "coords")}
@@ -19,7 +19,7 @@ blockShapes <- function(nodes, make_plots=FALSE) {
 
 
   # Calculate 'edge features' will be node features in training
-  edgelist <- common::edgeList(nodes)
+  edgelist <- common::edgeList(nodes, edges=cached_edges)
     
 
   angle_difference <- abs(angles[edgelist[,1]] - angles[edgelist[,2]])

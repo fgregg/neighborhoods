@@ -5,10 +5,15 @@ library(rgeos)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-physicalBarriers <- function(nodes) {
+physicalBarriers <- function(nodes,
+                             cached_edges=NULL,
+                             railroads=NULL,
+                             highways=NULL,
+                             grid.streets=NULL,
+                             water=NULL) {
   centroids <- sp::coordinates(nodes)
 
-  edgelist <- common::edgeList(nodes)
+  edgelist <- common::edgeList(nodes, edges = cached_edges)
 
   edge.weights <- rep(1, dim(edgelist)[1])
 

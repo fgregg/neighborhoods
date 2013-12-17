@@ -1,4 +1,6 @@
 library(devtools)
+library(spdep)
+library(rgeos)
 
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
@@ -7,19 +9,19 @@ projection = "+proj=tmerc +lat_0=36.66666666666666 +lon_0=-88.33333333333333 +k=
 # Lat/Lon of Bounding Box
 
 # Load Block Data
-if (file.exists("chicago_blocks_poly.Rdata")) {
-  load("chicago_blocks_poly.Rdata")
+if (file.exists("chicago/data/chicago_blocks_poly.Rdata")) {
+  load("chicago/data/chicago_blocks_poly.Rdata")
 } else {
   chicago.blocks.poly <- readOGR("../admin_areas/CensusBlockTIGER2010.shp",
                          "CensusBlockTIGER2010")
-  save(chicago.blocks.poly, file="chicago_blocks_poly.Rdata")
+  save(chicago.blocks.poly, file="chicago/data/chicago_blocks_poly.Rdata")
 }
 
 
 # Shape Files of Barriers that will effect edge weights
 
-if (file.exists("chicago_barriers.Rdata")) {
-  load("chicago_barriers.Rdata")
+if (file.exists("chicago/data/chicago_barriers.Rdata")) {
+  load("chicago/data/chicago_barriers.Rdata")
 } else {
   railroads <- readOGR("../barriers/Railroads.shp",
                        layer = "Railroads")
@@ -46,49 +48,19 @@ if (file.exists("chicago_barriers.Rdata")) {
        chicago.highways,
        chicago.grid.streets,
        chicago.water,
-       file="chicago_barriers.Rdata")
+       file="chicago/data/chicago_barriers.Rdata")
 }
 
 
-if (file.exists("chicago_barrier_intersects.Rdata")) {
-  load("chicago_barrier_intersects.Rdata")
-} else {
-  edgelist <-nb2edgelist(poly2nb(chicago.blocks.poly,
-                                 foundInBox=gUnarySTRtreeQuery(chicago.blocks.poly)))
 
-  chicago.railroad.intersects <- edgesIntersect(edgelist,
-                                                centroids,
-                                                railroads,
-                                                projection)
+if (!file.exists("chicago/data/chicago_all_edges.Rdata")) {
 
-  chicago.highway.intersects <- edgesIntersect(edgelist,
-                                               centroids,
-                                               highways,
-                                               projection)
-  
-  chicago.grid.street.intersects <- edgesIntersect(edgelist,
-                                                   centroids,
-                                                   grid.streets,
-                                                   projection)
+    nodes = chicago.blocks.poly
+    node_neighbors <-spdep::poly2nb(nodes,
+                                    queen=FALSE,
+                                    foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
+    node_edgelist <- common::nb2edgelist(node_neighbors)
 
-  chicago.water.intersects <- edgesIntersect(edgelist,
-                                             centroids,
-                                             water,
-                                             projection)
-
-  save(chicago.railroad.intersects,
-       chicago.highway.intersects,
-       chicago.grid.street.intersects,
-       chicago.water.intersects,
-       file="chicago_barrier_intersects.Rdata")
+    chicago.all_edges <- common::extractBorder(node_edgelist, nodes) 
+    save(chicago.all_edges, file='chicago_all_edges.Rdata')
 }
-
-nodes = chicago.blocks.poly
-node_neighbors <-spdep::poly2nb(nodes,
-                                queen=FALSE,
-                                foundInBox=rgeos::gUnarySTRtreeQuery(nodes))
-node_edgelist <- common::nb2edgelist(node_neighbors)
-
-chicago.all_edges <- common::extractBorder(node_edgelist, nodes) 
-save(chicago.all_edges, file='chicago_all_edges.Rdata')
-
