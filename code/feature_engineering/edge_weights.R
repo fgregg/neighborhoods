@@ -11,6 +11,7 @@ physicalBarriers <- function(nodes,
                              highways=NULL,
                              grid.streets=NULL,
                              water=NULL) {
+
   centroids <- sp::coordinates(nodes)
 
   edgelist <- common::edgeList(nodes, edges = cached_edges)
