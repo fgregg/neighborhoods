@@ -28,7 +28,8 @@ featurePlot <- function(feature, file_name) {
 censusDifferences <- function(nodes, make_plots=FALSE, cached_edges) {
 
   if (identical(nodes, blocks.poly) 
-      || identical(nodes, populated.blocks)) {
+      || identical(nodes, populated.blocks)
+      || identical(nodes, chicago.blocks.poly)) {
     census_data = paste(PATH, 'census_data_blocks.csv', sep='')
     csv_columns = c("TRACT_BLOC"="factor",
                     "state"="factor",

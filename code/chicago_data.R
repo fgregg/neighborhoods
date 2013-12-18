@@ -32,6 +32,10 @@ if (file.exists("chicago/data/chicago_barriers.Rdata")) {
   streets <- readOGR("../barriers/Major_Streets.shp",
                      layer="Major_Streets",
                      p4s="+proj=utm +zone=16 +datum=NAD83")
+
+  streets <- spTransform(streets,
+                         CRS(projection)
+                         )
   
   chicago.highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
                                                          "KENNEDY"),]
@@ -53,7 +57,9 @@ if (file.exists("chicago/data/chicago_barriers.Rdata")) {
 
 
 
-if (!file.exists("chicago/data/chicago_all_edges.Rdata")) {
+if (file.exists("chicago/data/chicago_all_edges.Rdata")) {
+  load("chicago/data/chicago_all_edges.Rdata")
+} else { 
 
     nodes = chicago.blocks.poly
     node_neighbors <-spdep::poly2nb(nodes,
@@ -62,5 +68,18 @@ if (!file.exists("chicago/data/chicago_all_edges.Rdata")) {
     node_edgelist <- common::nb2edgelist(node_neighbors)
 
     chicago.all_edges <- common::extractBorder(node_edgelist, nodes) 
-    save(chicago.all_edges, file='chicago_all_edges.Rdata')
+    save(chicago.all_edges, file='chicago/data/chicago_all_edges.Rdata')
+}
+
+if (file.exists("chicago/data/chicago_edge_lines.Rdata")) {
+  load("chicago/data/chicago_edge_lines.Rdata")
+} else { 
+
+  edgelist <- common::edgeList(chicago.blocks.poly, edges=chicago.all_edges)
+
+  centroids <- coordinates(chicago.blocks.poly)
+
+  chicago.edge.lines <- common::edgesToLines(edgelist, centroids, projection)
+
+  save(chicago.edge.lines, file='chicago/data/chicago_edge_lines.Rdata')
 }

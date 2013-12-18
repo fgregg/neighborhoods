@@ -7,58 +7,39 @@ devtools::load_all(pkg)
 
 physicalBarriers <- function(nodes,
                              cached_edges=NULL,
+                             edge_lines=NULL,
                              railroads=NULL,
                              highways=NULL,
                              grid.streets=NULL,
                              water=NULL) {
 
-  centroids <- sp::coordinates(nodes)
-
-  edgelist <- common::edgeList(nodes, edges = cached_edges)
-
+  edgelist <- common::edgeList(nodes, edges=cached_edges)
+  
   edge.weights <- rep(1, dim(edgelist)[1])
 
   print("RAIL")
 
-  railroad.intersects <- common::edgesIntersect(edgelist,
-                                                centroids,
-                                                railroads,
-                                                projection)
-  rail.distance <- common::distanceFromBorder(nodes,
-                                              edgelist,
-                                              as.numeric(railroad.intersects) + 1)
+  railroad.intersects <- rowSums(rgeos::gIntersects(chicago.railroads,
+                                                    edge_lines,
+                                                    byid=TRUE))
   print("HIGHWAY")
   
 
-  highway.intersects <- common::edgesIntersect(edgelist,
-                                               centroids,
-                                               highways,
-                                               projection)
-
-  highway.distance <- common::distanceFromBorder(nodes,
-                                                 edgelist,
-                                                 as.numeric(highway.intersects) + 1)
+  highway.intersects <- rowSums(rgeos::gIntersects(highways,
+                                                   edge_lines,
+                                                   byid=TRUE))
 
   print("GRID STREET")
   
-  grid.street.intersects <- common::edgesIntersect(edgelist,
-                                                   centroids,
-                                                   grid.streets,
-                                                   projection)
+  grid.street.intersects <- rowSums(rgeos::gIntersects(grid.streets,
+                                                       edge_lines,
+                                                       byid=TRUE))
 
-  grid.distance <- common::distanceFromBorder(nodes,
-                                              edgelist,
-                                              as.numeric(grid.street.intersects) + 1)
-  
+  print("WATER")
 
-  water.intersects <- common::edgesIntersect(edgelist,
-                                             centroids,
-                                             water,
-                                             projection)
-
-  water.distance <- common::distanceFromBorder(nodes,
-                                               edgelist,
-                                               as.numeric(water.intersects) + 1)
+  water.intersects <- rowSums(rgeos::gIntersects(water,
+                                                 edge_lines,
+                                                 byid=TRUE))
 
 
   rail.weights <- as.numeric(railroad.intersects)
@@ -76,13 +57,9 @@ physicalBarriers <- function(nodes,
   weights <- list(edges=edgelist,
                   total=edge.weights,
                   rail=rail.weights,
-                  rail.distance=rail.distance,
                   highway=highway.weights,
-                  highway.distance=highway.distance,
                   water=water.weights,
-                  water.distance=water.distance,
-                  grid_street=grid.street.weights,
-                  grid.distance=grid.distance)
+                  grid_street=grid.street.weights)
 
   return(weights)
 }

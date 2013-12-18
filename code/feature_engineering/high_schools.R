@@ -6,27 +6,20 @@ library(spdep)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-highSchools <- function(nodes, cached_edges) {
+highSchools <- function(nodes, cached_edges, edge_lines) {
 
   high_schools <- rgdal::readOGR("/home/fgregg/academic/neighborhoods/phenomena/CPS_HighSchool_AttendanceBoundaries_13_14.shp",
                                  "CPS_HighSchool_AttendanceBoundaries_13_14")
 
-  high_schools <- high_schools[as.vector(rgeos::gIntersects(high_schools,
-                                                            bbx, byid=TRUE)),]
+  containing <- gCovers(high_schools, high_schools, byid=TRUE)
 
-  block_edgelist <- common::edgeList(nodes, edges=cached_edges)
+  high_schools <- high_schools[colSums(containing) < 2, ]
 
-  crosses <- common::crossesPolygons(block_edgelist,
-                                     coordinates(nodes),
-                                     high_schools,
-                                     common::projection)
+  crosses <- rowSums(rgeos::gIntersects(high_schools,
+                                        edge_lines,
+                                        byid=TRUE))
 
-  distances <- common::distanceFromBorder(nodes, block_edgelist, crosses)
-
-  return(list(crosses=crosses,
-              distances=distances))
-
-
+  return(list(crosses=crosses))
 }
 
 if (!common::from_source()) {

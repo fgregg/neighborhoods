@@ -51,13 +51,12 @@ crossesPolygons <- function(edges, centroids, barrier, crs) {
         )
 }
 
-edgesToLines <- function(edges) {
-    edges <- as.data.frame(edges)
-    edges <- split(edges, rownames(edges))
+edgesToLines <- function(edges, centroids, projection) {
+    edges <- lapply(seq_len(nrow(edges)), function(i) edges[i,])  
     SpatialLines(
         mapply(function(edge, id) {
-            l <- rbind(centroids[edge[[1]],],
-                       centroids[edge[[2]],])
+            l <- rbind(centroids[edge[1],],
+                       centroids[edge[2],])
             l <- Lines(Line(l), ID=id)
             return(l)
         },
