@@ -1,7 +1,14 @@
+import argparse
 import csv
 import numpy
 from pystruct.models import GraphCRF, PottsEdgeFeatureGraphCRF
 from pystruct.learners import NSlackSSVM as learner
+
+parser = argparse.ArgumentParser(description='Train Potts Model.')
+parser.add_argument('regularizer', metavar='C', type=float, nargs='+',
+                    help='regularizer', default=0.01)
+
+args = parser.parse_args()
 
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
@@ -11,63 +18,16 @@ _, node_labels = numpy.unique(node_labels, return_inverse=True)
 
 edge_attributes = numpy.loadtxt('model.matrix', skiprows=1)
 
-markers = numpy.loadtxt(PATH + 'markers.csv', skiprows=1, delimiter=',',
-                        dtype=numpy.int)
-
-#markers[:,0] -= 1
-#markers[:,1] = node_labels[markers[:,0]]
-
-print node_labels
-print len(node_labels)
-
-makers = numpy.vstack((numpy.arange(0,len(node_labels)), node_labels))
-
-# js_age = numpy.loadtxt(PATH + 'js_age.csv', skiprows = 1)
-# js_family = numpy.loadtxt(PATH + 'js_family.csv', skiprows = 1)
-# js_race = numpy.loadtxt(PATH + 'js_race.csv', skiprows = 1)
-# js_housing = numpy.loadtxt(PATH + 'js_housing.csv', skiprows = 1)
-
-# rail = numpy.loadtxt(PATH + 'rail_intersects.csv', skiprows = 1)
-# highway = numpy.loadtxt(PATH + 'highway_intersects.csv', skiprows = 1)
-# grid_street = numpy.loadtxt(PATH + 'grid_intersects.csv', skiprows = 1)
-# water = numpy.loadtxt(PATH + 'water_intersects.csv', skiprows = 1)
-
-# zoning = numpy.loadtxt(PATH + 'zoning_crosses.csv', skiprows = 1)
-# elementary_school = numpy.loadtxt(PATH + 'elementary_schools_crosses.csv', skiprows = 1)
-# high_school = numpy.loadtxt(PATH + 'high_schools_crosses.csv', skiprows = 1)
-# numpy
-
-# block_angle = numpy.loadtxt(PATH + 'block_angles.csv', skiprows = 1)
-
-# edge_attributes = numpy.vstack((js_age, 
-#                                 js_family,
-#                                 js_race,
-#                                 js_housing,
-#                                 rail,
-#                                 highway,
-#                                 grid_street,
-#                                 water,
-#                                 zoning,
-#                                 elementary_school,
-#                                 high_school,
-#                                 block_angle)).transpose()
-
 edges = numpy.loadtxt(PATH + 'edges.csv', skiprows = 1, dtype=int, delimiter=',')
 edges += -1
 
+markers = numpy.transpose(numpy.vstack((numpy.arange(0,len(node_labels)), node_labels)))
 
 Y = (numpy.array(node_labels, dtype=numpy.int),)
-print Y 
-X= numpy.empty((len(node_labels), 0), dtype=numpy.float)
+X = numpy.empty((len(node_labels), 0), dtype=numpy.float)
 
-#E = numpy.empty((0, 2), dtype=numpy.int)
 E = numpy.array(edges, dtype=numpy.int)
 X = ((X, E, edge_attributes),)
-
-
-#model = GraphCRF(n_features=node_attributes.shape[1],
-#                 #class_weight=[1, 0.001],
-#                 n_states=2, inference_method='qpbo')
 
 model = PottsEdgeFeatureGraphCRF(n_states = 23, 
                                  n_features = 0,
@@ -75,23 +35,37 @@ model = PottsEdgeFeatureGraphCRF(n_states = 23,
                                  inference_method = 'qpbo',
                                  markers=markers)
 
-                         
-                         
-
 
 svm = learner(model, 
               verbose=3, 
               n_jobs=5, 
               max_iter=1000, 
-              C=0.01, 
+              C=args.regularizer[0], 
               show_loss_every=1)
 
 svm.fit(X, Y)
 print X
-print svm.w
+
+with open('/home/fgregg/academic/neighborhoods/code/training/weights.csv', 'w') as f :
+   writer = csv.writer(f, delimiter=' ')
+   writer.writerow(svm.w)
+
 predicted_borders = svm.predict(X)
                          
 with open('/home/fgregg/academic/neighborhoods/code/training/predicted_borders.csv', 'w') as f :
    writer = csv.writer(f, delimiter=' ')
    for edge in predicted_borders[0] :
+      writer.writerow([edge])
+
+chicago_nodes_n = len(numpy.loadtxt(PATH + 'chicago_node_labels.csv', skiprows = 1))
+chicago_edges = numpy.loadtxt(PATH + 'chicago_edges.csv', skiprows = 1, dtype=int, delimiter=',')
+X_chicago = ((numpy.empty((chicago_nodes_n, 0), dtype=numpy.float), 
+              numpy.array(chicago_edges, dtype=numpy.int),
+              numpy.loadtxt('chicago.model.matrix', skiprows=1)),)
+
+predicted_chicago = svm.predict(X_chicago)
+                         
+with open('/home/fgregg/academic/neighborhoods/code/training/predicted_chicago.csv', 'w') as f :
+   writer = csv.writer(f, delimiter=' ')
+   for edge in predicted_chicago[0] :
       writer.writerow([edge])
