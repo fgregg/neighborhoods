@@ -32,16 +32,14 @@ if (file.exists("chicago/data/chicago_barriers.Rdata")) {
   streets <- readOGR("../barriers/Major_Streets.shp",
                      layer="Major_Streets",
                      p4s="+proj=utm +zone=16 +datum=NAD83")
-
-  streets <- spTransform(streets,
-                         CRS(projection)
-                         )
   
-  chicago.highways <- streets[streets@data$STREET %in% c("LAKE SHORE",
-                                                         "KENNEDY"),]
+  chicago.highways <- streets[(streets@data$STREET %in% c("LAKE SHORE",
+                                                         "KENNEDY")
+                               | streets@data$STREET_TYP == "EXPY"),]
   
-  chicago.grid.streets <- streets[!streets@data$STREET %in% c("LAKE SHORE",
-                                                              "KENNEDY"),]
+  chicago.grid.streets <- streets[!(streets@data$STREET %in% c("LAKE SHORE",
+                                                         "KENNEDY")
+                                    | streets@data$STREET_TYP == "EXPY"),]
   
   water <- readOGR("../barriers/Kmlchicagowaterfeatures.kml",
                    layer = "WATER_FEATURES")

@@ -19,7 +19,7 @@ physicalBarriers <- function(nodes,
 
   print("RAIL")
 
-  railroad.intersects <- rowSums(rgeos::gIntersects(chicago.railroads,
+  railroad.intersects <- rowSums(rgeos::gIntersects(railroads,
                                                     edge_lines,
                                                     byid=TRUE))
   print("HIGHWAY")
