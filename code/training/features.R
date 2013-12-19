@@ -22,7 +22,6 @@ block_angle <- block_angle %% pi/2 / (pi/2)
 population <- read.csv('../interchange/min_population.csv')$x
 sufficient_pop <- as.numeric(population > 30)
 
-node_labels <- read.csv('../interchange/border.csv')$x
 
 features <- data.frame(sufficient_pop,
                        js_age,
@@ -32,24 +31,22 @@ features <- data.frame(sufficient_pop,
                        rail,
                        highway,
                        water,
-                       zoning,
                        elementary_school,
                        high_school,
                        block_angle,
-                       node_labels,
                        grid_street)
 
-M <- model.matrix(node_labels ~ sufficient_pop:(
-                                  js_age + 
-                                  js_family +
-                                  js_race +
-                                  js_housing) +
-                                sufficient_pop*( 
-                                  rail +
-                                  water +
-                                  elementary_school +
-                                  high_school +
-                                  block_angle),
+M <- model.matrix(~ (sufficient_pop:(js_age + 
+                                     js_family +
+                                     js_race +
+                                     js_housing) +
+                     sufficient_pop*(rail +
+                                     water +
+                                     highways +
+                                     grid_streets +
+                                     elementary_school +
+                                     high_school +
+                                     block_angle)),
                   data=features)
 
 write.table(M, "model.matrix", row.names=FALSE)

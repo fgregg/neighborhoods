@@ -35,16 +35,18 @@ features <- data.frame(sufficient_pop,
                        block_angle,
                        grid_street)
 
- M <- model.matrix(~ (sufficient_pop:(js_age + 
-                                      js_family +
-                                      js_race +
-                                      js_housing) +
-                      sufficient_pop*(rail +
-                                      water +
-                                      elementary_school +
-                                      high_school +
-                                      block_angle)),
-                      data=features)
+M <- model.matrix(~ (sufficient_pop:(js_age + 
+                                     js_family +
+                                     js_race +
+                                     js_housing) +
+                     sufficient_pop*(rail +
+                                     water +
+                                     highway +
+                                     grid_street +
+                                     elementary_school +
+                                     high_school +
+                                     block_angle)),
+                  data=features)
 
 write.table(M, "chicago.model.matrix", row.names=FALSE)
 
