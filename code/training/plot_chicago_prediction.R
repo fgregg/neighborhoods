@@ -1,11 +1,11 @@
 library(devtools)
 library(igraph)
 
-pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
-devtools::load_all(pkg)
+#pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
+#devtools::load_all(pkg)
 
-pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
-devtools::load_all(pkg)
+#pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
+#devtools::load_all(pkg)
 
 
 expit <- function(x) {
@@ -36,4 +36,6 @@ for (hood_label in unique(segments)) {
 
 hood_frequency <- table(hoods)
 
-plot(chicago.blocks.poly, col=rgb(t(col2rgb(sample(colors())[hoods %% 657])/255), alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)), border="transparent")
+pdf()
+plot(chicago.blocks.poly, col=rgb(t(col2rgb(sample(colors())[hoods %% 657 + 1])/255), alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)), border="transparent")
+dev.off()

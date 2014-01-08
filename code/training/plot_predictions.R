@@ -32,5 +32,4 @@ for (hood_label in unique(segments)) {
 
 hood_frequency <- table(hoods)
 
-
-plot(blocks.poly, col=col2rgb(sample(colors())[hoods %% 657]), border="transparent")
+plot(blocks.poly, col=rgb(t(col2rgb(sample(colors())[hoods %% 657 + 1])/255), alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)), border="transparent")
