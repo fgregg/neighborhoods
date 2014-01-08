@@ -13,6 +13,7 @@
 \begin{document}
 
 <<include=FALSE>>=
+library(xtable)
 opts_chunk$set(echo=FALSE, 
                fig.width=4.5, 
                fig.height=4.75, 
@@ -39,6 +40,7 @@ knit_hooks$set(inline = inline_hook)
 <<preamble, cache=FALSE>>= 
 setwd('/home/fgregg/academic/neighborhoods/writing/')
 default_margins = par("mar")
+CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
 
@@ -135,7 +137,233 @@ the City of Chicago on the built environment, crimes, 311 reports,
 zoning, and the similar. We'd like to set them in relation to each
 other.
 
-\section*{Conclusion}
+\section*{Data Details}
+The ultimate units of measurement are U.S. Census blocks the edges
+between them. The U.S. Census blocks mainly correspond to city face
+blocks. We use a rook adjacency to define the edges, i.e. all edges
+are between blocks that share a common border of length greater than
+0. In the training data, there are \Sexpr{dim(blocks.poly)[1]} blocks and
+  \Sexpr{dim(features)[1]} edges.
 
+For the inter-block similarities, we will use physical, demographic,
+and administrative features.
+
+\subsection*{Physical Barriers}
+Highways, rail lines, rivers, and major streets can act as convenient
+neighborhood boundaries. For each of these types of features, we code
+an edge feature variable as 1 if the two adjacent blocks are separated
+by the feature or code and 0 otherwise.
+
+We also measure the difference in orientation between blocks. Blocks
+are nearly all longer than they are wide, and we calculate the angle
+of the longest side. For each edge, we calculate the difference
+between the orientations of the blocks. We normalize the difference to
+fall in $[0,1]$. 
+
+\subsection*{School Boundaries}
+If two adjacent blocks are in different elementary school attendance
+boundary then we code an edge feature with 1, 0 otherwise. Similar for
+high schools.
+
+\subsection*{Demographic Features}
+<<loadFeatures, include=FALSE, cache=FALSE>>= 
+setwd('../code/training/')
+source('features.R')
+setwd(CURDIR)
+@ 
+
+From the U.S. Census, we have block level information on race, age,
+family structure, and housing ownership patterns. We can define
+measures between blocks for these data. 
+
+The measure we will use is the Jensen Shannon Divergence, which is a
+symmetric measure of the similarity of distributions that ranges from
+0 to 1. 
+
+For race, the distribution is the number people coded by the Census as
+``Hispanic or Latino'', ``Not Hispanic or Latino : White alone'',
+``Not Hispanic or Latino : Black Alone'', and ``Not Hispanic or Latino
+: Asian alone.'' 
+
+For age, the distribution is the number of people
+under 5, between 5 and 17, between 18 and 20, between 21 and 29,
+between 30 and 64, and over 85. These age ranges were chosen to
+capture life stages that tend to be spatially segregated: preschool,
+school age, college age, young adult, middle age, retired. 
+
+For family structure, the distribution is ``Husband-wife family'',
+``Male householder, no wife present'', ``Female householder, no
+husband present'', ``Householder, living alone'', and ``Householder,
+not living alone''.
+
+Many blocks have no one living in them or only a handful. In such
+cases, it makes little sense to compare say racial composition. If
+either adjacent blocks has fewer than 30 persons living in it, we do
+not calculate the Jensen-Shannon divergences. There are
+\Sexpr{sum(features$sufficient_pop)} edges where we calculate these
+demographic similarities.
+
+
+<<featureTable, echo=FALSE, results='asis'>>= 
+feature_summary <- data.frame(sufficient.population=c(mean(features$sufficient_pop), 
+                                rep(NA, 5)),
+                              rail = c(mean(features$rail), 
+                                rep(NA, 5)),
+                              highway = c(mean(features$highway), 
+                                rep(NA, 5)),
+                              water = c(mean(features$water), 
+                                rep(NA, 5)),
+                              zoning = c(mean(features$zoning), 
+                                rep(NA, 5)),
+                              elementary.school = c(mean(features$elementary_school), 
+                                rep(NA, 5)),
+                              high.school = c(mean(features$high_school), 
+                                rep(NA, 5)),
+                              grid.street = c(mean(features$grid_street), 
+                                rep(NA, 5)),
+                              age.js=c(mean(features$js_age[features$sufficient_pop==1]), 
+                                quantile(features$js_age[features$sufficient_pop==1])),
+                              race.js=c(mean(features$js_race[features$sufficient_pop==1]), 
+                                quantile(features$js_race[features$sufficient_pop==1])),
+                              housing.js=c(mean(features$js_housing[features$sufficient_pop==1]), 
+                                quantile(features$js_housing[features$sufficient_pop==1])),
+                              block.angle=c(mean(features$block_angle[features$sufficient_pop==1]), 
+                                quantile(features$block_angle[features$sufficient_pop==1])),
+                              family.js=c(mean(features$js_family[features$sufficient_pop==1]), 
+                                quantile(features$js_family[features$sufficient_pop==1]))
+                              
+                              )
+feature_summary <- xtable(t(feature_summary))
+colnames(feature_summary) <- c("Mean", "Min", "25th Quant.", "Median", "75th Quant.", "Max")
+print(feature_summary)
+@ 
+
+\begin{figure}
+<<railImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$rail + 1])
+@ 
+\caption{Rail Lines}
+\end{figure}
+
+\begin{figure}
+<<highwayImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$highway + 1])
+@ 
+\caption{Highways}
+\end{figure}
+
+\begin{figure}
+<<gridImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$grid_street + 1])
+@ 
+\caption{Major Streets}
+\end{figure}
+
+\begin{figure}
+<<waterImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$water + 1])
+@ 
+\caption{River}
+\end{figure}
+
+\begin{figure}
+<<elementaryImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$elementary_school + 1])
+@ 
+\caption{Elementary School Attendance Boundaries}
+\end{figure}
+
+\begin{figure}
+<<highschoolImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$high_school + 1])
+@ 
+\caption{High School Attendance Boundaries}
+\end{figure}
+
+\begin{figure}
+<<zoningImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$zoning + 1])
+@ 
+\caption{Zoning Differences}
+\end{figure}
+
+\begin{figure}
+<<sufficientImage, dev='pdf'>>= 
+plot(all_edges$lines, col=c("#00000022", "red")[features$sufficient_pop + 1])
+@ 
+\caption{Sufficient Population}
+\end{figure}
+
+
+\begin{figure}
+<<blockAngleImage, dev='pdf'>>= 
+plot(all_edges$lines, col=rgb(colorRamp(c("lightgrey", "red"))(features$block_angle)/255))
+@ 
+\caption{Difference in Block Orientation}
+\end{figure}
+
+\begin{figure}
+<<<raceImage, dev='pdf'>>=
+plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$js_race[features$sufficient_pop==1])/255))
+@ 
+\caption{Difference in Distribution of Race and Ethnicity}
+\end{figure}
+
+
+\begin{figure}
+<<<ageImage, dev='pdf'>>=
+plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$js_age[features$sufficient_pop==1])/255))
+@ 
+\caption{Difference in Distribution of Age}
+\end{figure}
+
+
+\begin{figure}
+<<<familyImage, dev='pdf'>>=
+plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$js_family[features$sufficient_pop==1])/255))
+@ 
+\caption{Difference in Distribution of Family Type}
+\end{figure}
+
+
+\begin{figure}
+<<<housingImage, dev='pdf'>>=
+plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$js_housing[features$sufficient_pop==1])/255))
+@ 
+\caption{Difference in Distribution of Housing Type}
+\end{figure}
+
+\section*{Results}
+<<trainModel, include=FALSE, eval=FALSE>>= 
+setwd('../code/training/')
+system('python train_ssvm.py 0.001')
+segments <- read.table("predicted_borders.csv")$V1+1
+weights <- read.table("weights.csv")
+setwd(CURDIR)
+@
+
+<<weightTable, results='asis', cache=TRUE>>=
+WT <- xtable(t(weights), digits=4)
+row.names(WT) <- dimnames(M)[[2]]
+print(WT)
+@ 
+
+<<processHoodLabels, echo=FALSE>>=
+setwd('../code/training/')
+source('plot_predictions.R')
+setwd(CURDIR)
+
+@ 
+\begin{figure}
+<<plotPredictions, cache=FALSE, dev='pdf'>>=
+plot(blocks.poly, col=rgb(t(col2rgb(sample(colors())[hoods %% 657])/255), alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)), border="transparent")
+@ 
+\caption{Predicted Neighborhoods}
+\end{figure}
+
+TODO.. write algorithm that assigns different color to each singly
+colored connected component
+
+TODO.. predict all of chicago
 
 \end{document}
