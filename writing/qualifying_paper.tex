@@ -119,6 +119,9 @@ the case of Chicago neighborhoods.
 
 \subsection*{Data}
 
+
+
+
 I have a nightly updated database of geocoded Craigslist apartment
 rentals, sublet, and roommate listings. For most of these listings,
 the poster entered some text in a ``Specific Location'' field. With
@@ -193,8 +196,6 @@ high schools.
 
 \subsection*{Demographic Features}
 
-
-
 From the U.S. Census, we have block level information on race, age,
 family structure, and housing ownership patterns. We can define
 measures between blocks for these data. 
@@ -227,8 +228,11 @@ not calculate the Jensen-Shannon divergences. There are
 demographic similarities.
 
 
-% latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Tue Dec 10 13:37:28 2013
+\begin{kframe}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: argument is not numeric or logical: returning NA}}\end{kframe}% latex table generated in R 3.0.2 by xtable 1.7-1 package
+% Wed Jan  8 11:09:45 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
@@ -239,14 +243,14 @@ sufficient.population & 0.51 &  &  &  &  &  \\
   rail & 0.01 &  &  &  &  &  \\ 
   highway & 0.02 &  &  &  &  &  \\ 
   water & 0.01 &  &  &  &  &  \\ 
-  zoning & 0.38 &  &  &  &  &  \\ 
+  zoning &  &  &  &  &  &  \\ 
   elementary.school & 0.09 &  &  &  &  &  \\ 
   high.school & 0.03 &  &  &  &  &  \\ 
   grid.street & 0.17 &  &  &  &  &  \\ 
   age.js & 0.05 & 0.00 & 0.02 & 0.04 & 0.06 & 0.69 \\ 
   race.js & 0.04 & 0.00 & 0.01 & 0.02 & 0.05 & 0.61 \\ 
   housing.js & 0.02 & 0.00 & 0.00 & 0.01 & 0.02 & 0.31 \\ 
-  block.angle & 0.06 & 0.00 & 0.00 & 0.00 & 0.16 & 0.31 \\ 
+  block.angle & 0.18 & 0.00 & 0.00 & 0.00 & 0.50 & 0.98 \\ 
   family.js & 0.06 & 0.00 & 0.02 & 0.04 & 0.07 & 0.60 \\ 
    \hline
 \end{tabular}
@@ -455,44 +459,32 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 
 \section*{Results}
 
-
-
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Dec 11 18:50:16 2013
+% Wed Jan  8 13:06:03 2014
 \begin{table}[ht]
 \centering
-\begin{tabular}{rr}
+\begin{tabular}{rrr}
   \hline
- & x \\ 
+ & no\_pop & pop \\ 
   \hline
-(Intercept) & 0.0006 \\ 
-  sufficient\_pop & -0.0024 \\ 
-  rail & 0.0224 \\ 
-  water & 0.0130 \\ 
-  elementary\_school & 0.0032 \\ 
-  high\_school & 0.0092 \\ 
-  block\_angle & -0.0050 \\ 
-  sufficient\_pop:js\_age & -0.0012 \\ 
-  sufficient\_pop:js\_family & -0.0010 \\ 
-  sufficient\_pop:js\_race & 0.0028 \\ 
-  sufficient\_pop:js\_housing & -0.0004 \\ 
-  sufficient\_pop:rail & -0.0000 \\ 
-  sufficient\_pop:water & 0.0034 \\ 
-  sufficient\_pop:elementary\_school & -0.0112 \\ 
-  sufficient\_pop:high\_school & 0.0026 \\ 
-  sufficient\_pop:block\_angle & 0.0070 \\ 
+(Intercept) & 0.0019 & 0.0006 \\ 
+  Railroad & 0.0253 & 0.0255 \\ 
+  Water & 0.0130 & 0.0166 \\ 
+  Highway & 0.0057 &  \\ 
+  Major Street & 0.0065 & -0.0206 \\ 
+  Elementary School & 0.0103 & 0.0110 \\ 
+  High School & 0.0084 & 0.0104 \\ 
+  Block Angle & -0.0144 & -0.0263 \\ 
+  Family Structure &  & -0.0017 \\ 
+  Race and Ethnicity &  & 0.0022 \\ 
+  Age Structure &  & -0.0032 \\ 
+  Housing Structure &  & -0.0012 \\ 
    \hline
 \end{tabular}
 \end{table}
 
 
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading common}}\end{kframe}
-\end{knitrout}
 
 \begin{figure}
 \begin{knitrout}
@@ -509,9 +501,12 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 \caption{Predicted Neighborhoods}
 \end{figure}
 
-TODO.. write algorithm that assigns different color to each singly
-colored connected component
 
-TODO.. predict all of chicago
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
+\end{figure}
+
+
+TODO rand index on community measures
 
 \end{document}

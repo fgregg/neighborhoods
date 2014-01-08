@@ -42,8 +42,8 @@ M <- model.matrix(~ (sufficient_pop:(js_age +
                                      js_housing) +
                      sufficient_pop*(rail +
                                      water +
-                                     highways +
-                                     grid_streets +
+                                     highway +
+                                     grid_street +
                                      elementary_school +
                                      high_school +
                                      block_angle)),

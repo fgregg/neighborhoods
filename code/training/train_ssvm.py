@@ -4,9 +4,10 @@ import numpy
 from pystruct.models import GraphCRF, PottsEdgeFeatureGraphCRF
 from pystruct.learners import NSlackSSVM as learner
 
-parser = argparse.ArgumentParser(description='Train Potts Model.')
+parser = argparse.ArgumentParser(description='Train Potts Model.'
 parser.add_argument('regularizer', metavar='C', type=float, nargs='+',
                     help='regularizer', default=0.01)
+
 
 args = parser.parse_args()
 
