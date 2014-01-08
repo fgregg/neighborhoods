@@ -7,6 +7,20 @@ library(igraph)
 #pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
 #devtools::load_all(pkg)
 
+community_area <- readOGR("../../admin_areas/Kmlcommunityareas.kml",
+                     layer = "COMMUNITYAREA")
+community_area <- spTransform(community_area,
+                              CRS(projection)
+                              )
+
+
+parks <- readOGR("../../barriers/Kmlchicagoparks.kml",
+                     layer = "Chicago Parks")
+
+parks <- spTransform(parks,
+                     CRS(projection)
+                     )
+
 
 expit <- function(x) {
     exp(x)/(exp(x) + 1)
@@ -36,6 +50,26 @@ for (hood_label in unique(segments)) {
 
 hood_frequency <- table(hoods)
 
-pdf()
-plot(chicago.blocks.poly, col=rgb(t(col2rgb(sample(colors())[hoods %% 657 + 1])/255), alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)), border="transparent")
+map_colors <- sample(colors())[order(hood_frequency) %% 657 + 1]
+
+pdf("predicted_chicago_neighborhoods.pdf")
+plot(chicago.blocks.poly,
+     col=rgb(t(col2rgb(map_colors[hoods %% 657 + 1])/255),
+       alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)),
+     border="transparent")
 dev.off()
+
+pdf("predicted_chicago_neighborhoods_ca.pdf")
+plot(chicago.blocks.poly,
+     col=rgb(t(col2rgb(map_colors[hoods %% 657 + 1])/255),
+       alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)),
+     border="transparent")
+plot(parks[sapply(slot(parks, "polygons"), slot, "area") > 0.00001,],
+     col="#DBEADC",
+     border="transparent",
+     add=TRUE)
+plot(community_area,
+     add=TRUE)
+dev.off()
+
+
