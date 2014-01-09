@@ -300,3 +300,19 @@ rotate = function(pts,angle){
   cbind(co * pts[,1] - si * pts[,2], si * pts[,1] + co * pts[,2])
 }
 
+segmentsToHoods <- function(segment, G) {
+
+    hoods <- rep(0, length(segments))
+    color = 1
+
+    for (hood_label in unique(segments)) {
+        G1 <- delete.vertices(G, V(G)[segments != hood_label])
+        GLIST <- decompose.graph(G1)
+
+        for (i in 1:length(GLIST)) {
+            hoods[as.numeric(V(GLIST[[i]])$name)] <- color
+            color <- color + 1
+        }
+    }        
+    return(hoods)
+}

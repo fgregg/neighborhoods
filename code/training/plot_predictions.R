@@ -17,19 +17,8 @@ G <- igraph::graph.data.frame(node_edgelist)
 
 segments <- read.table("predicted_borders.csv")$V1+1
 
-hoods <- rep(0, length(segments))
-color = 1
-
-for (hood_label in unique(segments)) {
-    G1 <- delete.vertices(G, V(G)[segments != hood_label])
-    GLIST <- decompose.graph(G1)
-
-    for (i in 1:length(GLIST)) {
-        hoods[as.numeric(V(GLIST[[i]])$name)] <- color
-        color <- color + 1
-    }
-}        
-
+hoods <- common::segmentsToHoods(segments, G)
+    
 hood_frequency <- table(hoods)
 
 set.seed(as.double(Sys.time()))
