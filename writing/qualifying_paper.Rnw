@@ -92,7 +92,7 @@ So much for theory, let's see how this works in practice. Let's take
 the case of Chicago neighborhoods.  
 
 \subsection*{Data}
-<<loadFeatures, include=FALSE, cache=FALSE>>= 
+<<loadFeatures, include=FALSE, cache=TRUE>>= 
 setwd('../code/training/')
 source('features.R')
 setwd(CURDIR)
@@ -178,7 +178,7 @@ family structure, and housing ownership patterns. We can define
 measures between blocks for these data. 
 
 The measure we will use is the Jensen Shannon Divergence, which is a
-symmetric measure of the similarity of distributions that ranges from
+symmetric measure of the distance between distributions that ranges from
 0 to 1. 
 
 For race, the distribution is the number people coded by the Census as
@@ -282,13 +282,6 @@ plot(all_edges$lines, col=c("#00000022", "red")[features$high_school + 1])
 \end{figure}
 
 \begin{figure}
-<<zoningImage, dev='pdf'>>= 
-plot(all_edges$lines, col=c("#00000022", "red")[features$zoning + 1])
-@ 
-\caption{Zoning Differences}
-\end{figure}
-
-\begin{figure}
 <<sufficientImage, dev='pdf'>>= 
 plot(all_edges$lines, col=c("#00000022", "red")[features$sufficient_pop + 1])
 @ 
@@ -334,7 +327,84 @@ plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
 
+\section*{Modeling}
+We'd handle the empty or sparsely populated block by using a dummy
+variable to effectively learned two model at once. The non-populated
+block model is 
+
+\begin{align}
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w}) = \sum_{<i
+    j>}^{\mathcal{N}}\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w})  
+\end{align}
+
+\begin{equation}
+\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w}) = \begin{cases}
+    0 \quad\quad\quad y_i = y_j \\
+    \phi(\mathbf{s}_{i,j}, \mathbf{w}) \quad y_i \neq y_j \\
+  \end{cases}
+\end{equation}
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) = & w_0 
+                                     + w_1\text{Rail}_{i,j} 
+                                     + w_2\text{Water}_{i,j} 
+                                     + w_3\text{Highway}_{i,j} \\
+                                     &+ w_4\text{Major Street}_{i,j} 
+                                     + w_5\text{Elementary School}_{i,j}\\ 
+                                     & + w_6\text{High School}_{i,j}
+                                     + w_7\text{Block Angle}_{i,j} \\
+\end{align}
+
+While the model for the populated neighboring blocks will be
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) = & w_8 
+                                     + w_9\text{Rail}_{i,j} 
+                                     + w_{10}\text{Water}_{i,j} 
+                                     + w_{11}\text{Highway}_{i,j}\\
+                                     &+ w_{12}\text{Major Street}_{i,j} 
+                                     + w_{13}\text{Elementary School}_{i,j}\\
+                                     &+ w_{14}\text{High School}_{i,j} 
+                                     + w_{15}\text{Block Angle}_{i,j}\\
+                                     &+ w_{16}\text{Family Structure}_{i,j}
+                                     + w_{17}\text{Race and Ethnicity}_{i_j}\\
+                                     &+ w_{18}\text{Age Structure}  
+                                     + w_{19}\text{Housing Structure}
+\end{align}
+
+We can combine these models by creating a dummy variable that takes a
+value of 1 if neighboring block have sufficient population to support
+the demographic distance measures, and 0 if the neighboring blocks do
+not. We'll interact this dummy with the populated model and add the
+variables to our unpopulated model.
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_0 
+                                     + w_1\text{Rail}_{i,j} 
+                                     + w_2\text{Water}_{i,j} 
+                                     + w_3\text{Highway}_{i,j} \\
+                                     &+ w_4\text{Major Street}_{i,j} 
+                                     + w_5\text{Elementary School}_{i,j}\\ 
+                                     & + w_6\text{High School}_{i,j}
+                                     + w_7\text{Block Angle}_{i,j} \\
+                                     &+ \text{Populated Blocks}_{i,j}\cdot\\
+                                     &\quad (w_8
+                                     + w_9\text{Rail}_{i,j} 
+                                     + w_{10}\text{Water}_{i,j}\\ 
+                                     &\quad+ w_{11}\text{Highway}_{i,j}
+                                     + w_{12}\text{Major Street}_{i,j}\\ 
+                                     &\quad + w_{13}\text{Elementary School}_{i,j} 
+                                     + w_{14}\text{High School}_{i,j}\\ 
+                                     &\quad + w_{15}\text{Block Angle}_{i,j}
+                                     + w_{16}\text{Family Structure}_{i,j}\\
+                                     &\quad + w_{17}\text{Race and Ethnicity}_{i_j}
+                                     + w_{18}\text{Age Structure}\\  
+                                     &\quad+ w_{19}\text{Housing Structure})\\
+\end{align}
+
 \section*{Results}
+
+After estimating the model using the pystruct\footnote{\url{https://github.com/pystruct/pystruct/tree/rand_loss}}
 
 <<weightTable, results='asis', cache=TRUE>>=
 setwd('../code/training/')
@@ -382,6 +452,8 @@ rownames(models) <- c('(Intercept)',
                       'Age Structure', 
                       'Housing Structure')
 
+
+
 models['Highway', "pop"] <- NA
 
 WT <- xtable(models, digits=4)
@@ -390,7 +462,7 @@ print(WT)
 
 
 \begin{figure}
-<<plotPredictions, echo=FALSE, cache=FALSE, dev='pdf', message=FALSE>>=
+<<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
 setwd('../code/training/')
 source('plot_predictions.R')
 setwd(CURDIR)
@@ -404,6 +476,8 @@ setwd(CURDIR)
 \end{figure}
 
 
-TODO rand index on community measures
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods_ca.pdf}
+\end{figure}
 
 \end{document}

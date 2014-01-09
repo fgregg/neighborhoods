@@ -201,7 +201,7 @@ family structure, and housing ownership patterns. We can define
 measures between blocks for these data. 
 
 The measure we will use is the Jensen Shannon Divergence, which is a
-symmetric measure of the similarity of distributions that ranges from
+symmetric measure of the distance between distributions that ranges from
 0 to 1. 
 
 For race, the distribution is the number people coded by the Census as
@@ -457,10 +457,98 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
 
+\section*{Modeling}
+We'd handle the empty or sparsely populated block by using a dummy
+variable to effectively learned two model at once. The non-populated
+block model is 
+
+\begin{align}
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w}) = \sum_{<i
+    j>}^{\mathcal{N}}\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w})  
+\end{align}
+
+\begin{equation}
+\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w}) = \begin{cases}
+    0 \quad\quad\quad y_i = y_j \\
+    \phi(\mathbf{s}_{i,j}, \mathbf{w}) \quad y_i \neq y_j \\
+  \end{cases}
+\end{equation}
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) = & w_0 
+                                     + w_1\text{Rail}_{i,j} 
+                                     + w_2\text{Water}_{i,j} 
+                                     + w_3\text{Highway}_{i,j} \\
+                                     &+ w_4\text{Major Street}_{i,j} 
+                                     + w_5\text{Elementary School}_{i,j}\\ 
+                                     & + w_6\text{High School}_{i,j}
+                                     + w_7\text{Block Angle}_{i,j} \\
+\end{align}
+
+While the model for the populated neighboring blocks will be
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) = & w_8 
+                                     + w_9\text{Rail}_{i,j} 
+                                     + w_{10}\text{Water}_{i,j} 
+                                     + w_{11}\text{Highway}_{i,j}\\
+                                     &+ w_{12}\text{Major Street}_{i,j} 
+                                     + w_{13}\text{Elementary School}_{i,j}\\
+                                     &+ w_{14}\text{High School}_{i,j} 
+                                     + w_{15}\text{Block Angle}_{i,j}\\
+                                     &+ w_{16}\text{Family Structure}_{i,j}
+                                     + w_{17}\text{Race and Ethnicity}_{i_j}\\
+                                     &+ w_{18}\text{Age Structure}  
+                                     + w_{19}\text{Housing Structure}
+\end{align}
+
+We can combine these models by creating a dummy variable that takes a
+value of 1 if neighboring block have sufficient population to support
+the demographic distance measures, and 1 if the neighboring blocks do
+not. We'll interact this dummy with the populated model and add the
+variables to our unpopulated model.
+
+\begin{align}
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_0 
+                                     + w_1\text{Rail}_{i,j} 
+                                     + w_2\text{Water}_{i,j} 
+                                     + w_3\text{Highway}_{i,j} \\
+                                     &+ w_4\text{Major Street}_{i,j} 
+                                     + w_5\text{Elementary School}_{i,j}\\ 
+                                     & + w_6\text{High School}_{i,j}
+                                     + w_7\text{Block Angle}_{i,j} \\
+                                     &+ \text{Populated Blocks}_{i,j}\cdot\\
+                                     &\quad (w_8
+                                     + w_9\text{Rail}_{i,j} 
+                                     + w_{10}\text{Water}_{i,j}\\ 
+                                     &\quad+ w_{11}\text{Highway}_{i,j}
+                                     + w_{12}\text{Major Street}_{i,j}\\ 
+                                     &\quad + w_{13}\text{Elementary School}_{i,j} 
+                                     + w_{14}\text{High School}_{i,j}\\ 
+                                     &\quad + w_{15}\text{Block Angle}_{i,j}
+                                     + w_{16}\text{Family Structure}_{i,j}\\
+                                     &\quad + w_{17}\text{Race and Ethnicity}_{i_j}
+                                     + w_{18}\text{Age Structure}\\  
+                                     &\quad+ w_{19}\text{Housing Structure})\\
+\end{align}
+
+
+
+For the empty or sparsely unpopulated blocks, we do not want to
+
+Since not every pair of blocks are sufficiently populated to define a
+distanance
+
+Every pair of neighboring blocks 
+
+Because 
+
 \section*{Results}
 
+
+
 % latex table generated in R 3.0.2 by xtable 1.7-1 package
-% Wed Jan  8 13:06:03 2014
+% Wed Jan  8 19:20:33 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrr}
@@ -507,6 +595,8 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 \end{figure}
 
 
-TODO rand index on community measures
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods_ca.pdf}
+\end{figure}
 
 \end{document}
