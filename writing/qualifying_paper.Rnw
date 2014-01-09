@@ -404,7 +404,27 @@ variables to our unpopulated model.
 
 \section*{Results}
 
-After estimating the model using the pystruct\footnote{\url{https://github.com/pystruct/pystruct/tree/rand_loss}}
+After training the model using the pystruct structure learning
+framework\footnote{\url{https://github.com/pystruct/pystruct/tree/rand_loss}},
+we get two classes of results: predictions of Chicago neighborhoods
+and parameter estimates. 
+
+Let's take up the predictions first:
+
+
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
+\caption{Predicted Neighborhoods in Chicago}
+\end{figure}
+
+
+
+
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods_ca.pdf}
+\end{figure}
+
+
 
 <<weightTable, results='asis', cache=TRUE>>=
 setwd('../code/training/')
@@ -471,13 +491,5 @@ setwd(CURDIR)
 \end{figure}
 
 
-\begin{figure}
-\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
-\end{figure}
-
-
-\begin{figure}
-\includegraphics{../code/training/predicted_chicago_neighborhoods_ca.pdf}
-\end{figure}
 
 \end{document}
