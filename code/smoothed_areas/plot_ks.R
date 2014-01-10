@@ -1,22 +1,27 @@
 source('ks_to_blocks.R')
- 
+
+classes <- exp(read.csv('../interchange/unary.csv'))
+
+map.colors = colors()
 
 map.colors = rep(c('#B2DF8A', "#A6CEE3", "#1F78B4", "#33A02C",
                    "#FB9A99", "#E31A1C", "#FDBF6F"),
-             length.out = length(neighborhoods))
+             length.out = dim(unary)[1]-1)
 
-pdf("blocks.pdf")
+map.colors = sample(map.colors)
+
+#pdf("blocks.pdf")
 #Plot KDE
 plot(blocks.poly,
      col = common::probColors(map.colors, classes),
      border=rgb(0,0,0,0.04),
      lwd=0.01)
-dev.off()
+#dev.off()
 
 n.points <- 2^9
 C = rasterTrainKDE(listings, neighborhoods, range, n.points, 0.0000012)
 
-pdf("smooth.pdf")
+#pdf("smooth.pdf")
 common::basePlot(range)
 common::plotPredictions(C, map.colors, 100000, range)
 
@@ -53,4 +58,4 @@ text(hood.medoids[hood.medoids$neighborhood == "southport corridor",
      cex=.3,
      srt=90)
 
-dev.off()
+#dev.off()

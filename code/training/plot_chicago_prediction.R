@@ -1,11 +1,11 @@
 library(devtools)
 library(igraph)
 
-#pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
-#devtools::load_all(pkg)
+pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
+devtools::load_all(pkg)
 
-#pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
-#devtools::load_all(pkg)
+pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
+devtools::load_all(pkg)
 
 community_area <- readOGR("../../admin_areas/Kmlcommunityareas.kml",
                      layer = "COMMUNITYAREA")
@@ -29,24 +29,13 @@ expit <- function(x) {
 node_neighbors <-spdep::poly2nb(chicago.blocks.poly,
                                 queen=FALSE,
                                 foundInBox=rgeos::gUnarySTRtreeQuery(chicago.blocks.poly))
-node_edgelist <- common::nb2edgelist(node_neighbors)[all_edges$spatial_lines,]
+node_edgelist <- common::nb2edgelist(node_neighbors)[chicago.all_edges$spatial_lines,]
 
 G <- igraph::graph.data.frame(node_edgelist)
 
 segments <- read.table("predicted_chicago.csv")$V1+1
 
-hoods <- rep(0, length(segments))
-color = 1
-
-for (hood_label in unique(segments)) {
-    G1 <- delete.vertices(G, V(G)[segments != hood_label])
-    GLIST <- decompose.graph(G1)
-
-    for (i in 1:length(GLIST)) {
-        hoods[as.numeric(V(GLIST[[i]])$name)] <- color
-        color <- color + 1
-    }
-}        
+hoods <- common::segmentsToHoods(segments, G)
 
 hood_frequency <- table(hoods)
 

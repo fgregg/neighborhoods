@@ -2,9 +2,10 @@ import argparse
 import csv
 import numpy
 from pystruct.models import GraphCRF, PottsEdgeFeatureGraphCRF
+from pystruct.models import MixedSemanticPottsEdgeFeatureGraphCRF
 from pystruct.learners import NSlackSSVM as learner
 
-parser = argparse.ArgumentParser(description='Train Potts Model.'
+parser = argparse.ArgumentParser(description='Train Potts Model.')
 parser.add_argument('regularizer', metavar='C', type=float, nargs='+',
                     help='regularizer', default=0.01)
 
@@ -13,9 +14,18 @@ args = parser.parse_args()
 
 PATH = '/home/fgregg/academic/neighborhoods/code/interchange/'
 
-node_labels = numpy.loadtxt(PATH + 'potts_labels.csv', skiprows = 1)
-#node_labels = numpy.loadtxt(PATH + 'ks_label.csv', skiprows = 1)
+#node_labels = numpy.loadtxt(PATH + 'potts_labels.csv', skiprows = 1)
+node_labels = numpy.loadtxt(PATH + 'ks_label.csv', skiprows = 1)
+
+print node_labels
+
+node_features = numpy.loadtxt(PATH + 'block_pop.csv', skiprows = 1, dtype=numpy.float)
+
 _, node_labels = numpy.unique(node_labels, return_inverse=True)
+
+
+print numpy.bincount(node_labels)
+
 
 edge_attributes = numpy.loadtxt('model.matrix', skiprows=1)
 
@@ -24,14 +34,23 @@ edges += -1
 
 Y = (numpy.array(node_labels, dtype=numpy.int),)
 X = numpy.empty((len(node_labels), 0), dtype=numpy.float)
+#X = node_features
+#X = X.reshape((-1, 1))
+
 
 E = numpy.array(edges, dtype=numpy.int)
 X = ((X, E, edge_attributes),)
 
-model = PottsEdgeFeatureGraphCRF(n_states = 23, 
+model = PottsEdgeFeatureGraphCRF(n_states = 25, 
                                  n_features = 0,
                                  n_edge_features = edge_attributes.shape[1],
                                  inference_method = 'qpbo')
+
+# model = MixedSemanticPottsEdgeFeatureGraphCRF(n_states = 23, 
+#                                               n_features = 1,
+#                                               n_edge_features = edge_attributes.shape[1],
+#                                               inference_method = 'qpbo',
+#                                               semantic_labels = [22])
 
 
 svm = learner(model, 

@@ -18,7 +18,7 @@ G <- igraph::graph.data.frame(node_edgelist)
 segments <- read.table("predicted_borders.csv")$V1+1
 
 hoods <- common::segmentsToHoods(segments, G)
-    
+
 hood_frequency <- table(hoods)
 
 set.seed(as.double(Sys.time()))

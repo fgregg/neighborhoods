@@ -300,19 +300,27 @@ rotate = function(pts,angle){
   cbind(co * pts[,1] - si * pts[,2], si * pts[,1] + co * pts[,2])
 }
 
-segmentsToHoods <- function(segment, G) {
+segmentsToHoods <- function(segments, G, semantic=-1) {
 
     hoods <- rep(0, length(segments))
     color = 1
 
     for (hood_label in unique(segments)) {
-        G1 <- delete.vertices(G, V(G)[segments != hood_label])
-        GLIST <- decompose.graph(G1)
+        if (hood_label != semantic) {
+            ignorable_vertices = V(G)[as.character(which(segments != hood_label))]
+            G1 <- delete.vertices(G, ignorable_vertices)
+            GLIST <- decompose.graph(G1)
 
-        for (i in 1:length(GLIST)) {
-            hoods[as.numeric(V(GLIST[[i]])$name)] <- color
+            for (i in 1:length(GLIST)) {
+                indices = as.numeric(V(GLIST[[i]])$name)
+                hoods[indices] <- color
+                color <- color + 1
+            }
+        }
+        else {
+            hoods[segments == hood_label] <- color
             color <- color + 1
         }
-    }        
+    }
     return(hoods)
 }
