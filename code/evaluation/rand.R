@@ -23,8 +23,6 @@ G <- igraph::graph.data.frame(node_edgelist)
 
 segments <- read.table("../training/predicted_chicago.csv")$V1+1
 
-hoods <- common::segmentsToHoods(segments, G)
-
 blocks_ca <- apply(rgeos::gContains(community_area,
                                     chicago.blocks.poly,
                                     byid=TRUE),
@@ -34,4 +32,10 @@ blocks_ca <- apply(rgeos::gContains(community_area,
 blocks_ca <- as.numeric(blocks_ca)
 missing <- is.na(x)
 
-phyclust::RRand(hoods[!missing], x[!missing])
+hoods <- common::segmentsToHoods(segments, G)
+
+hood_frequency <- table(hoods)
+
+infrequent <- hood_frequency[hoods] < 10
+
+phyclust::RRand(hoods[!missing & !infrequent], x[!missing & !infrequent])
