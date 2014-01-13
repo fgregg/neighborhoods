@@ -307,8 +307,8 @@ segmentsToHoods <- function(segments, G, semantic=-1) {
 
     for (hood_label in unique(segments)) {
         if (hood_label != semantic) {
-            ignorable_vertices = V(G)[as.character(which(segments != hood_label))]
-            G1 <- delete.vertices(G, ignorable_vertices)
+            ignorable_vertices = as.character(which(segments != hood_label))
+            G1 <- delete.vertices(G, V(G)[ignorable_vertices])
             GLIST <- decompose.graph(G1)
 
             for (i in 1:length(GLIST)) {

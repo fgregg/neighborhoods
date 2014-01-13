@@ -63,5 +63,14 @@ if (!common::from_source()) {
 
   write.csv(unary, file="../interchange/unary.csv", row.names=FALSE)
 
-  write.csv(apply(unary, 1, which.max), file="../interchange/ks_label.csv", row.names=FALSE)
+  node_neighbors <-spdep::poly2nb(blocks.poly,
+                                queen=FALSE,
+                                foundInBox=rgeos::gUnarySTRtreeQuery(blocks.poly))
+  node_edgelist <- common::nb2edgelist(node_neighbors)[all_edges$spatial_lines,]
+  G <- igraph::graph.data.frame(node_edgelist)
+
+  ks_labels <- apply(unary, 1, which.max)
+
+  segments <- common::hoodsToSegments(ks_labels, G)
+  write.csv(segments, file="../interchange/ks_label.csv", row.names=FALSE)
 }
