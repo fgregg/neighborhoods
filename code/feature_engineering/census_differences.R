@@ -271,6 +271,7 @@ censusDifferences <- function(nodes, make_plots=FALSE, cached_edges) {
 }
 
 
+
 if (!common::from_source()) {
   differences <- censusDifferences(blocks.poly)
   write.csv(differences$race,
@@ -281,4 +282,70 @@ if (!common::from_source()) {
             file="../interchange/js_family.csv", row.names=FALSE)
   write.csv(differences$housing,
             file="../interchange/js_housing.csv", row.names=FALSE)
+}
+
+differences <- function(column) {
+    overall <- (sum(nodes@data[, column], na.rm=TRUE)
+                /sum(nodes@data[, "P0040001"], na.rm=TRUE))
+    smoother = 1000
+    no_pop <- nodes@data[, "P0040001"] < 30
+    
+    block_A <- ((nodes@data[edgelist[,1], column] + overall*smoother)
+                /(nodes@data[edgelist[,1], "P0040001"] + smoother))
+    block_B <- ((nodes@data[edgelist[,2], column] + overall*smoother)
+                /(nodes@data[edgelist[,2], "P0040001"] + smoother))
+
+    block_A[no_pop] <- NA
+    block_B[no_pop] <- NA
+
+    odds_A <- block_A/(1 - block_A)
+    odds_B <- block_B/(1 - block_B)
+
+    print(head(block_A))
+    print(head(odds_A))
+
+    classIntervals(abs(log(odds_A)
+                       - log(odds_B)))
+}
+
+euclideanDistance <- function(columns) {
+    normalizer <- nodes@data[, "P0040001"]
+    normalizer <- ifelse(normalizer == 0, NA, 1)
+
+    block_A <- nodes@data[edgelist[,1], columns]/normalizer[edgelist[,1]]
+    block_B <- nodes@data[edgelist[,2], columns]/normalizer[edgelist[,2]]
+
+
+    distance <- sqrt(rowSums((block_A - block_B)^2))
+
+    classIntervals(distance)
+
+}
+
+
+vectorDistance <- function(columns) {
+
+
+    block_A <- (nodes@data[edgelist[,1], columns]
+                /nodes@data[edgelist[,1], "P0040001"])
+    block_B <- (nodes@data[edgelist[,2], columns]
+                /nodes@data[edgelist[,2], "P0040001"])
+
+    distance <- rowSums(block_A * block_B)
+}
+
+mahalanobisDistance <- function(columns) {
+
+    block_A <- nodes@data[edgelist[,1], columns]
+    block_B <- nodes@data[edgelist[,2], columns]
+
+    diff_blocks <- as.matrix(block_A - block_B)
+
+    C = solve(cov(diff_blocks))
+
+    distances <- apply(diff_blocks, 1, function(x) t(x) %*% C %*% x)
+
+    distances <- sqrt(distances)
+
+    classIntervals(distances)
 }

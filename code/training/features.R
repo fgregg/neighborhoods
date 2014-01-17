@@ -8,6 +8,10 @@ js_family <- read.csv('../interchange/js_family.csv')$x
 js_race <- read.csv('../interchange/js_race.csv')$x
 js_housing <- read.csv('../interchange/js_housing.csv')$x
 
+cosine_race <- read.csv('../interchange/cosine_race.csv')$x
+cosine_race[is.na(cosine_race)] <- 0
+
+
 rail <- read.csv('../interchange/rail_intersects.csv')$x
 highway <- read.csv('../interchange/highway_intersects.csv')$x
 grid_street <- read.csv('../interchange/grid_intersects.csv')$x
@@ -38,7 +42,7 @@ features <- data.frame(sufficient_pop,
 
 M <- model.matrix(~ (sufficient_pop:(js_age + 
                                      js_family +
-                                     js_race +
+                                     cosine_race +
                                      js_housing) +
                      sufficient_pop*(rail +
                                      water +
@@ -48,6 +52,8 @@ M <- model.matrix(~ (sufficient_pop:(js_age +
                                      high_school +
                                      block_angle)),
                   data=features)
+
+
 
 write.table(M, "model.matrix", row.names=FALSE)
 
