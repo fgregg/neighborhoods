@@ -326,12 +326,15 @@ euclideanDistance <- function(columns) {
 vectorDistance <- function(columns) {
 
 
-    block_A <- (nodes@data[edgelist[,1], columns]
-                /nodes@data[edgelist[,1], "P0040001"])
-    block_B <- (nodes@data[edgelist[,2], columns]
-                /nodes@data[edgelist[,2], "P0040001"])
+    block_A <- nodes@data[edgelist[,1], columns]
+    block_B <- nodes@data[edgelist[,2], columns]
+
+    block_A <- block_A/rowSums(block_A)
+    block_B <- block_B/rowSums(block_B)
 
     distance <- rowSums(block_A * block_B)
+
+    return(1-distance)
 }
 
 mahalanobisDistance <- function(columns) {
@@ -348,4 +351,54 @@ mahalanobisDistance <- function(columns) {
     distances <- sqrt(distances)
 
     classIntervals(distances)
+}
+
+jsDistance <-function(columns) {
+    normalizer <- colSums(nodes@data[, columns])/sum(nodes@data[, columns])
+    smoother <- 0.1
+
+    block_A <- ((nodes@data[edgelist[,1], columns] + normalizer * smoother)
+                /(nodes@data[edgelist[,1], "P0040001"] + smoother))
+    block_B <- ((nodes@data[edgelist[,2], columns] + normalizer * smoother)
+                /(nodes@data[edgelist[,2], "P0040001"] + smoother))
+
+    m <- 0.5 * (block_A + block_B)
+
+    js <- (0.5 * rowSums((log(block_A) - log(m)) * block_A)
+           + 0.5 * rowSums((log(block_B) - log(m)) * block_B))
+
+    return(js)
+}
+
+emdDistance <-function(columns) {
+    distances <- rep(0, dim(edgelist)[1])
+
+    block_A <- ((nodes@data[edgelist[,1], columns])
+                /(nodes@data[edgelist[,1], "P0040001"]))
+    block_B <- ((nodes@data[edgelist[,2], columns])
+                /(nodes@data[edgelist[,2], "P0040001"]))
+
+    for (i in 1:length(distances)) {
+        distances[i] <- earthmovdist::emdL1(as.numeric(block_A[i,]),
+                                            as.numeric(block_B[i,]))
+    }
+
+    return(distances)
+
+}
+
+chiDistance <- function(columns) {
+    block_A <- nodes@data[edgelist[,1], columns]
+    block_B <- nodes@data[edgelist[,2], columns]
+
+    block_A <- block_A/rowSums(block_A)
+    block_B <- block_A/rowSums(block_B)
+
+    missing <- rowSums(block_A + block_B, na.rm=TRUE) == 0
+    
+    distance <- rowSums(((block_A - block_B)^2)/(block_A + block_B), na.rm=TRUE)
+
+    distance[missing] <- NA
+
+    return(distance)
 }
