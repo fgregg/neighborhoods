@@ -322,6 +322,17 @@ euclideanDistance <- function(columns) {
 
 }
 
+absDistance <- function(column) {
+    normalizer <- sapply(slot(nodes, "polygons"), slot, "area")
+    
+    block_A <- nodes@data[edgelist[,1], column]/normalizer[edgelist[,1]]
+    block_B <- nodes@data[edgelist[,2], column]/normalizer[edgelist[,2]]
+
+    distance <- (abs(log(block_A) - log(block_B)))
+    distance[is.infinite(distance)] <- NA
+
+    return(distance)
+}
 
 vectorDistance <- function(columns) {
 
@@ -392,7 +403,7 @@ chiDistance <- function(columns) {
     block_B <- nodes@data[edgelist[,2], columns]
 
     block_A <- block_A/rowSums(block_A)
-    block_B <- block_A/rowSums(block_B)
+    block_B <- block_B/rowSums(block_B)
 
     missing <- rowSums(block_A + block_B, na.rm=TRUE) == 0
     
@@ -400,5 +411,113 @@ chiDistance <- function(columns) {
 
     distance[missing] <- NA
 
+    distance <- exp(-distance)
+
     return(distance)
 }
+
+minPair <- function(column) {
+    block_A <- nodes@data[edgelist[,1], column]
+    block_B <- nodes@data[edgelist[,2], column]
+
+    return(apply(cbind(block_A, block_B), 1, min))
+}
+
+ages <- c("P0120003", # Under 5, male
+          "P0120027", # Under 5, female
+          "P0120004", # Under 5-9, male
+          "P0120005", # Under 10-14, male
+          "P0120006", # Under 15-17, male
+          "P0120028", # Under 5-9, female
+          "P0120029", # Under 10-14, female
+          "P0120030", # Under 15-17, female
+          "P0120007", # Under 18, 19, male
+          "P0120008", # Under 20, male
+          "P0120009", # Under 21, male
+          "P0120031", # Under 18, 19, female
+          "P0120032", # Under 20, female
+          "P0120033", # Under 21, female
+          "P0120010", # Under 22-24, male
+          "P0120011", # Under 25-29, male
+          "P0120034", # Under 22-24, female
+          "P0120035", # Under 25-29, female
+          "P0120012", # Under 30-34, male
+          "P0120013", # Under 35-39, male
+          "P0120014", # Under 40-44, male
+          "P0120015", # Under 45-49, male
+          "P0120016", # Under 50-54, male
+          "P0120017", # Under 55-59, male
+          "P0120018", # Under 60,61, male
+          "P0120019", # Under 62-64, male
+          "P0120036", # Under 30-34, female
+          "P0120037", # Under 35-39, female
+          "P0120038", # Under 40-44, female
+          "P0120039", # Under 45-49, female
+          "P0120040", # Under 50-54, female
+          "P0120041", # Under 55-59, female
+          "P0120042", # Under 60,61, female
+          "P0120043", # Under 62-64, female
+          "P0120020", # Under 65,66, male
+          "P0120021", # Under 67-69, male
+          "P0120022", # Under 70-74, male
+          "P0120023", # Under 75-79, male
+          "P0120024", # Under 80-84, male
+          "P0120025", # Under 85+, male
+          "P0120044", # Under 65,66, female
+          "P0120045", # Under 67-69, female
+          "P0120046", # Under 70-74, female
+          "P0120047", # Under 75-79, female
+          "P0120048", # Under 80-84, female
+          "P0120049") # Under 85+, female
+
+cosine_age <- vectorDistance(ages)
+chi_age <- chiDistance(ages)
+write.csv(cosine_age, "../interchange/cosine_age.csv", row.names=FALSE)
+write.csv(chi_age, "../interchange/chi_age.csv", row.names=FALSE)
+
+
+housing <- c("H0040002",
+             "H0040003",
+             "H0040004",
+             "H0050002",
+             "H0050003",
+             "H0050004",
+             "H0050005",
+             "H0050006",
+             "H0050007",
+             "H0050008")
+
+cosine_housing <- vectorDistance(housing)
+chi_housing <- chiDistance(housing)
+write.csv(cosine_housing, "../interchange/cosine_housing.csv", row.names=FALSE)
+write.csv(chi_housing, "../interchange/chi_housing.csv", row.names=FALSE)
+write.csv(minPair("H0050001"), "../interchange/min_housing_unit.csv", row.names=FALSE) 
+write.csv(absDistance("H0050001"),
+          "../interchange/diff_housing_unit.csv",
+          row.names=FALSE)
+
+family <- c("P0180003",
+            "P0180005",
+            "P0180006",
+            "P0180008",
+            "P0180009")
+
+cosine_family <- vectorDistance(family)
+chi_family <- chiDistance(family)
+write.csv(cosine_family, "../interchange/cosine_family.csv", row.names=FALSE)
+write.csv(chi_family, "../interchange/chi_family.csv", row.names=FALSE)
+write.csv(minPair("P0180001"), "../interchange/min_household.csv", row.names=FALSE) 
+
+ethnicity <- c("P0040003",
+               "P0050003",
+               "P0050004",
+               "P0050005",
+               "P0050006",
+               "P0050007",
+               "P0050008",
+               "P0050009")
+
+cosine_ethnicity <- vectorDistance(ethnicity)
+chi_ethnicity <- chiDistance(ethnicity)
+write.csv(cosine_ethnicity, "../interchange/cosine_ethnicity.csv", row.names=FALSE)
+write.csv(chi_ethnicity, "../interchange/chi_ethnicity.csv", row.names=FALSE)

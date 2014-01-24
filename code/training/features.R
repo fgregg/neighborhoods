@@ -45,10 +45,20 @@ block_angle <- block_angle %% pi/2 / (pi/2)
 population <- read.csv('../interchange/min_population.csv')$x
 households <- read.csv('../interchange/min_household.csv')$x
 housing_units <- read.csv('../interchange/min_housing_unit.csv')$x
-sufficient_pop <- as.numeric(population > 30)
-                             #& households > 1
-                             #& housing_units > 1)
 
+diff_housing_units <- read.csv('../interchange/diff_housing_unit.csv')$x
+diff_housing_units[is.na(diff_housing_units)] <- 100
+
+sufficient_pop <- as.numeric(population > 30)
+sufficient_households <- as.numeric(households > 5)
+sufficient_units <- as.numeric(housing_units > 5)
+
+just_households <- as.numeric(sufficient_households == 1
+                              & sufficient_pop == 0)
+
+just_units <- as.numeric(sufficient_units == 1
+                         & sufficient_households == 0
+                         & sufficient_pop == 0)
 
 features <- data.frame(sufficient_pop,
                        js_age,
@@ -72,16 +82,27 @@ features <- data.frame(sufficient_pop,
                        grid_street)
 
 M <- model.matrix(~ (sufficient_pop:(cosine_age + 
-                                     #cosine_family +
                                      cosine_ethnicity) +
-                                     #cosine_housing) +
                      sufficient_pop*(rail +
                                      water +
-                                     highway +
                                      grid_street +
                                      elementary_school +
                                      high_school +
-                                     block_angle)),
+                                     block_angle) +
+                     sufficient_households:cosine_family +
+                     just_households +
+                     just_households:(rail +
+                                      water +
+                                      grid_street +
+                                      elementary_school +
+                                      high_school +
+                                      block_angle) + 
+                     sufficient_units:(cosine_housing +
+                                       diff_housing_units) +
+                     just_units +
+                     just_units:(grid_street +
+                                 elementary_school +
+                                 block_angle)),
                   data=features)
 
 
