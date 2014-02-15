@@ -18,15 +18,15 @@ cosine_family[is.na(cosine_family)] <- 100
 cosine_housing[is.na(cosine_housing)] <- 100
 cosine_age[is.na(cosine_age)] <- 100
 
-chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
-chi_family <- read.csv('../interchange/chi_family.csv')$x
-chi_housing <- read.csv('../interchange/chi_housing.csv')$x
-chi_age <- read.csv('../interchange/chi_age.csv')$x
+## chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
+## chi_family <- read.csv('../interchange/chi_family.csv')$x
+## chi_housing <- read.csv('../interchange/chi_housing.csv')$x
+## chi_age <- read.csv('../interchange/chi_age.csv')$x
 
-chi_ethnicity[is.na(chi_ethnicity)] <- 100
-chi_family[is.na(chi_family)] <- 100
-chi_housing[is.na(chi_housing)] <- 100
-chi_age[is.na(chi_age)] <- 100
+## chi_ethnicity[is.na(chi_ethnicity)] <- 100
+## chi_family[is.na(chi_family)] <- 100
+## chi_housing[is.na(chi_housing)] <- 100
+## chi_age[is.na(chi_age)] <- 100
 
 
 
@@ -61,6 +61,8 @@ just_units <- as.numeric(sufficient_units == 1
                          & sufficient_pop == 0)
 
 features <- data.frame(sufficient_pop,
+                       just_households,
+                       just_units,
                        js_age,
                        js_family,
                        js_race,
@@ -69,10 +71,7 @@ features <- data.frame(sufficient_pop,
                        cosine_housing,
                        cosine_family,
                        cosine_age,
-                       chi_ethnicity,
-                       chi_housing,
-                       chi_family,
-                       chi_age,
+                       diff_housing_units,
                        rail,
                        highway,
                        water,
