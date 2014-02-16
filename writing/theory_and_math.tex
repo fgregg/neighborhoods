@@ -30,13 +30,13 @@ connected. We'll index the blocks as $1$, $2$, $3$, and $4$.
 
 \end{figure}
 
-In our city, there are two neighborhoods. Each block belongs to either
-one or the other of these neighborhoods. Neighboring blocks that are
-similar are more apt to belong to the same neighborhood and
-neighboring blocks that are different are more apt to belong to
-different neighborhoods.
+Suppose that, in our city, there are two neighborhoods. Each block
+belongs to either one or the other of these neighborhoods. Neighboring
+blocks that are similar are more apt to belong to the same
+neighborhood and neighboring blocks that are different are more apt to
+belong to different neighborhoods.
 
-We'll denote the neighborhood that the $i$th block belongs to as
+We will denote the neighborhood that the $i$th block belongs to as
 $y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
 
 \begin{figure}[!h]
@@ -65,8 +65,8 @@ neighborhood. One way to formalize this is is to score every possible
 assignment of neighborhoods in such a way that our preferred patterns
 have the best score.
 
-Let's call a pattern of assignment of blocks to neighborhoods as
-$\mathbf{y}$.  The score of $\mathbf{y}$ will be
+Denote a particular pattern of assignment of blocks to neighborhoods
+as $\mathbf{y}$.  The score of $\mathbf{y}$ will be
 $\operatorname{E}(\mathbf{y})$ which will take the following form:
 
 \begin{align}
@@ -84,10 +84,10 @@ the second block. Also, where
 \end{cases}
 \end{equation}
 
-Let's say that we want the lowest score. If we have our similarity
-measures $\phi_{i,j}$ be positive when blocks are similar and negative
-when blocks are different we will encourage neighboring blocks to
-belong to the same neighborhood. Let's say that our city has the
+Suppose that we want the lowest score. If our similarity
+measures $\phi_{i,j}$ are positive when blocks are similar and negative
+when blocks are different, then we will encourage neighboring blocks to
+belong to the same neighborhood. Let our city have the
 following $\phi$'s.
 
 \begin{align*}
@@ -122,19 +122,24 @@ neighborhood.
 
 \end{figure}
 
+\begin{table}[h]
 \input{energy_table.tex}
+\caption{Scores of Neighborhood Assignments}
+\label{table:energy}
+\end{table}
 
-In general, for a given set of similarity measures between blocks
-there are one or more assignment that have a lowest score. For small
-networks, we can find these best assignments by checking all possible
-patterns of assignments. Unfortunately, this becomes quickly
-impractical for larger cities. With two possible neighborhoods, the
-number of possible assignments is $2^N$ where N is the number of
-blocks.
+In our little city, there are two ways of assigning blocks to
+neighborhoods that minimizes the score (Table \ref{table:energy}) and
+in general this will be true. For a given set of similarity measures
+between blocks, there are one or more assignment that have a lowest
+score. For small networks, we can find these best assignments by
+checking all possible patterns of assignments. Unfortunately, this
+becomes quickly impractical for larger cities. With two possible
+neighborhoods, the number of possible assignments is $2^N$ where N is
+the number of blocks.
 
-However, even if we have many blocks, if we have similarities
-between the blocks we can find a lowest scoring assignment
-approximately using the QPBO algorithm.\footnote{Minimizing
+However, even if we have many blocks, we can find a lowest scoring
+assignment approximately using the QPBO algorithm.\footnote{Minimizing
   non-submodular functions with graph cuts – a review (are there any
   bounds worth mentioning}. This will be true for every scoring
 function that decomposes over blocks and edges, i.e. has the following
@@ -143,7 +148,6 @@ form:
 \begin{align}
 \operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
 \end{align}
-
 
 
 As we'll see, this will allow us to go in
@@ -174,7 +178,7 @@ assignment the lowest score of all possible ways of assigning blocks
 to neighborhoods. 
 
 However, this problem does not have a unique solution. In the above
-four block assignment, the lowest score assignments would have the
+four block assignments, the lowest score assignments would have the
 lowest scores if the similarities were 2, -2, -2, 2 or 1000, -1000,
 -1000, 1000. So, we will say that we want the lowest scoring
 assignment to not just have the lowest score, but we want to find the
@@ -214,9 +218,9 @@ equivalent to the following quadratic program.
 \end{align*}
 
 
-\subsection{Learning Sketch}
+\subsection*{Learning Sketch}
 We usually can't directly solve that quadratic program because there
-are so many possible assignments , however we can still find the
+are so many possible assignments, however we can still find the
 optimal weights through the following procedure.
 
 Initialize the weights to some starting value. Create an empty set of
@@ -239,99 +243,65 @@ Update the weights by solving the quadratic program:
 Now find the lowest energy neighborhood assignment given the updated
 weights. Call this assignment $\mathbf{y}_2$ and add it to the
 constraint set $\mathcal{S}$. Continue until the either the lowest
-energy assignment given the weights is either the target assignment.
+energy assignment given the weights is either the target
+assignment\footnote{Szummer, Martin, Pushmeet Kohli, and Derek
+  Hoiem. ``Learning CRFs Using Graph Cuts.'' In \emph{Computer
+    Vision–ECCV 2008}, 582595. Springer, 2008. \url{http:
+ //link.springer.com/chapter/10.1007/978-3-540-88688-4_43}}.
 
-See Szummer, Learning CRFs using Graph Cuts for a more thorough
-explanation.
 
-\subsection*{Relaxations}
+\subsection*{Empirical Loss}
 Some readers may have noticed that the our four-city block example
-doesn't have a solution for the learning problem we have set up. There
+does not have a solution for the learning problem we have set up. There
 are two different neighborhood assignments that have the same lowest
 score, and they both achieve our goal of putting similar blocks in the 
-same neighborhood and dissimilar blocks in different neighborhoods.
+same neighborhood and dissimilar blocks in different neighborhoods (Table \ref{table:lowest}).
 
-One way to see why this happens is to condense the four block network
-into a two neighborhood graph. 
+\begin{table}
+\centering
+  \begin{tabular}{cc}
+      \tikz{ %
+        \node[latent] (1) {$0$} ; %
+        \node[latent, below left=of 1] (2) {$0$} ; %
+        \node[latent, fill=black, below right=of 1] (3) {\textcolor{white}{$1$}} ; %
+        \node[latent, fill=black, below left=of 3] (4) {\textcolor{white}{$1$}} ; %
+        \factor[below left=of 1] {1-2} {} {} {} ;
+        \factor[below right=of 1] {1-3} {} {} {} ;
+        \factor[below right=of 2] {2-4} {} {} {} ;
+        \factor[below left=of 3] {3-4} {} {} {} ;
+        \factoredge[-] {1} {1-2} {2} ; %
+        \factoredge[-] {1} {1-3} {3} ; %
+        \factoredge[-] {2} {2-4} {4} ; %
+        \factoredge[-] {3} {3-4} {4} ; %
+      } 
+    &
+      \tikz{ %
+        \node[latent, fill=black] (1) {\textcolor{white}{$1$}} ; %
+        \node[latent, fill=black, below left=of 1] (2) {\textcolor{white}{$1$}} ; %
+        \node[latent, below right=of 1] (3) {$0$} ; %
+        \node[latent, below left=of 3] (4) {$0$} ; %
+        \factor[below left=of 1] {1-2} {} {} {} ;
+        \factor[below right=of 1] {1-3} {} {} {} ;
+        \factor[below right=of 2] {2-4} {} {} {} ;
+        \factor[below left=of 3] {3-4} {} {} {} ;
+        \factoredge[-] {1} {1-2} {2} ; %
+        \factoredge[-] {1} {1-3} {3} ; %
+        \factoredge[-] {2} {2-4} {4} ; %
+        \factoredge[-] {3} {3-4} {4} ; %
+      } 
+    \\
+  \end{tabular}
+  \caption{Equivalent Lowest Assignments}
+  \label{table:lowest}
+\end{table}
 
-\begin{tabular}{cc}
-  \adjustbox{valign=c}{
-  \tikz{ %
-    \node[latent] (1) {$1$} ; %
-    \node[latent, below left=of 1] (2) {$2$} ; %
-    \node[latent, below right=of 1] (3) {$3$} ; %
-    \node[latent, below left=of 3] (4) {$4$} ; %
-    \node[rectangle, rotate fit=45, draw=red, fit= (1) (2), text=red] {A};
-    \node[rectangle, draw=red, rotate fit=45, fit= (3) (4), text=red] {B};
-    \edge[-] {2,3} {1} ; %
-    \edge[-] {2,3} {4} ; %
-  }}
-  &
-  \begin{adjustbox}{valign=c}
-  \tikz{ %
-    \node[latent, draw=red, text=red] (A) {A} ; %
-    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
-    \edge[-] {A} {B} ; %
-  }
-  \end{adjustbox}
-\end{tabular}
+Happily, for unrelated reasons, practicioners have found that good
+performance for this type of learning problem depends upon incorporating an
+empirical loss function into the objective function. If we follow
+suit, we will also side step this problem of multiple equivalent
+assignments. 
 
-To distinguish the two neighborhoods, we want to give each
-neighborhood a different color. In particular, we want to color the
-neighborhoods so that no two adjacent neighborhoods have the same
-color. We'll call such a color assignment a coloring. 
-
-With two colors there are two ways to color our neighborhood.
-
-\begin{tabular}{cc}
-  \tikz{ %
-    \node[latent, draw=red, text=red, fill=black] (A) {A} ; %
-    \node[latent, draw=red, text=red, below right=of A] (B) {B} ; %
-    \edge[-] {A} {B} ; %
-  }
-  &
-  \tikz{ %
-    \node[latent, draw=red, text=red] (A) {A} ; %
-    \node[latent, draw=red, text=red, below right=of A, fill=black] (B) {B} ; %
-    \edge[-] {A} {B} ; %
-  }
-\end{tabular}
-
-If we had more than two neighborhoods, we might need more than two
-colors. Whether you can color the neighborhoods with a certain number
-of colors depends upon the number of neighborhood and how they are
-connected. The same is true for the number of different ways you can
-color neighborhoods with a given colors.\footnote{Every graph has a 
-chromatic polynomial that determines the number of possible
-n-colorings of vertices in the graph}
-
-For twenty or so city neighborhood, we will usually need four colors,
-and the number of different ways to four-color those neighborhoods
-will be well over a thousand. That means in a larger city, there are
-thousands of patterns of assigning neighborhood labels to blocks that 
-will put the same blocks together, and therefore have the same score.
-
-In theory, we could overcome this multiplicity of equivalent
-assignments by relaxing our learning objective. Instead of looking for
-the weights that makes our target assignment the lowest scoring
-assignment, we can look for the weights that makes our target
-assignment lower scoring than as many assignments as we'd like. 
-
-\begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 + C\cdot\xi\\
-&\text{such that} \\
-&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 - \xi\\ 
-&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
-  possible neighborhood assignments}\\
-&\text{and } \mathbf{y} \neq \mathbf{y}^*
-\end{align*}
-
-This `slack' formulation validly specifies that we seek the weights
-that make target assignment and it's equivalent cousins the best
-solution. Unfortunately, in practice, the good performance in out of
-set prediction seems to depends upon incorporating an empirical loss
-function into the objective function, like below
+Below we show how to incorporate the empirical loss:
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
@@ -350,7 +320,7 @@ lowest score, where the score incorporates the empirical loss: i.e.
 %
 \begin{align}
 \operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
-  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(y*, y)
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(\mathbf{y}*, \mathbf{y})
 \end{align}
 %
 If the loss can be decomposed over the blocks like
@@ -361,9 +331,9 @@ If the loss can be decomposed over the blocks like
 \end{align}
 %
 then the objective has the form that allows us to use an algorithm
-like QPBO to find a quick minimum assignment. If the loss function does not
-decompose we have to check an exponentially many possible assignment,
-typically an intractable problem.
+like QPBO to quickly find an approximate minimum assignment. If the
+loss function does not decompose we have to check an exponentially
+many possible assignment, typically an intractable problem.
 
 Among the loss functions that do decompose over blocks, a common
 choice is the Hamming loss, $\sum_i^N\begin{cases}
