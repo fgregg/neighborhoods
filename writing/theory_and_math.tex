@@ -138,21 +138,70 @@ becomes quickly impractical for larger cities. With two possible
 neighborhoods, the number of possible assignments is $2^N$ where N is
 the number of blocks.
 
-However, even if we have many blocks, we can find a lowest scoring
-assignment approximately using the QPBO algorithm.\footnote{Minimizing
-  non-submodular functions with graph cuts – a review (are there any
-  bounds worth mentioning}. This will be true for every scoring
-function that decomposes over blocks and edges, i.e. has the following
-form:
+This permutational explosion means that for even small cities, we
+cannot possibly check every possible neighborhood assignment in
+human-scale time. For the same reason, traditional Markov Chain Monte
+Carlo methods for finding the lowest scoring assignment also prove
+intractable.\footnote{In order to converge on the mode of the
+  distribution of scores, we have to calculate a normalizing constant,
+  which is the sum of the scores of all possible assignments. This is
+  computationally too expensive. There have been a number of attempts
+  to find an acceptable substitute for the normalizing constant, but
+  the empirical results have disappointed. (references)}
 
+However, researchers, largely in the field of computer vision, have
+developed methods to quickly find the lowest scoring assignment for
+problems like ours. In 1986, Greig, Porteous, and Sehult demonstrated
+that finding the lowest scoring assignment for a two neighborhood case
+was equivalent to solving the graph cutting problem of min cut. Since
+the classic, 1956 result of Ford and Fulkerson, we have known how to
+solve this problem swiftly.\footnote{Ford and Fulkerson's original
+  algorithm is not polynomial, but it was quickly improved to solve
+  the problem in polynomial time.} In the 2000s, these graph cut
+techniques became popular in the computer vision community leading
+leading to theoretical clarification and methodological
+extension.\footnote{Kolmogorov, Vladimir. What Energy Functions Can be
+  Minimized via graph cuts}.
+
+\emph{Professor Evans: Should I go more deeply into this}
+
+We now have a set of graph cut techniques that allow us to find, or
+approximately find, the lowest scoring assignment for score functions
+that have the following form.\footnote{More generally, we can use
+  these techniques on scoring functions that also have a term for the
+  relation between the properties of a block and the region
+  assignment. This is particularly useful when we already know
+  something about what categories should exist. 
+
+  For example, if we had a strong, ecological theory of urban space,
+  we might want to identify regions like `the red light district,'
+  `the zone of industry`, `the central business district.` We would
+  want to pay a large penalty if we assigned a block that had lot of
+  immigrants to `the central business district` instead of `the
+  immigrant neighborhood.'
 \begin{align}
 \operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
 \end{align}
+}
 
+\begin{align}
+\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+\end{align}
 
-As we'll see, this will allow us to go in
-the opposite direction. If we know the correct assignment, we can find
-similarities.
+We will use extensively one extension to graph cuts called the
+Quadratic Pseudo Boolean Optimization algorithm, or QPBO. This method
+allows us to approximately find the lowest scoring assignment even
+though our scoring function is not submodular. A submodular scoring
+function would be one where $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1)
+\leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$ for all $i,j$ in
+$\mathcal{N}$. If we had a submodular scoring function, we would have a
+theoretical guarantee of finding the lowest scoring assignment. Our
+scoring function is decisively not submodular because we want
+very dissimilar neighboring blocks to be assigned to different
+neighborhoods. I.e., for some blocks we want it to hold that
+$\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1) \boldsymbol{>}
+\epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
+
 
 \section*{Learning similarities}
 Let's consider similarity measures that take the following linear form
