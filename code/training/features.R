@@ -11,10 +11,13 @@ js_housing <- read.csv('../interchange/js_housing.csv')$x
 cosine_ethnicity <- read.csv('../interchange/cosine_ethnicity.csv')$x
 cosine_family <- read.csv('../interchange/cosine_family.csv')$x
 cosine_age <- read.csv('../interchange/cosine_age.csv')$x
+cosine_housing <- read.csv('../interchange/cosine_housing.csv')$x
 
 cosine_ethnicity[is.na(cosine_ethnicity)] <- 100
 cosine_family[is.na(cosine_family)] <- 100
 cosine_age[is.na(cosine_age)] <- 100
+cosine_housing[is.na(cosine_housing)] <- 100
+
 
 ## chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
 ## chi_family <- read.csv('../interchange/chi_family.csv')$x
