@@ -491,8 +491,11 @@ cosine_housing <- vectorDistance(housing)
 chi_housing <- chiDistance(housing)
 write.csv(cosine_housing, "../interchange/cosine_housing.csv", row.names=FALSE)
 write.csv(chi_housing, "../interchange/chi_housing.csv", row.names=FALSE)
-write.csv(minPair("H0050001"), "../interchange/min_housing_unit.csv", row.names=FALSE) 
-write.csv(absDistance("H0050001"),
+
+nodes$all_units <- nodes$H0040001 + nodes$H0050001
+
+write.csv(minPair("all_units"), "../interchange/min_housing_unit.csv", row.names=FALSE) 
+write.csv(absDistance("all_units"),
           "../interchange/diff_housing_unit.csv",
           row.names=FALSE)
 
