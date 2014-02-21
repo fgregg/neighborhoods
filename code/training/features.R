@@ -10,12 +10,10 @@ js_housing <- read.csv('../interchange/js_housing.csv')$x
 
 cosine_ethnicity <- read.csv('../interchange/cosine_ethnicity.csv')$x
 cosine_family <- read.csv('../interchange/cosine_family.csv')$x
-cosine_housing <- read.csv('../interchange/cosine_housing.csv')$x
 cosine_age <- read.csv('../interchange/cosine_age.csv')$x
 
 cosine_ethnicity[is.na(cosine_ethnicity)] <- 100
 cosine_family[is.na(cosine_family)] <- 100
-cosine_housing[is.na(cosine_housing)] <- 100
 cosine_age[is.na(cosine_age)] <- 100
 
 ## chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
@@ -53,15 +51,41 @@ sufficient_pop <- as.numeric(population > 30)
 sufficient_households <- as.numeric(households > 5)
 sufficient_units <- as.numeric(housing_units > 5)
 
-just_households <- as.numeric(sufficient_households == 1
+all_sufficient <- as.numeric(sufficient_pop == 1
+                             & sufficient_households == 1
+                             & sufficient_units == 1)
+
+pop_households <- as.numeric(sufficient_units == 0
+                             & sufficient_households == 0
+                             & sufficient_pop == 1)
+
+# no blocks with pop_units
+# pop_units <- sum(sufficient_units == 1
+#                 & sufficient_households == 0
+#                 & sufficient_pop == 1)
+
+household_units <- as.numeric(sufficient_units == 1
+                              & sufficient_households == 1
                               & sufficient_pop == 0)
 
-just_units <- as.numeric(sufficient_units == 1
-                         & sufficient_households == 0
-                         & sufficient_pop == 0)
+just_pop <- as.numeric(sufficient_units == 0
+                       & sufficient_households == 0
+                       & sufficient_pop == 1)
 
-features <- data.frame(sufficient_pop,
-                       just_households,
+# no blocks with just households
+# just_households  <- sum(sufficient_units == 0
+#                        & sufficient_households == 1
+#                        & sufficient_pop == 0)
+
+just_units  <- as.numeric(sufficient_units == 1
+                          & sufficient_households == 0
+                          & sufficient_pop == 0)
+
+
+features <- data.frame(all_sufficient,
+                       pop_households,
+                       household_units,
+                       just_pop,
                        just_units,
                        js_age,
                        js_family,
@@ -80,28 +104,55 @@ features <- data.frame(sufficient_pop,
                        block_angle,
                        grid_street)
 
-M <- model.matrix(~ (sufficient_pop:(cosine_age + 
-                                     cosine_ethnicity) +
-                     sufficient_pop*(rail +
+M <- model.matrix(~ (all_sufficient:(cosine_age + 
+                                     cosine_ethnicity +
+                                     cosine_family +
+                                     cosine_housing +
+                                     diff_housing_units) +
+                     all_sufficient*(rail +
                                      water +
                                      grid_street +
                                      elementary_school +
                                      high_school +
                                      block_angle) +
-                     sufficient_households:cosine_family +
-                     just_households +
-                     just_households:(rail +
+                     pop_households +
+                     pop_households:(rail +
+                                     water +
+                                     grid_street +
+                                     elementary_school +
+                                     high_school +
+                                     cosine_age + 
+                                     cosine_ethnicity +
+                                     cosine_family) +
+                     household_units +
+                     household_units:(rail +
                                       water +
                                       grid_street +
                                       elementary_school +
                                       high_school +
-                                      block_angle) + 
-                     sufficient_units:(cosine_housing +
-                                       diff_housing_units) +
+                                      block_angle +
+                                      cosine_family +
+                                      cosine_housing +
+                                      diff_housing_units) +
+                     just_pop +
+                     just_pop:(rail +
+                               water +
+                               grid_street +
+                               elementary_school +
+                               high_school +
+                               block_angle +
+                               cosine_ethnicity +
+                               cosine_family) +
                      just_units +
-                     just_units:(grid_street +
+                     just_units:(rail +
+                                 water +
+                                 grid_street +
                                  elementary_school +
-                                 block_angle)),
+                                 high_school +
+                                 block_angle +
+                                 cosine_housing +
+                                 diff_housing_units)
+                     ),
                   data=features)
 
 

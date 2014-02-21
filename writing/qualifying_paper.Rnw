@@ -84,7 +84,7 @@ So much for theory, let's see how this works in practice. Let's take
 the case of Chicago neighborhoods.  
 
 \subsection*{Data}
-<<loadFeatures, include=FALSE, cache=TRUE>>= 
+<<loadFeatures, include=FALSE, cache=FALSE>>= 
 setwd('../code/training/')
 source('features.R')
 setwd(CURDIR)
@@ -211,16 +211,16 @@ feature_summary <- data.frame(sufficient.population=c(mean(features$sufficient_p
                                 rep(NA, 5)),
                               grid.street = c(mean(features$grid_street), 
                                 rep(NA, 5)),
-                              age.js=c(mean(features$js_age[features$sufficient_pop==1]), 
-                                quantile(features$js_age[features$sufficient_pop==1])),
-                              race.js=c(mean(features$js_race[features$sufficient_pop==1]), 
-                                quantile(features$js_race[features$sufficient_pop==1])),
-                              housing.js=c(mean(features$js_housing[features$sufficient_pop==1]), 
-                                quantile(features$js_housing[features$sufficient_pop==1])),
+                              age.js=c(mean(features$cosine_age[features$sufficient_pop==1]), 
+                                quantile(features$cosine_age[features$sufficient_pop==1])),
+                              race.js=c(mean(features$cosine_race[features$sufficient_pop==1]), 
+                                quantile(features$cosine_race[features$sufficient_pop==1])),
+                              housing.js=c(mean(features$cosine_housing[features$sufficient_pop==1]), 
+                                quantile(features$cosine_housing[features$sufficient_pop==1])),
                               block.angle=c(mean(features$block_angle[features$sufficient_pop==1]), 
                                 quantile(features$block_angle[features$sufficient_pop==1])),
-                              family.js=c(mean(features$js_family[features$sufficient_pop==1]), 
-                                quantile(features$js_family[features$sufficient_pop==1]))
+                              family.js=c(mean(features$cosine_family[features$sufficient_pop==1]), 
+                                quantile(features$cosine_family[features$sufficient_pop==1]))
                               
                               )
 feature_summary <- xtable(t(feature_summary))
@@ -272,7 +272,7 @@ plot(all_edges$lines, col=c("#00000022", "red")[features$high_school + 1])
 
 \begin{figure}
 <<sufficientImage, dev='pdf'>>= 
-plot(all_edges$lines, col=c("#00000022", "red")[features$sufficient_pop + 1])
+plot(all_edges$lines, col=c("#00000022", "red")[features$all_sufficient + 1])
 @ 
 \caption{Sufficient Population}
 \end{figure}
@@ -287,7 +287,7 @@ plot(all_edges$lines, col=rgb(colorRamp(c("lightgrey", "red"))(features$block_an
 
 \begin{figure}
 <<<raceImage, dev='pdf'>>=
-plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$cosine_ethnicity[features$sufficient_pop==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_ethnicity"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Race and Ethnicity}
 \end{figure}
@@ -295,7 +295,7 @@ plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<ageImage, dev='pdf'>>=
-plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$cosine_age[features$sufficient_pop==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_age"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Age}
 \end{figure}
@@ -303,7 +303,7 @@ plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<familyImage, dev='pdf'>>=
-plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$cosine_family[features$sufficient_pop==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_family"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Family Type}
 \end{figure}
@@ -311,7 +311,7 @@ plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<housingImage, dev='pdf'>>=
-plot(all_edges$lines[features$sufficient_pop==1], col=rgb(colorRamp(c("lightgrey", "red"))(features$cosine_housing[features$sufficient_pop==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_housing"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
@@ -523,10 +523,10 @@ pop <- c(weights[c('sufficient_pop',
 
 pop <- c(as.numeric(pop) 
          + as.numeric(no_pop), 
-         weights[c('sufficient_pop:js_family', 
-                   'sufficient_pop:js_race', 
-                   'sufficient_pop:js_age', 
-                   'sufficient_pop:js_housing')])
+         weights[c('sufficient_pop:cosine_family', 
+                   'sufficient_pop:cosine_race', 
+                   'sufficient_pop:cosine_age', 
+                   'sufficient_pop:cosine_housing')])
 
 no_pop <- c(no_pop, rep(NA, 4))
 
