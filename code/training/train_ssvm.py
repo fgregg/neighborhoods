@@ -41,7 +41,7 @@ X = numpy.empty((len(node_labels), 0), dtype=numpy.float)
 E = numpy.array(edges, dtype=numpy.int)
 X = ((X, E, edge_attributes),)
 
-model = PottsEdgeFeatureGraphCRF(n_states = 63, 
+model = PottsEdgeFeatureGraphCRF(n_states = 65, 
                                  n_features = 0,
                                  n_edge_features = edge_attributes.shape[1],
                                  inference_method = 'qpbo')
