@@ -116,11 +116,11 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                                      high_school +
                                      block_angle) +
                      pop_households +
-                     pop_households:(rail +
-                                     water +
+                     pop_households:(# rail +
+                                     # water +
                                      grid_street +
                                      elementary_school +
-                                     high_school +
+                                     # high_school +
                                      cosine_age + 
                                      cosine_ethnicity +
                                      cosine_family) +
@@ -135,17 +135,17 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                                       cosine_housing +
                                       diff_housing_units) +
                      just_pop +
-                     just_pop:(rail +
-                               water +
+                     just_pop:(#rail +
+                               #water +
                                grid_street +
                                elementary_school +
-                               high_school +
+                               # high_school +
                                block_angle +
                                cosine_ethnicity +
                                cosine_family) +
                      just_units +
                      just_units:(rail +
-                                 water +
+                                 # water +
                                  grid_street +
                                  elementary_school +
                                  high_school +
