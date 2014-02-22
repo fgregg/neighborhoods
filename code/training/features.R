@@ -107,7 +107,8 @@ features <- data.frame(all_sufficient,
                        block_angle,
                        grid_street)
 
-M <- model.matrix(~ (all_sufficient:(cosine_age + 
+M <- model.matrix(~ (highway + 
+                     all_sufficient:(cosine_age + 
                                      cosine_ethnicity +
                                      cosine_family +
                                      cosine_housing +
@@ -115,6 +116,7 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                      all_sufficient*(rail +
                                      water +
                                      grid_street +
+                                     #highway +
                                      elementary_school +
                                      high_school +
                                      block_angle) +
@@ -123,6 +125,7 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                                      # water +
                                      grid_street +
                                      elementary_school +
+                                     #highway +
                                      # high_school +
                                      cosine_age + 
                                      cosine_ethnicity +
@@ -131,6 +134,7 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                      household_units:(rail +
                                       water +
                                       grid_street +
+                                      #highway + 
                                       elementary_school +
                                       high_school +
                                       block_angle +
@@ -141,6 +145,7 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                      just_pop:(#rail +
                                #water +
                                grid_street +
+                               #highway +
                                elementary_school +
                                # high_school +
                                block_angle +
@@ -150,6 +155,7 @@ M <- model.matrix(~ (all_sufficient:(cosine_age +
                      just_units:(rail +
                                  # water +
                                  grid_street +
+                                 #highway +
                                  elementary_school +
                                  high_school +
                                  block_angle +
