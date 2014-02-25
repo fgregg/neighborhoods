@@ -122,13 +122,12 @@ claims that geographical points are in some neighborhood.
 
 Using kernel density estimation, we can use this point data to
 estimate a continuous probability distributions that any point in the
-city will be claimed to be in any of the neighborhoods (Figure
-\ref{fig:KDE}). The gray lines indicate the best guess about the
-neighborhood boundaries.
+city will be claimed to be in any of the neighborhoods. 
 
-At the center of every block, we will calculate the most probable
-neighborhood assignment and assign that most likely neighborhood to
-that block. This will be our training data (Figure ).
+At the center of every census block, we will calculate the most
+probable neighborhood assignment and assign that most likely
+neighborhood to that block. This will be our training data (Figure
+\ref{fig:training}).
 
 I would like to treat this measure as a kind of `averaged
 neighborhood perception.' Of course, it is at best a biased measure of
@@ -144,9 +143,19 @@ be good enough. We'll have ways of checking that hope.
 
 
 \begin{figure}
-\includegraphics{/home/fgregg/academic/neighborhoods/writing/probability}
-\caption{KDE probability estimates of neighborhood claims on North Side}
-\label{fig:KDE}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{/home/fgregg/sweave-cache/figs/plotTraining} 
+
+}
+
+
+
+\end{knitrout}
+
+\caption{Training Data}
+\label{fig:training}
 \end{figure}
 
 In addition to these data about neighborhood perception, we also have
@@ -213,15 +222,15 @@ Many blocks have no one living in them or only a handful. In such
 cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
 not calculate the Jensen-Shannon divergences. There are
-7,142 edges where we calculate these
+7,092 edges where we calculate these
 demographic similarities.
 
 
 \begin{kframe}
 
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: argument is not numeric or logical: returning NA}}\end{kframe}% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Sat Feb 15 08:55:48 2014
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: argument is not numeric or logical: returning NA\\\#\# Warning: argument is not numeric or logical: returning NA\\\#\# Warning: is.na() applied to non-(list or vector) of type 'NULL'}}\end{kframe}% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Sat Feb 22 13:42:21 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
@@ -236,11 +245,11 @@ sufficient.population & 0.51 &  &  &  &  &  \\
   elementary.school & 0.09 &  &  &  &  &  \\ 
   high.school & 0.03 &  &  &  &  &  \\ 
   grid.street & 0.17 &  &  &  &  &  \\ 
-  age.js & 0.05 & 0.00 & 0.02 & 0.04 & 0.06 & 0.69 \\ 
-  race.js & 0.04 & 0.00 & 0.01 & 0.02 & 0.05 & 0.61 \\ 
-  housing.js & 0.02 & 0.00 & 0.00 & 0.01 & 0.02 & 0.31 \\ 
+  age.js & 0.66 & 0.32 & 0.62 & 0.66 & 0.70 & 0.99 \\ 
+  race.js &  &  &  &  &  &  \\ 
+  housing.js & 0.59 & 0.01 & 0.53 & 0.61 & 0.67 & 1.00 \\ 
   block.angle & 0.18 & 0.00 & 0.00 & 0.00 & 0.50 & 0.98 \\ 
-  family.js & 0.06 & 0.00 & 0.02 & 0.04 & 0.07 & 0.60 \\ 
+  family.js & 0.69 & 0.11 & 0.66 & 0.70 & 0.73 & 0.97 \\ 
    \hline
 \end{tabular}
 \end{table}
@@ -402,10 +411,7 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 
 \begin{figure}
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: color intensity nan, not in [0,1]}}\end{kframe}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
 {\centering \includegraphics[width=\maxwidth]{/home/fgregg/sweave-cache/figs/_familyImage} 
 
@@ -421,10 +427,7 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 
 \begin{figure}
 \begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: color intensity nan, not in [0,1]}}\end{kframe}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
 {\centering \includegraphics[width=\maxwidth]{/home/fgregg/sweave-cache/figs/_housingImage} 
 
@@ -438,9 +441,16 @@ sufficient.population & 0.51 &  &  &  &  &  \\
 \end{figure}
 
 \section*{Modeling}
-We'd handle the empty or sparsely populated block by using a dummy
-variable to effectively learned two model at once. The non-populated
-block model is 
+Since many census blocks are empty, the demographic similarity between
+these blocks is not well defined. We might be tempted to ignore these
+cases, but deleting these cases would change the topology of the
+city. Removing unpopulated blocks would turn populated blocks into
+islands separated by commercial corridors. This would not allow for a
+neighborhood to span a highway or industrial corridor, a possibility
+we do not want to preclude.
+
+We deal with this variation by using dummy variables to effectively
+learned two model at once: a nonpopulated and populated block model:
 
 \begin{align}
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w}) = \sum_{<i
@@ -486,31 +496,68 @@ We can combine these models by creating a dummy variable that takes a
 value of 1 if neighboring block have sufficient population to support
 the demographic distance measures, and 0 if the neighboring blocks do
 not. We'll interact this dummy with the populated model and add the
-variables to our unpopulated model.
+variables to our unpopulated model.\footnote{Actually, our model is
+  a little more complicated because we are not just comparing
+  groups of people, but also groups of households and groups of
+  housing units. Sometimes there is sufficient population to compare
+  race, but not sufficient households to compare family structure. We
+  use an additional dummy variables to handle these cases}
 
 \begin{align}
-\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_0 
-                                     + w_1\text{Rail}_{i,j} 
-                                     + w_2\text{Water}_{i,j} 
-                                     + w_3\text{Highway}_{i,j} \\
-                                     &+ w_4\text{Major Street}_{i,j} 
-                                     + w_5\text{Elementary School}_{i,j}\\ 
-                                     & + w_6\text{High School}_{i,j}
-                                     + w_7\text{Block Angle}_{i,j} \\
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_1 
+                                     + w_2\text{Rail}_{i,j} 
+                                     + w_3\text{Water}_{i,j} 
+                                     + w_4\text{Highway}_{i,j} \\
+                                     &+ w_5\text{Major Street}_{i,j} 
+                                     + w_6\text{Elementary School}_{i,j}\\ 
+                                     & + w_7\text{High School}_{i,j}
+                                     + w_8\text{Block Angle}_{i,j} \\
                                      &+ \text{Populated Blocks}_{i,j}\cdot\\
-                                     &\quad (w_8
-                                     + w_9\text{Rail}_{i,j} 
-                                     + w_{10}\text{Water}_{i,j}\\ 
-                                     &\quad+ w_{11}\text{Highway}_{i,j}
-                                     + w_{12}\text{Major Street}_{i,j}\\ 
-                                     &\quad + w_{13}\text{Elementary School}_{i,j} 
-                                     + w_{14}\text{High School}_{i,j}\\ 
-                                     &\quad + w_{15}\text{Block Angle}_{i,j}
-                                     + w_{16}\text{Family Structure}_{i,j}\\
-                                     &\quad + w_{17}\text{Race and Ethnicity}_{i_j}
-                                     + w_{18}\text{Age Structure}\\  
-                                     &\quad+ w_{19}\text{Housing Structure})\\
+                                     &\quad (w_9
+                                     + w_{10}\text{Rail}_{i,j} 
+                                     + w_{11}\text{Water}_{i,j}\\ 
+                                     &\quad+ w_{12}\text{Highway}_{i,j}
+                                     + w_{13}\text{Major Street}_{i,j}\\ 
+                                     &\quad + w_{14}\text{Elementary School}_{i,j} 
+                                     + w_{15}\text{High School}_{i,j}\\ 
+                                     &\quad + w_{16}\text{Block Angle}_{i,j}
+                                     + w_{17}\text{Family Structure}_{i,j}\\
+                                     &\quad + w_{18}\text{Race and Ethnicity}_{i_j}
+                                     + w_{19}\text{Age Structure}\\  
+                                     &\quad+ w_{20}\text{Housing Structure})\\
 \end{align}
+
+\subsection*{The Null Neighborhood}
+So far we have said treated neighborhood labels as semantically
+meaningless--what matters is that a set of adjacent blocks are
+assigned to same, but arbitrary neighborhood label. However, there is
+one label that we will want to treat differently, the label of ``No
+neighborhood.'' 
+
+Our data is generated by people making claims about
+their housing units. In places where there are no people, we
+will observe no claims about what neighborhood the place belongs
+to. We handle this by adding in a block specific penalty term:
+
+\begin{align}
+\epsilon_{i}(y_i, \text{Population}_i, w_0) = \begin{cases}
+    0 \quad\quad\quad y_i = ``No Neighborhood'' \\
+    w_0\cdot\text{Population}_i \quad y_i \neq ``No Neighborhood'' \\
+  \end{cases}
+\end{align}
+
+Where $\text{Population}_i$ is a dummy variable that indicates whether
+a block contains more than 30 people or not.
+
+So the final form of the model is :
+
+\begin{align}
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w}) =
+  \sum_i^N\epsilon_{i}(y_i, \text{Population}_i, w_0) + \sum_{<i
+    j>}^{\mathcal{N}}\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w})  
+\end{align}
+
+This functional form can be handled by the graph cut methods.
 
 \section*{Results}
 After training the model using the PyStruct structure learning
@@ -613,33 +660,37 @@ next step must be to try to find a set of features that can produce a
 higher degree of predictive accuracy.
 
 
-\begin{figure}
-\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
-\caption{Predicted Neighborhoods in Chicago}
-\end{figure}
+%\begin{figure}
+%\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
+%\caption{Predicted Neighborhoods in Chicago}
+%\end{figure}
 
 
 
-\begin{kframe}
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Sat Feb 22 14:14:12 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+(Intercept) & -0.0012 \\ 
+  Railroad & 0.0864 \\ 
+  Water & 0.0000 \\ 
+  Highway & 0.0209 \\ 
+  Major Street & -0.0147 \\ 
+  Elementary School & 0.0027 \\ 
+  High School & -0.0035 \\ 
+  Block Angle & 0.0026 \\ 
+  Family Structure & -0.0168 \\ 
+  Race and Ethnicity & 0.0124 \\ 
+  Age Structure & -0.0013 \\ 
+  Housing Structure & 0.0118 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: undefined columns selected}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: undefined columns selected}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'pop' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'no\_pop' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'no\_pop' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'models' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'models' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'models' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'WT' not found}}\end{kframe}
 
 
 
@@ -657,7 +708,6 @@ higher degree of predictive accuracy.
 
 \caption{Predicted Neighborhoods}
 \end{figure}
-
 
 
 \end{document}
