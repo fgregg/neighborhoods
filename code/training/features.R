@@ -29,6 +29,8 @@ chi_family[is.na(chi_family)] <- 100
 chi_housing[is.na(chi_housing)] <- 100
 chi_age[is.na(chi_age)] <- 100
 
+abs_age <- read.csv('../interchange/abs_age.csv')$x
+abs_age[is.na(abs_age)] <- 100
 
 rail <- read.csv('../interchange/rail_intersects.csv')$x
 highway <- read.csv('../interchange/highway_intersects.csv')$x
@@ -60,10 +62,9 @@ pop_households <- as.numeric(sufficient_units == 0
                              & sufficient_households == 1
                              & sufficient_pop == 1)
 
-# no blocks with pop_units
-# pop_units <- sum(sufficient_units == 1
-#                 & sufficient_households == 0
-#                 & sufficient_pop == 1)
+pop_units <- sum(sufficient_units == 1
+                 & sufficient_households == 0
+                 & sufficient_pop == 1)
 
 household_units <- as.numeric(sufficient_units == 1
                               & sufficient_households == 1
@@ -102,7 +103,7 @@ features <- data.frame(all_sufficient,
                        grid_street)
 
 M <- model.matrix(~ (highway + 
-                     all_sufficient:(chi_age + 
+                     all_sufficient:(abs_age + 
                                      chi_ethnicity +
                                      chi_family +
                                      chi_housing +
@@ -114,16 +115,6 @@ M <- model.matrix(~ (highway +
                                      elementary_school +
                                      high_school +
                                      block_angle) +
-                     pop_households +
-                     pop_households:(# rail +
-                                     # water +
-                                     grid_street +
-                                     elementary_school +
-                                     #highway +
-                                     # high_school +
-                                     chi_age + 
-                                     chi_ethnicity +
-                                     chi_family) +
                      household_units +
                      household_units:(rail +
                                       water +
@@ -144,7 +135,7 @@ M <- model.matrix(~ (highway +
                                # high_school +
                                block_angle +
                                chi_ethnicity +
-                               chi_age) +
+                               abs_age) +
                      just_units +
                      just_units:(rail +
                                  # water +
@@ -153,12 +144,11 @@ M <- model.matrix(~ (highway +
                                  elementary_school +
                                  high_school +
                                  block_angle +
-                                 chi_housing +
-                                 diff_housing_units)
+                                 chi_housing)
                      ),
                   data=features)
 
 
 
 write.table(M, "model.matrix", row.names=FALSE)
-
+ 

@@ -322,14 +322,29 @@ euclideanDistance <- function(columns) {
 
 }
 
-absDistance <- function(column) {
-    normalizer <- sapply(slot(nodes, "polygons"), slot, "area")
+absDistance <- function(column, zeroes=FALSE) {
+    #normalizer <- sapply(slot(nodes, "polygons"), slot, "area")
     
-    block_A <- nodes@data[edgelist[,1], column]/normalizer[edgelist[,1]]
-    block_B <- nodes@data[edgelist[,2], column]/normalizer[edgelist[,2]]
+    block_A <- nodes@data[edgelist[,1], column] 
+    block_B <- nodes@data[edgelist[,2], column]
 
-    distance <- (abs(log(block_A) - log(block_B)))
-    distance[is.infinite(distance)] <- NA
+    if (!zeroes) { 
+        block_A[block_A == 0] <- NA
+        block_B[block_B == 0] <- NA
+    }
+
+    distance <- abs(block_A - block_B)
+
+    return(distance)
+}
+
+absRatio <- function(column) {
+    block_A <- nodes@data[edgelist[,1], column] #/normalizer[edgelist[,1]]
+    block_B <- nodes@data[edgelist[,2], column] #/normalizer[edgelist[,2]]
+
+    distance <- ((block_A - block_B)^2)/(block_A + block_B)
+
+    distance <- sqrt(distance)
 
     return(distance)
 }
@@ -355,13 +370,13 @@ mahalanobisDistance <- function(columns) {
 
     diff_blocks <- as.matrix(block_A - block_B)
 
-    C = solve(cov(diff_blocks))
+    C = solve(cov(na.omit(diff_blocks)))
 
     distances <- apply(diff_blocks, 1, function(x) t(x) %*% C %*% x)
 
     distances <- sqrt(distances)
 
-    classIntervals(distances)
+    return(distances)
 }
 
 jsDistance <-function(columns) {
@@ -421,11 +436,9 @@ cramerDistance <-  function(columns) {
 }
 
 
-chiDistance <- function(columns) {
+chiDistance <- function(columns, smoothing=10) {
     smoother <- colSums(nodes@data[, columns])
     smoother <- smoother / sum(smoother)
-    smoothing = 100
-        
     
     block_A <- nodes@data[edgelist[,1], columns]
     block_B <- nodes@data[edgelist[,2], columns]
@@ -436,7 +449,7 @@ chiDistance <- function(columns) {
     block_A <- (block_A + smoother * smoothing)/(normalizer_A + smoothing)
     block_B <- (block_B + smoother * smoothing)/(normalizer_B + smoothing)
 
-    missing <- normalizer_A + normalizer_B == 0
+    missing <- (normalizer_A + normalizer_B) == 0
     
     distance <- rowSums(((block_A - block_B)^2)/(block_A + block_B), na.rm=TRUE)
 
@@ -452,6 +465,7 @@ minPair <- function(column) {
     return(apply(cbind(block_A, block_B), 1, min))
 }
 
+                                             
 female_ages <- c("P0120027", # Under 5, female
                  "P0120028", # Under 5-9, female
                  "P0120029", # Under 10-14, female
@@ -565,9 +579,15 @@ chunked_ages <- c("preschool", "school", "college",
 
 cosine_age <- vectorDistance(chunked_ages)
 
-chi_age <- chiDistance(chunked_ages)
+chi_age <- chiDistance(chunked_ages, 10)
+
 write.csv(cosine_age, "../interchange/cosine_age.csv", row.names=FALSE)
 write.csv(chi_age, "../interchange/chi_age.csv", row.names=FALSE)
+
+median_age <- absDistance("P0130001")
+
+write.csv(median_age, "../interchange/abs_age.csv", row.names=FALSE)
+
 
 
 housing <- c("H0040002", # owned with a mortgage or loan
@@ -582,15 +602,26 @@ housing <- c("H0040002", # owned with a mortgage or loan
              "H0050008" # other vacant
              )
 
+
 nodes$owner_occupied <- nodes$H0040002 + nodes$H0040003
+
+nodes$rentals <- nodes$H0040004 + nodes$H0050002 + nodes$H0050003
+
+nodes$homes <- nodes$owner_occupied + nodes$H0050004 + nodes$H0050005 + nodes$H0050006
+
+nodes$other_vacant <- nodes$H0050007 + nodes$H0050008
+
+market_makeup <- c("rentals",
+                   "homes",
+                   "other_vacant")
 
 ownership <- c("owner_occupied",
                "H0040004",
                "H0050001")
 
-cosine_housing <- vectorDistance(ownership)
+cosine_housing <- vectorDistance(market_makeup)
 
-chi_housing <- chiDistance(ownership)
+chi_housing <- chiDistance(market_makeup)
 
 write.csv(cosine_housing, "../interchange/cosine_housing.csv", row.names=FALSE)
 write.csv(chi_housing, "../interchange/chi_housing.csv", row.names=FALSE)
@@ -603,7 +634,7 @@ write.csv(absDistance("all_units"),
           row.names=FALSE)
 
 nodes$single_parent <- nodes$P0180005 + nodes$P0180006
-nodes$husband_wife <- nodes$P0180003 + nodes$single_parent
+nodes$husband_wife <- nodes$P0180003 
 nodes$non_families <- nodes$P0180008 + nodes$P0180009
 
 family <- c("husband_wife",
