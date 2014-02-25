@@ -191,12 +191,12 @@ Many blocks have no one living in them or only a handful. In such
 cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
 not calculate the Jensen-Shannon divergences. There are
-\Sexpr{sum(features$sufficient_pop)} edges where we calculate these
+\Sexpr{sum(features$all_sufficient)} edges where we calculate these
 demographic similarities.
 
 
 <<featureTable, echo=FALSE, results='asis'>>= 
-feature_summary <- data.frame(sufficient.population=c(mean(features$sufficient_pop), 
+feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficient), 
                                 rep(NA, 5)),
                               rail = c(mean(features$rail), 
                                 rep(NA, 5)),
@@ -212,16 +212,16 @@ feature_summary <- data.frame(sufficient.population=c(mean(features$sufficient_p
                                 rep(NA, 5)),
                               grid.street = c(mean(features$grid_street), 
                                 rep(NA, 5)),
-                              age.js=c(mean(features$cosine_age[features$sufficient_pop==1]), 
-                                quantile(features$cosine_age[features$sufficient_pop==1])),
-                              race.js=c(mean(features$cosine_race[features$sufficient_pop==1]), 
-                                quantile(features$cosine_race[features$sufficient_pop==1])),
-                              housing.js=c(mean(features$cosine_housing[features$sufficient_pop==1]), 
-                                quantile(features$cosine_housing[features$sufficient_pop==1])),
-                              block.angle=c(mean(features$block_angle[features$sufficient_pop==1]), 
-                                quantile(features$block_angle[features$sufficient_pop==1])),
-                              family.js=c(mean(features$cosine_family[features$sufficient_pop==1]), 
-                                quantile(features$cosine_family[features$sufficient_pop==1]))
+                              age.js=c(mean(features$cosine_age[features$all_sufficient==1]), 
+                                quantile(features$cosine_age[features$all_sufficient==1])),
+                              race.js=c(mean(features$cosine_race[features$all_sufficient==1]), 
+                                quantile(features$cosine_race[features$all_sufficient==1])),
+                              housing.js=c(mean(features$cosine_housing[features$all_sufficient==1]), 
+                                quantile(features$cosine_housing[features$all_sufficient==1])),
+                              block.angle=c(mean(features$block_angle[features$all_sufficient==1]), 
+                                quantile(features$block_angle[features$all_sufficient==1])),
+                              family.js=c(mean(features$cosine_family[features$all_sufficient==1]), 
+                                quantile(features$cosine_family[features$all_sufficient==1]))
                               
                               )
 feature_summary <- xtable(t(feature_summary))
@@ -544,38 +544,39 @@ higher degree of predictive accuracy.
 
 
 
-<<weightTable, results='asis', cache=TRUE>>=
+<<weightTable, results='asis', cache=FALSE>>=
 setwd('../code/training/')
 weights <- read.table("weights.csv")
-names(weights) <- dimnames(M)[[2]] 
+names(weights) <- c('no_neighbor', 'neighbor', colnames(M))
+
 no_pop <- c(weights[c('(Intercept)', 
                       'rail', 
-                      'water', 
+                      'water',
                       'highway', 
                       'grid_street', 
                       'elementary_school', 
                       'high_school', 
                       'block_angle')])
 
-pop <- c(weights[c('sufficient_pop', 
-                   'sufficient_pop:rail', 
-                   'sufficient_pop:water', 
-                   'sufficient_pop:highway', 
-                   'sufficient_pop:grid_street', 
-                   'sufficient_pop:elementary_school', 
-                   'sufficient_pop:high_school', 
-                   'sufficient_pop:block_angle')])
+pop <- c(weights[c('all_sufficient', 
+                   'all_sufficient:rail', 
+                   'all_sufficient:water',
+                   'highway',
+                   'all_sufficient:grid_street', 
+                   'all_sufficient:elementary_school', 
+                   'all_sufficient:high_school', 
+                   'all_sufficient:block_angle')])
+pop$highway <- 0
 
-pop <- c(as.numeric(pop) 
-         + as.numeric(no_pop), 
-         weights[c('sufficient_pop:cosine_family', 
-                   'sufficient_pop:cosine_race', 
-                   'sufficient_pop:cosine_age', 
-                   'sufficient_pop:cosine_housing')])
+combined_pop <- c(as.numeric(pop) 
+                  + as.numeric(no_pop), 
+                  weights[c('all_sufficient:cosine_family', 
+                            'all_sufficient:cosine_ethnicity', 
+                            'all_sufficient:cosine_age', 
+                            'all_sufficient:cosine_housing')])
 
-no_pop <- c(no_pop, rep(NA, 4))
 
-models <- cbind(no_pop, pop)
+models <- matrix(combined_pop)
 
 rownames(models) <- c('(Intercept)', 
                       'Railroad', 
@@ -590,18 +591,16 @@ rownames(models) <- c('(Intercept)',
                       'Age Structure', 
                       'Housing Structure')
 
-
-
-models['Highway', "pop"] <- NA
-
 WT <- xtable(models, digits=4)
 print(WT)
+
 @ 
 
 
 \begin{figure}
 <<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
 par(mfrow=c(1,2))
+par(mar=rep(0, 4), xpd = NA) 
 source('plot_training.R')
 setwd('../code/training/')
 source('plot_predictions.R')
