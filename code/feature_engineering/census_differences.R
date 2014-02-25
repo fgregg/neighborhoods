@@ -383,11 +383,13 @@ jsDistance <-function(columns) {
 
 emdDistance <-function(columns) {
     distances <- rep(0, dim(edgelist)[1])
+    
+    block_A <- nodes@data[edgelist[,1], columns]
+    block_B <- nodes@data[edgelist[,2], columns]
 
-    block_A <- ((nodes@data[edgelist[,1], columns])
-                /(nodes@data[edgelist[,1], "P0040001"]))
-    block_B <- ((nodes@data[edgelist[,2], columns])
-                /(nodes@data[edgelist[,2], "P0040001"]))
+    block_A <- block_A/rowSums(block_A)
+    block_B <- block_B/rowSums(block_B)
+
 
     for (i in 1:length(distances)) {
         distances[i] <- earthmovdist::emdL1(as.numeric(block_A[i,]),
@@ -398,22 +400,49 @@ emdDistance <-function(columns) {
 
 }
 
-chiDistance <- function(columns) {
+cramerDistance <-  function(columns) {
     block_A <- nodes@data[edgelist[,1], columns]
     block_B <- nodes@data[edgelist[,2], columns]
 
     block_A <- block_A/rowSums(block_A)
     block_B <- block_B/rowSums(block_B)
 
+    block_A <- t(apply(block_A, 1, cumsum))
+    block_B <- t(apply(block_B, 1, cumsum))
+
     missing <- rowSums(block_A + block_B, na.rm=TRUE) == 0
+    
+
+    distance <- rowSums((block_A - block_B)^2, na.rm=TRUE)
+
+    distance[missing] <- NA
+
+    return(sqrt(distance)/2)
+}
+
+
+chiDistance <- function(columns) {
+    smoother <- colSums(nodes@data[, columns])
+    smoother <- smoother / sum(smoother)
+    smoothing = 100
+        
+    
+    block_A <- nodes@data[edgelist[,1], columns]
+    block_B <- nodes@data[edgelist[,2], columns]
+
+    normalizer_A <- rowSums(block_A)
+    normalizer_B <- rowSums(block_B)
+
+    block_A <- (block_A + smoother * smoothing)/(normalizer_A + smoothing)
+    block_B <- (block_B + smoother * smoothing)/(normalizer_B + smoothing)
+
+    missing <- normalizer_A + normalizer_B == 0
     
     distance <- rowSums(((block_A - block_B)^2)/(block_A + block_B), na.rm=TRUE)
 
     distance[missing] <- NA
 
-    distance <- exp(-distance)
-
-    return(distance)
+    return(sqrt(0.5*distance))
 }
 
 minPair <- function(column) {
@@ -423,52 +452,53 @@ minPair <- function(column) {
     return(apply(cbind(block_A, block_B), 1, min))
 }
 
-ages <- c("P0120003", # Under 5, male
-          "P0120027", # Under 5, female
-          "P0120004", # Under 5-9, male
-          "P0120005", # Under 10-14, male
-          "P0120006", # Under 15-17, male
-          "P0120028", # Under 5-9, female
-          "P0120029", # Under 10-14, female
-          "P0120030", # Under 15-17, female
-          "P0120007", # Under 18, 19, male
-          "P0120008", # Under 20, male
-          "P0120009", # Under 21, male
-          "P0120031", # Under 18, 19, female
-          "P0120032", # Under 20, female
-          "P0120033", # Under 21, female
-          "P0120010", # Under 22-24, male
-          "P0120011", # Under 25-29, male
-          "P0120034", # Under 22-24, female
-          "P0120035", # Under 25-29, female
-          "P0120012", # Under 30-34, male
-          "P0120013", # Under 35-39, male
-          "P0120014", # Under 40-44, male
-          "P0120015", # Under 45-49, male
-          "P0120016", # Under 50-54, male
-          "P0120017", # Under 55-59, male
-          "P0120018", # Under 60,61, male
-          "P0120019", # Under 62-64, male
-          "P0120036", # Under 30-34, female
-          "P0120037", # Under 35-39, female
-          "P0120038", # Under 40-44, female
-          "P0120039", # Under 45-49, female
-          "P0120040", # Under 50-54, female
-          "P0120041", # Under 55-59, female
-          "P0120042", # Under 60,61, female
-          "P0120043", # Under 62-64, female
-          "P0120020", # Under 65,66, male
-          "P0120021", # Under 67-69, male
-          "P0120022", # Under 70-74, male
-          "P0120023", # Under 75-79, male
-          "P0120024", # Under 80-84, male
-          "P0120025", # Under 85+, male
-          "P0120044", # Under 65,66, female
-          "P0120045", # Under 67-69, female
-          "P0120046", # Under 70-74, female
-          "P0120047", # Under 75-79, female
-          "P0120048", # Under 80-84, female
-          "P0120049") # Under 85+, female
+female_ages <- c("P0120027", # Under 5, female
+                 "P0120028", # Under 5-9, female
+                 "P0120029", # Under 10-14, female
+                 "P0120030", # Under 15-17, female
+                 "P0120031", # Under 18, 19, female
+                 "P0120032", # Under 20, female
+                 "P0120033", # Under 21, female
+                 "P0120034", # Under 22-24, female
+                 "P0120035", # Under 25-29, female
+                 "P0120036", # Under 30-34, female
+                 "P0120037", # Under 35-39, female
+                 "P0120038", # Under 40-44, female
+                 "P0120039", # Under 45-49, female
+                 "P0120040", # Under 50-54, female
+                 "P0120041", # Under 55-59, female
+                 "P0120042", # Under 60,61, female
+                 "P0120043", # Under 62-64, female
+                 "P0120044", # Under 65,66, female
+                 "P0120045", # Under 67-69, female
+                 "P0120046", # Under 70-74, female
+                 "P0120047", # Under 75-79, female
+                 "P0120048", # Under 80-84, female
+                 "P0120049") # Under 85+, female
+
+male_ages <- c("P0120003", # Under 5, male
+               "P0120004", # Under 5-9, male
+               "P0120005", # Under 10-14, male
+               "P0120006", # Under 15-17, male
+               "P0120007", # Under 18, 19, male
+               "P0120008", # Under 20, male
+               "P0120009", # Under 21, male
+               "P0120010", # Under 22-24, male
+               "P0120011", # Under 25-29, male
+               "P0120012", # Under 30-34, male
+               "P0120013", # Under 35-39, male
+               "P0120014", # Under 40-44, male
+               "P0120015", # Under 45-49, male
+               "P0120016", # Under 50-54, male
+               "P0120017", # Under 55-59, male
+               "P0120018", # Under 60,61, male
+               "P0120019", # Under 62-64, male
+               "P0120020", # Under 65,66, male
+               "P0120021", # Under 67-69, male
+               "P0120022", # Under 70-74, male
+               "P0120023", # Under 75-79, male
+               "P0120024", # Under 80-84, male
+               "P0120025") # Under 85+, male
 
   nodes$preschool <- rowSums(nodes@data[, c("P0120003", # Under 5, male
                                             "P0120027")] # Under 5, female
@@ -534,25 +564,34 @@ chunked_ages <- c("preschool", "school", "college",
 
 
 cosine_age <- vectorDistance(chunked_ages)
+
 chi_age <- chiDistance(chunked_ages)
 write.csv(cosine_age, "../interchange/cosine_age.csv", row.names=FALSE)
 write.csv(chi_age, "../interchange/chi_age.csv", row.names=FALSE)
 
 
-housing <- c("H0040002",
-             "H0040003",
-             "H0040004",
-             "H0050002",
-             "H0050003",
-             "H0050004",
-             "H0050005",
-             "H0050006",
-             "H0050007",
-             "H0050008")
+housing <- c("H0040002", # owned with a mortgage or loan
+             "H0040003", # owned free and clear
+             "H0040004", # renter occupied
+             "H0050002",  # for rent 
+             "H0050003", # rented, not occupied
+             "H0050004", # for sale, only
+             "H0050005", # sold, not occupied
+             "H0050006", # For seasonal, recreational, or occasional use
+             "H0050007", # For migrant workers
+             "H0050008" # other vacant
+             )
 
-cosine_housing <- vectorDistance(housing)
+nodes$owner_occupied <- nodes$H0040002 + nodes$H0040003
 
-chi_housing <- chiDistance(housing)
+ownership <- c("owner_occupied",
+               "H0040004",
+               "H0050001")
+
+cosine_housing <- vectorDistance(ownership)
+
+chi_housing <- chiDistance(ownership)
+
 write.csv(cosine_housing, "../interchange/cosine_housing.csv", row.names=FALSE)
 write.csv(chi_housing, "../interchange/chi_housing.csv", row.names=FALSE)
 
@@ -563,14 +602,23 @@ write.csv(absDistance("all_units"),
           "../interchange/diff_housing_unit.csv",
           row.names=FALSE)
 
-family <- c("P0180003",
-            "P0180005",
-            "P0180006",
-            "P0180008",
-            "P0180009")
+nodes$single_parent <- nodes$P0180005 + nodes$P0180006
+nodes$husband_wife <- nodes$P0180003 + nodes$single_parent
+nodes$non_families <- nodes$P0180008 + nodes$P0180009
+
+family <- c("husband_wife",
+            "single_parent",
+            "non_families")
+            #"P0180003", # husband-wife family
+            #"P0180005", # male householder, no wife present
+            #"P0180006", # female householder, no husband present
+            #"P0180008", # householders living alone
+            #"P0180009") # householders not living alone 
 
 cosine_family <- vectorDistance(family)
+
 chi_family <- chiDistance(family)
+
 write.csv(cosine_family, "../interchange/cosine_family.csv", row.names=FALSE)
 write.csv(chi_family, "../interchange/chi_family.csv", row.names=FALSE)
 write.csv(minPair("P0180001"), "../interchange/min_household.csv", row.names=FALSE) 

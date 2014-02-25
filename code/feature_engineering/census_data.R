@@ -136,8 +136,11 @@ variables <- c("P0040001", # total population,
                "P0180005", # Male householder, no wife present
                "P0180006", # Female householder, no husband present
                "P0180008", # Male householder, living alone
-               "P0180009" # Female householder, living alone
-               )
+               "P0180009", # Female householder, living alone
+               "P0130001", # Median age by sex, both sex
+               "P0130002", # Median age by sex, male
+               "P0130003") # Median age by sex, female
+
 
 chicago_blocks <- blockData('17', '031', variables)
 

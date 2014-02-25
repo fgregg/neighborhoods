@@ -19,17 +19,15 @@ cosine_age[is.na(cosine_age)] <- 100
 cosine_housing[is.na(cosine_housing)] <- 100
 
 
-## chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
-## chi_family <- read.csv('../interchange/chi_family.csv')$x
-## chi_housing <- read.csv('../interchange/chi_housing.csv')$x
-## chi_age <- read.csv('../interchange/chi_age.csv')$x
+chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
+chi_family <- read.csv('../interchange/chi_family.csv')$x
+chi_housing <- read.csv('../interchange/chi_housing.csv')$x
+chi_age <- read.csv('../interchange/chi_age.csv')$x
 
-## chi_ethnicity[is.na(chi_ethnicity)] <- 100
-## chi_family[is.na(chi_family)] <- 100
-## chi_housing[is.na(chi_housing)] <- 100
-## chi_age[is.na(chi_age)] <- 100
-
-
+chi_ethnicity[is.na(chi_ethnicity)] <- 100
+chi_family[is.na(chi_family)] <- 100
+chi_housing[is.na(chi_housing)] <- 100
+chi_age[is.na(chi_age)] <- 100
 
 
 rail <- read.csv('../interchange/rail_intersects.csv')$x
@@ -59,7 +57,7 @@ all_sufficient <- as.numeric(sufficient_pop == 1
                              & sufficient_units == 1)
 
 pop_households <- as.numeric(sufficient_units == 0
-                             & sufficient_households == 0
+                             & sufficient_households == 1
                              & sufficient_pop == 1)
 
 # no blocks with pop_units
@@ -90,14 +88,10 @@ features <- data.frame(all_sufficient,
                        household_units,
                        just_pop,
                        just_units,
-                       js_age,
-                       js_family,
-                       js_race,
-                       js_housing,
-                       cosine_ethnicity,
-                       cosine_housing,
-                       cosine_family,
-                       cosine_age,
+                       chi_ethnicity,
+                       chi_housing,
+                       chi_family,
+                       chi_age,
                        diff_housing_units,
                        rail,
                        highway,
@@ -108,10 +102,10 @@ features <- data.frame(all_sufficient,
                        grid_street)
 
 M <- model.matrix(~ (highway + 
-                     all_sufficient:(cosine_age + 
-                                     cosine_ethnicity +
-                                     cosine_family +
-                                     cosine_housing +
+                     all_sufficient:(chi_age + 
+                                     chi_ethnicity +
+                                     chi_family +
+                                     chi_housing +
                                      diff_housing_units) +
                      all_sufficient*(rail +
                                      water +
@@ -127,9 +121,9 @@ M <- model.matrix(~ (highway +
                                      elementary_school +
                                      #highway +
                                      # high_school +
-                                     cosine_age + 
-                                     cosine_ethnicity +
-                                     cosine_family) +
+                                     chi_age + 
+                                     chi_ethnicity +
+                                     chi_family) +
                      household_units +
                      household_units:(rail +
                                       water +
@@ -138,8 +132,8 @@ M <- model.matrix(~ (highway +
                                       elementary_school +
                                       high_school +
                                       block_angle +
-                                      cosine_family +
-                                      cosine_housing +
+                                      chi_family +
+                                      chi_housing +
                                       diff_housing_units) +
                      just_pop +
                      just_pop:(#rail +
@@ -149,8 +143,8 @@ M <- model.matrix(~ (highway +
                                elementary_school +
                                # high_school +
                                block_angle +
-                               cosine_ethnicity +
-                               cosine_family) +
+                               chi_ethnicity +
+                               chi_age) +
                      just_units +
                      just_units:(rail +
                                  # water +
@@ -159,7 +153,7 @@ M <- model.matrix(~ (highway +
                                  elementary_school +
                                  high_school +
                                  block_angle +
-                                 cosine_housing +
+                                 chi_housing +
                                  diff_housing_units)
                      ),
                   data=features)
