@@ -154,12 +154,21 @@ We also measure the difference in orientation between blocks. Blocks
 are nearly all longer than they are wide, and we calculate the angle
 of the longest side. For each pair of blocks, we calculate the
 difference between the orientations of the blocks. We normalize the
-difference to fall in $[0, 1]$. This measure was inspired by Rick
-Grannis’s argument that adjoining face blocks which are not separated
-by a busy street should tend to form areas of mutual
-influence.\footnote{Grannis, Rick. \emph{From the Ground up
-    Translating Geography into Community through Neighbor
-    Networks}. Princeton: Princeton University Press, 2009.}
+difference to fall in $[0, 1]$. This measure was inspired by Vivien
+Palmer's work on the persistent effect of primary settlements. 
+
+In the late 1920s, Palmer developed the theory that when a subdivision
+of a city was originally opened for residential settlement, the
+subdivision would start out largely homogenous in its building stock
+and population. This homogeneity would lead to the subdivision
+maintaining a common fate through the history of the city. The
+residents would tend to respond similarly to larger urban processes
+and the building stock would tend to have the same patterns of
+depreciation and reevaluation.\cite{palmer_primary_1932}
+
+When subdivision were originally platted, the developers tended to
+align the streets within their subdivision. Misalignment of blocks are
+a rough measure of the where different subdivision meet. 
 
 \subsection*{School Boundaries}
 If two adjacent blocks are in different elementary school attendance boundary
@@ -170,32 +179,34 @@ From the U.S. Census, we have block level information on race, age, family
 structure, and housing ownership patterns. We can define measures between
 blocks for these data.
 
-The measure we will use is the Jensen Shannon Divergence, which is a
-symmetric measure of the distance between distributions that ranges from 0
-to 1.
+We will use two measures for the demographic factors. The first is the
+absolute difference. The second is the $\chi$ distance $\sqrt{
+\frac{1}{2} \sum_i^d \frac{(x_i - y_i)^2}{x_i + y_i}}$, where $x_i$ is
+the frequency of bin $i$ of the histogram $\mathbf{x}$ and similar for
+$y_i$. This is just square root of the familiar $\chi^2$ statistic. By
+taking the square root, $\chi$ becomes a metric.\cite{pele_distance_2011}
 
 For race, the distribution is the number people coded by the Census as
 ``Hispanic or Latino'', ``Not Hispanic or Latino : White alone'', ``Not Hispanic
 or Latino : Black Alone'', and ``Not Hispanic or Latino : Asian alone.''
-For age, the distribution is the number of people under 5, between 5 and
-17, between 18 and 20, between 21 and 29, between 30 and 64, and over
-85. These age ranges were chosen to capture life stages that tend to be
-spatially segregated: preschool, school age, college age, young adult, middle
-age, retired.
 
-For family structure, the distribution is ``Husband-wife family'', ``Male
-householder, no wife present'', ``Female householder, no husband present'',
-``Householder, living alone'', and ``Householder, not living alone''.
+For age, we'll use the absolute difference between the median age of
+neighboring blocks.
+
+For family structure, the distribution is of households with children
+versus households without. 
+
+For housing structure, the distribution is of housing units in the
+rental market, housing market, or otherwise disposed.
 
 Many blocks have no one living in them or only a handful. In such
 cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
-not calculate the Jensen-Shannon divergences. There are
+not calculate the demographic differences. There are
 \Sexpr{sum(features$all_sufficient)} edges where we calculate these
 demographic similarities.
 
-
-<<featureTable, echo=FALSE, results='asis'>>= 
+<<featureTable, results='asis', cache=FALSE, message=FALSE>>= 
 feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficient), 
                                 rep(NA, 5)),
                               rail = c(mean(features$rail), 
@@ -204,28 +215,32 @@ feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficie
                                 rep(NA, 5)),
                               water = c(mean(features$water), 
                                 rep(NA, 5)),
-                              zoning = c(mean(features$zoning), 
-                                rep(NA, 5)),
                               elementary.school = c(mean(features$elementary_school), 
                                 rep(NA, 5)),
                               high.school = c(mean(features$high_school), 
                                 rep(NA, 5)),
                               grid.street = c(mean(features$grid_street), 
                                 rep(NA, 5)),
-                              age.js=c(mean(features$cosine_age[features$all_sufficient==1]), 
-                                quantile(features$cosine_age[features$all_sufficient==1])),
-                              race.js=c(mean(features$cosine_race[features$all_sufficient==1]), 
-                                quantile(features$cosine_race[features$all_sufficient==1])),
-                              housing.js=c(mean(features$cosine_housing[features$all_sufficient==1]), 
-                                quantile(features$cosine_housing[features$all_sufficient==1])),
-                              block.angle=c(mean(features$block_angle[features$all_sufficient==1]), 
-                                quantile(features$block_angle[features$all_sufficient==1])),
-                              family.js=c(mean(features$cosine_family[features$all_sufficient==1]), 
-                                quantile(features$cosine_family[features$all_sufficient==1]))
+                              block.angle=c(mean(features$block_angle), 
+                                  quantile(features$block_angle)),
+
+                              age.js=c(mean(features$abs_age[features$all_sufficient==1]), 
+                                  
+                                quantile(features$abs_age[features$all_sufficient==1])),
+                              race.js=c(mean(features$chi_ethnicity[features$all_sufficient==1]), 
+                                quantile(features$chi_ethnicity[features$all_sufficient==1])),
+                              housing.js=c(mean(features$chi_housing[features$all_sufficient==1]), 
+                                quantile(features$chi_housing[features$all_sufficient==1])),
+                              family.js=c(mean(features$chi_family[features$all_sufficient==1]), 
+                                quantile(features$chi_family[features$all_sufficient==1]))
                               
                               )
 feature_summary <- xtable(t(feature_summary))
 colnames(feature_summary) <- c("Mean", "Min", "25th Quant.", "Median", "75th Quant.", "Max")
+row.names(feature_summary) <- c("Sufficient Population", "Rail", "Highway", 
+                                "Water", "Elementary School", "High School", 
+                                "Grid Street", "Block Angle", "Age", 
+                                "Ethnicity", "Housing", "Family")
 print(feature_summary)
 @ 
 
@@ -288,7 +303,7 @@ plot(all_edges$lines, col=rgb(colorRamp(c("lightgrey", "red"))(features$block_an
 
 \begin{figure}
 <<<raceImage, dev='pdf'>>=
-plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_ethnicity"][features$all_sufficient==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:chi_ethnicity"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Race and Ethnicity}
 \end{figure}
@@ -296,7 +311,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<ageImage, dev='pdf'>>=
-plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_age"][features$all_sufficient==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:abs_age"][features$all_sufficient==1]/max(M[,"all_sufficient:abs_age"]))/255))
 @ 
 \caption{Difference in Distribution of Age}
 \end{figure}
@@ -304,7 +319,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<familyImage, dev='pdf'>>=
-plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_family"][features$all_sufficient==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:chi_family"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Family Type}
 \end{figure}
@@ -312,7 +327,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 
 \begin{figure}
 <<<housingImage, dev='pdf'>>=
-plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:cosine_housing"][features$all_sufficient==1])/255))
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:chi_housing"][features$all_sufficient==1])/255))
 @ 
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
@@ -438,11 +453,8 @@ This functional form can be handled by the graph cut methods.
 
 \section*{Results}
 After training the model using the PyStruct structure learning
-framework,\footnote{Mueller, Andreas, and Sven Behnke. ``PyStruct:
-  Learning Structured Prediction in Python.'' Journal of Machine
-  Learning Research Forthcoming. See https://github.
-  com/fgregg/pystruct for custom model} we get two classes of results:
-predictions of Chicago neighborhoods and parameter estimates.
+framework,\cite{mueller_pystruct:_????} we get two classes of results:
+predictions of Chicago neighborhoods and parameter estimates.\footnote{See \url{https://github.com/fgregg/pystruct for custom model}}
 
 Given a set of learned weights we can find, approximately, a lowest
 scoring assignment of labels to neighborhoods of the city. However,
@@ -547,7 +559,7 @@ higher degree of predictive accuracy.
 <<weightTable, results='asis', cache=FALSE>>=
 setwd('../code/training/')
 weights <- read.table("weights.csv")
-names(weights) <- c('no_neighbor', 'neighbor', colnames(M))
+names(weights) <- colnames(M)
 
 no_pop <- c(weights[c('(Intercept)', 
                       'rail', 
@@ -570,10 +582,11 @@ pop$highway <- 0
 
 combined_pop <- c(as.numeric(pop) 
                   + as.numeric(no_pop), 
-                  weights[c('all_sufficient:cosine_family', 
-                            'all_sufficient:cosine_ethnicity', 
-                            'all_sufficient:cosine_age', 
-                            'all_sufficient:cosine_housing')])
+                  weights[c('all_sufficient:chi_family', 
+                            'all_sufficient:chi_ethnicity', 
+                            'all_sufficient:abs_age',
+                            'all_sufficient:diff_housing_units',
+                            'all_sufficient:chi_housing')])
 
 
 models <- matrix(combined_pop)
@@ -589,6 +602,7 @@ rownames(models) <- c('(Intercept)',
                       'Family Structure', 
                       'Race and Ethnicity', 
                       'Age Structure', 
+                      'Number of Housing Units',
                       'Housing Structure')
 
 WT <- xtable(models, digits=4)
@@ -610,5 +624,7 @@ par(mfrow=c(1,1))
 \caption{Predicted Neighborhoods}
 \end{figure}
 
+\bibliographystyle{plain}
+\bibliography{qp}
 
 \end{document}

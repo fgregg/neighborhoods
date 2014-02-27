@@ -185,12 +185,21 @@ We also measure the difference in orientation between blocks. Blocks
 are nearly all longer than they are wide, and we calculate the angle
 of the longest side. For each pair of blocks, we calculate the
 difference between the orientations of the blocks. We normalize the
-difference to fall in $[0, 1]$. This measure was inspired by Rick
-Grannis’s argument that adjoining face blocks which are not separated
-by a busy street should tend to form areas of mutual
-influence.\footnote{Grannis, Rick. \emph{From the Ground up
-    Translating Geography into Community through Neighbor
-    Networks}. Princeton: Princeton University Press, 2009.}
+difference to fall in $[0, 1]$. This measure was inspired by Vivien
+Palmer's work on the persistent effect of primary settlements. 
+
+In the late 1920s, Palmer developed the theory that when a subdivision
+of a city was originally opened for residential settlement, the
+subdivision would start out largely homogenous in its building stock
+and population. This homogeneity would lead to the subdivision
+maintaining a common fate through the history of the city. The
+residents would tend to respond similarly to larger urban processes
+and the building stock would tend to have the same patterns of
+depreciation and reevaluation.\cite{palmer_primary_1932}
+
+When subdivision were originally platted, the developers tended to
+align the streets within their subdivision. Misalignment of blocks are
+a rough measure of the where different subdivision meet. 
 
 \subsection*{School Boundaries}
 If two adjacent blocks are in different elementary school attendance boundary
@@ -201,55 +210,53 @@ From the U.S. Census, we have block level information on race, age, family
 structure, and housing ownership patterns. We can define measures between
 blocks for these data.
 
-The measure we will use is the Jensen Shannon Divergence, which is a
-symmetric measure of the distance between distributions that ranges from 0
-to 1.
+We will use two measures for the demographic factors. The first is the
+absolute difference. The second is the $\chi$ distance $\sqrt{
+\frac{1}{2} \sum_i^d \frac{(x_i - y_i)^2}{x_i + y_i}}$, where $x_i$ is
+the frequency of bin $i$ of the histogram $\mathbf{x}$ and similar for
+$y_i$. This is just square root of the familiar $\chi^2$ statistic. By
+taking the square root, $\chi$ becomes a metric.\cite{pele_distance_2011}
 
 For race, the distribution is the number people coded by the Census as
 ``Hispanic or Latino'', ``Not Hispanic or Latino : White alone'', ``Not Hispanic
 or Latino : Black Alone'', and ``Not Hispanic or Latino : Asian alone.''
-For age, the distribution is the number of people under 5, between 5 and
-17, between 18 and 20, between 21 and 29, between 30 and 64, and over
-85. These age ranges were chosen to capture life stages that tend to be
-spatially segregated: preschool, school age, college age, young adult, middle
-age, retired.
 
-For family structure, the distribution is ``Husband-wife family'', ``Male
-householder, no wife present'', ``Female householder, no husband present'',
-``Householder, living alone'', and ``Householder, not living alone''.
+For age, we'll use the absolute difference between the median age of
+neighboring blocks.
+
+For family structure, the distribution is of households with children
+versus households without. 
+
+For housing structure, the distribution is of housing units in the
+rental market, housing market, or otherwise disposed.
 
 Many blocks have no one living in them or only a handful. In such
 cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
-not calculate the Jensen-Shannon divergences. There are
+not calculate the demographic differences. There are
 7,092 edges where we calculate these
 demographic similarities.
 
-
-\begin{kframe}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: argument is not numeric or logical: returning NA\\\#\# Warning: argument is not numeric or logical: returning NA\\\#\# Warning: is.na() applied to non-(list or vector) of type 'NULL'}}\end{kframe}% latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Sat Feb 22 13:42:21 2014
+% latex table generated in R 3.0.1 by xtable 1.7-1 package
+% Wed Feb 26 18:23:10 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & Mean & Min & 25th Quant. & Median & 75th Quant. & Max \\ 
   \hline
-sufficient.population & 0.51 &  &  &  &  &  \\ 
-  rail & 0.01 &  &  &  &  &  \\ 
-  highway & 0.02 &  &  &  &  &  \\ 
-  water & 0.01 &  &  &  &  &  \\ 
-  zoning &  &  &  &  &  &  \\ 
-  elementary.school & 0.09 &  &  &  &  &  \\ 
-  high.school & 0.03 &  &  &  &  &  \\ 
-  grid.street & 0.17 &  &  &  &  &  \\ 
-  age.js & 0.66 & 0.32 & 0.62 & 0.66 & 0.70 & 0.99 \\ 
-  race.js &  &  &  &  &  &  \\ 
-  housing.js & 0.59 & 0.01 & 0.53 & 0.61 & 0.67 & 1.00 \\ 
-  block.angle & 0.18 & 0.00 & 0.00 & 0.00 & 0.50 & 0.98 \\ 
-  family.js & 0.69 & 0.11 & 0.66 & 0.70 & 0.73 & 0.97 \\ 
+Sufficient Population & 0.51 &  &  &  &  &  \\ 
+  Rail & 0.01 &  &  &  &  &  \\ 
+  Highway & 0.02 &  &  &  &  &  \\ 
+  Water & 0.01 &  &  &  &  &  \\ 
+  Elementary School & 0.09 &  &  &  &  &  \\ 
+  High School & 0.03 &  &  &  &  &  \\ 
+  Grid Street & 0.17 &  &  &  &  &  \\ 
+  Block Angle & 0.20 & 0.00 & 0.00 & 0.00 & 0.50 & 1.00 \\ 
+  Age & 5.00 & 0.00 & 1.30 & 2.90 & 5.70 & 61.10 \\ 
+  Ethnicity & 0.24 & 0.01 & 0.16 & 0.22 & 0.30 & 0.94 \\ 
+  Housing & 0.23 & 0.00 & 0.12 & 0.19 & 0.31 & 0.93 \\ 
+  Family & 0.13 & 0.00 & 0.05 & 0.11 & 0.19 & 0.81 \\ 
    \hline
 \end{tabular}
 \end{table}
@@ -561,11 +568,8 @@ This functional form can be handled by the graph cut methods.
 
 \section*{Results}
 After training the model using the PyStruct structure learning
-framework,\footnote{Mueller, Andreas, and Sven Behnke. ``PyStruct:
-  Learning Structured Prediction in Python.'' Journal of Machine
-  Learning Research Forthcoming. See https://github.
-  com/fgregg/pystruct for custom model} we get two classes of results:
-predictions of Chicago neighborhoods and parameter estimates.
+framework,\cite{mueller_pystruct:_????} we get two classes of results:
+predictions of Chicago neighborhoods and parameter estimates.\footnote{See \url{https://github.com/fgregg/pystruct for custom model}}
 
 Given a set of learned weights we can find, approximately, a lowest
 scoring assignment of labels to neighborhoods of the city. However,
@@ -668,25 +672,26 @@ higher degree of predictive accuracy.
 
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Sat Feb 22 14:14:12 2014
+% Wed Feb 26 18:23:15 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rr}
   \hline
  & x \\ 
   \hline
-(Intercept) & -0.0012 \\ 
-  Railroad & 0.0864 \\ 
-  Water & 0.0000 \\ 
-  Highway & 0.0209 \\ 
-  Major Street & -0.0147 \\ 
-  Elementary School & 0.0027 \\ 
-  High School & -0.0035 \\ 
-  Block Angle & 0.0026 \\ 
-  Family Structure & -0.0168 \\ 
-  Race and Ethnicity & 0.0124 \\ 
-  Age Structure & -0.0013 \\ 
-  Housing Structure & 0.0118 \\ 
+(Intercept) & -0.0059 \\ 
+  Railroad & 0.0151 \\ 
+  Water & 0.0008 \\ 
+  Highway & 0.0009 \\ 
+  Major Street & -0.0112 \\ 
+  Elementary School & -0.0013 \\ 
+  High School & 0.0014 \\ 
+  Block Angle & 0.0024 \\ 
+  Family Structure & -0.0023 \\ 
+  Race and Ethnicity & 0.0030 \\ 
+  Age Structure & 0.0001 \\ 
+  Number of Housing Units & 0.0095 \\ 
+  Housing Structure & -0.0008 \\ 
    \hline
 \end{tabular}
 \end{table}
@@ -709,5 +714,7 @@ higher degree of predictive accuracy.
 \caption{Predicted Neighborhoods}
 \end{figure}
 
+\bibliographystyle{plain}
+\bibliography{qp}
 
 \end{document}
