@@ -25,7 +25,11 @@ set.seed(as.double(Sys.time()))
 
 map_colors = sample(sample(colors()))
 
-plot(blocks.poly,
-     col=rgb(t(col2rgb(map_colors[hoods %% 657 + 1])/255),
-         alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)),
-     border="transparent")
+#pdf("updated_model.pdf")
+if (!common::from_source()) {
+    plot(blocks.poly,
+         col=rgb(t(col2rgb(map_colors[hoods %% 657 + 1])/255),
+             alpha=ifelse(hood_frequency[hoods] < 10, 0.05, 1)),
+         border="transparent")
+}
+#dev.off()
