@@ -78,7 +78,7 @@ chicago_nodes_n = len(numpy.loadtxt(PATH + 'chicago_node_labels.csv', skiprows =
 chicago_edges = numpy.loadtxt(PATH + 'chicago_edges.csv', skiprows = 1, dtype=int, delimiter=',')
 X_chicago = ((numpy.empty((chicago_nodes_n, 0), dtype=numpy.float), 
               numpy.array(chicago_edges, dtype=numpy.int) - 1,
-              numpy.loadtxt('chicago.model.matrix', skiprows=1)),)
+              numpy.loadtxt('chicago_model.matrix', skiprows=1)),)
 
 predicted_chicago = svm.predict(X_chicago)
                          

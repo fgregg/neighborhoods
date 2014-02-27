@@ -1,53 +1,36 @@
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
-
-
 devtools::load_all(pkg)
 
-js_age <- read.csv('../interchange/js_age.csv')$x
-js_family <- read.csv('../interchange/js_family.csv')$x
-js_race <- read.csv('../interchange/js_race.csv')$x
-js_housing <- read.csv('../interchange/js_housing.csv')$x
+#PREFIX = "chicago_"
+PREFIX = ""
 
-cosine_ethnicity <- read.csv('../interchange/cosine_ethnicity.csv')$x
-cosine_family <- read.csv('../interchange/cosine_family.csv')$x
-cosine_age <- read.csv('../interchange/cosine_age.csv')$x
-cosine_housing <- read.csv('../interchange/cosine_housing.csv')$x
-
-cosine_ethnicity[is.na(cosine_ethnicity)] <- 100
-cosine_family[is.na(cosine_family)] <- 100
-cosine_age[is.na(cosine_age)] <- 100
-cosine_housing[is.na(cosine_housing)] <- 100
-
-
-chi_ethnicity <- read.csv('../interchange/chi_ethnicity.csv')$x
-chi_family <- read.csv('../interchange/chi_family.csv')$x
-chi_housing <- read.csv('../interchange/chi_housing.csv')$x
-chi_age <- read.csv('../interchange/chi_age.csv')$x
+chi_ethnicity <- read.csv(paste('../interchange/', PREFIX, 'chi_ethnicity.csv', sep=""))$x
+chi_family <- read.csv(paste('../interchange/', PREFIX, 'chi_family.csv', sep=""))$x
+chi_housing <- read.csv(paste('../interchange/', PREFIX, 'chi_housing.csv', sep=""))$x
 
 chi_ethnicity[is.na(chi_ethnicity)] <- 100
 chi_family[is.na(chi_family)] <- 100
 chi_housing[is.na(chi_housing)] <- 100
-chi_age[is.na(chi_age)] <- 100
 
-abs_age <- read.csv('../interchange/abs_age.csv')$x
+abs_age <- read.csv(paste('../interchange/', PREFIX, 'abs_age.csv', sep=""))$x
 abs_age[is.na(abs_age)] <- 100
 
-rail <- read.csv('../interchange/rail_intersects.csv')$x
-highway <- read.csv('../interchange/highway_intersects.csv')$x
-grid_street <- read.csv('../interchange/grid_intersects.csv')$x
-water <- read.csv('../interchange/water_intersects.csv')$x
+rail <- read.csv(paste('../interchange/', PREFIX, 'rail_intersects.csv', sep=""))$x
+highway <- read.csv(paste('../interchange/', PREFIX, 'highway_intersects.csv', sep=""))$x
+grid_street <- read.csv(paste('../interchange/', PREFIX, 'grid_intersects.csv', sep=""))$x
+water <- read.csv(paste('../interchange/', PREFIX, 'water_intersects.csv', sep=""))$x
 
-elementary_school <- read.csv('../interchange/elementary_schools_crosses.csv')$x
-high_school <- read.csv('../interchange/high_schools_crosses.csv')$x
-block_angle <- read.csv('../interchange/block_angles.csv')$x
+elementary_school <- read.csv(paste('../interchange/', PREFIX, 'elementary_schools_crosses.csv', sep=""))$x
+high_school <- read.csv(paste('../interchange/', PREFIX, 'high_schools_crosses.csv', sep=""))$x
+block_angle <- read.csv(paste('../interchange/', PREFIX, 'block_angles.csv', sep=""))$x
 
 block_angle <- block_angle %% pi/2 / (pi/2)
 
-population <- read.csv('../interchange/min_population.csv')$x
-households <- read.csv('../interchange/min_household.csv')$x
-housing_units <- read.csv('../interchange/min_housing_unit.csv')$x
+population <- read.csv(paste('../interchange/', PREFIX, 'min_population.csv', sep=""))$x
+households <- read.csv(paste('../interchange/', PREFIX, 'min_household.csv', sep=""))$x
+housing_units <- read.csv(paste('../interchange/', PREFIX, 'min_housing_unit.csv', sep=""))$x
 
-diff_housing_units <- read.csv('../interchange/diff_housing_unit.csv')$x
+diff_housing_units <- read.csv(paste('../interchange/', PREFIX, 'diff_housing_unit.csv', sep=""))$x
 diff_housing_units[is.na(diff_housing_units)] <- 100
 
 sufficient_pop <- as.numeric(population > 30)
@@ -92,7 +75,7 @@ features <- data.frame(all_sufficient,
                        chi_ethnicity,
                        chi_housing,
                        chi_family,
-                       chi_age,
+                       abs_age,
                        diff_housing_units,
                        rail,
                        highway,
@@ -150,5 +133,5 @@ M <- model.matrix(~ (highway +
 
 
 
-write.table(M, "model.matrix", row.names=FALSE)
+write.table(M, paste(PREFIX, "model.matrix", sep=""), row.names=FALSE)
  
