@@ -46,36 +46,32 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 
 
 \section*{Introduction}
-Social scientists have devised an wide arsenal of techniques to group
-similar elements under the rubrics of clustering, community detection,
-and network partition. All these techniques assume that the researcher
-already knows what makes elements similar. The researcher must supply
-pair-wise similarity or distance scores between elements. If the
-grouping algorithm is a reasonable one, these scores should affect the
-final result much more than the choice of algorithm.\footnote{For a
-  recent synthetic view, see Bindel, David. ``Communities, Spectral
-  Clustering, and Random Walks.'' presented at the Scientific and
-  Statistical Computing Seminar, University of Chicago, November
-  2011. \url{http://www.cs.cornell.edu/~bindel/present/
- chicago-nov11.pdf.}}
+Social scientists have long been concerned in dividing the social
+world into meaningful components. In recent year's we have
+developed many methods to accomplish this when know what parts of the
+world are similar to one another, broadly clustering, community
+detection, and network partition techniques. Unfortunately, we are
+seldom so lucky as to already know what really matters for making one
+thing similar to another. 
 
-When our similarity is binary, i.e. did ego nominate alter as friend, life is
-easy. But, as soon as a variable has more than two possible values then the
-researcher must choose how to turn those values into similarities. A careful
-researcher may check her choices for robustness, but may only learn that
-her errors are robust. In the end, we adjust the various weights until the
-groupings come out looking about right. We would have been better off just
-drawing what we wanted in the first place.
+When our similarity is binary, i.e. did ego nominate alter as friend,
+life is easy. But, as soon as a variable has more than two possible
+values then the researcher must choose, by hand, how to turn those
+values into similarities. In the end, we adjust the various weights
+until the groupings from our favorite clustering algorithm come out
+looking about right. We would have been better off just drawing what
+we wanted in the first place.
 
 Another way is possible. If our subjects ever group themselves, we can
 use that revealed grouping to learn what counts for similarity in a particular
 social world. We can then apply our derived similarity to group elements in
 a way that is likely to be meaningful to the types of people we learned from.
+
 People group themselves in a variety of ways: making friends, getting
-married, joining organizations, share consumption, and self-labeling. In this
-paper, we will discuss a particular form of self-labeling: claims that a location
-belongs to a city neighborhood. However, the larger approach is much more
-general.
+married, joining organizations, share consumption, and
+self-labeling. In this paper, we will discuss a particular form of
+self-labeling: claims that a location belongs to a city
+neighborhood. However, the larger approach is much more general.
 
 \input{theory_and_math.tex}
 
@@ -142,7 +138,7 @@ there are \Sexpr{dim(blocks.poly)[1]} blocks and
   \Sexpr{dim(features)[1]} edges.
 
 For the inter-block similarities, we will use physical, demographic, and
-administrative features.
+administrative features (Table \ref{tab:Distribution}).
 
 \subsection*{Physical Barriers}
 Highways, rail lines, rivers, and major streets often act as neighborhood
@@ -159,7 +155,7 @@ Palmer's work on the persistent effect of primary settlements.
 
 In the late 1920s, Palmer developed the theory that when a subdivision
 of a city was originally opened for residential settlement, the
-subdivision would start out largely homogenous in its building stock
+area would start out largely homogenous in its building stock
 and population. This homogeneity would lead to the subdivision
 maintaining a common fate through the history of the city. The
 residents would tend to respond similarly to larger urban processes
@@ -190,14 +186,15 @@ For race, the distribution is the number people coded by the Census as
 ``Hispanic or Latino'', ``Not Hispanic or Latino : White alone'', ``Not Hispanic
 or Latino : Black Alone'', and ``Not Hispanic or Latino : Asian alone.''
 
-For age, we'll use the absolute difference between the median age of
+For age, we'll use the absolute difference between the log median age of
 neighboring blocks.
 
 For family structure, the distribution is of households with children
 versus households without. 
 
 For housing structure, the distribution is of housing units in the
-rental market, housing market, or otherwise disposed.
+rental market, housing market, or otherwise disposed. We also use the
+absolute difference between the log median density of housing units.
 
 Many blocks have no one living in them or only a handful. In such
 cases, it makes little sense to compare demographic distributions. If
@@ -223,6 +220,10 @@ feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficie
                                 rep(NA, 5)),
                               block.angle=c(mean(features$block_angle), 
                                   quantile(features$block_angle)),
+                              diff_units.js=c(mean(features$diff_housing_units[features$all_sufficient==1]), 
+                                  
+                                quantile(features$diff_housing_units[features$all_sufficient==1])),
+
 
                               age.js=c(mean(features$abs_age[features$all_sufficient==1]), 
                                   
@@ -235,11 +236,14 @@ feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficie
                                 quantile(features$chi_family[features$all_sufficient==1]))
                               
                               )
-feature_summary <- xtable(t(feature_summary))
+feature_summary <- xtable(t(feature_summary),
+                          caption="Distribution of Barriers and Distances",
+                          label="tab:Distribution")
 colnames(feature_summary) <- c("Mean", "Min", "25th Quant.", "Median", "75th Quant.", "Max")
 row.names(feature_summary) <- c("Sufficient Population", "Rail", "Highway", 
                                 "Water", "Elementary School", "High School", 
-                                "Grid Street", "Block Angle", "Age", 
+                                "Grid Street", "Block Angle", 
+                                "Log Housing Density", "Log Median Age", 
                                 "Ethnicity", "Housing", "Family")
 print(feature_summary)
 @ 
@@ -313,7 +317,15 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 <<<ageImage, dev='pdf'>>=
 plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:abs_age"][features$all_sufficient==1]/max(M[,"all_sufficient:abs_age"]))/255))
 @ 
-\caption{Difference in Distribution of Age}
+\caption{Difference in Log Median Age}
+\end{figure}
+
+
+\begin{figure}
+<<<housingDiffImage, dev='pdf'>>=
+plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:diff_housing_units"][features$all_sufficient==1]/max(M[,"all_sufficient:diff_housing_units"]))/255))
+@ 
+\caption{Difference in Log Density of Housing Units}
 \end{figure}
 
 
@@ -344,11 +356,13 @@ we do not want to preclude.
 We deal with this variation by using dummy variables to effectively
 learned two model at once: a nonpopulated and populated block model:
 
+Our overall scoring function is 
 \begin{align}
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w}) = \sum_{<i
     j>}^{\mathcal{N}}\epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w})  
 \end{align}
 
+where 
 \begin{equation}
 \epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w}) = \begin{cases}
     0 \quad\quad\quad y_i = y_j \\
@@ -356,6 +370,7 @@ learned two model at once: a nonpopulated and populated block model:
   \end{cases}
 \end{equation}
 
+and the unpopulated block model is 
 \begin{align}
 \phi(\mathbf{s}_{i,j}, \mathbf{w}) = & w_0 
                                      + w_1\text{Rail}_{i,j} 
@@ -379,9 +394,10 @@ While the model for the populated neighboring blocks will be
                                      &+ w_{14}\text{High School}_{i,j} 
                                      + w_{15}\text{Block Angle}_{i,j}\\
                                      &+ w_{16}\text{Family Structure}_{i,j}
-                                     + w_{17}\text{Race and Ethnicity}_{i_j}\\
-                                     &+ w_{18}\text{Age Structure}  
-                                     + w_{19}\text{Housing Structure}
+                                     + w_{17}\text{Race and Ethnicity}_{i,j}\\
+                                     &+ w_{18}\text{Age Structure}_{i,j}  
+                                     + w_{19}\text{Housing Structure}_{i,j} \\
+                                     &+ w_{20}\text{Housing Density}_{i,j}  
 \end{align}
 
 We can combine these models by creating a dummy variable that takes a
@@ -396,34 +412,37 @@ variables to our unpopulated model.\footnote{Actually, our model is
   use an additional dummy variables to handle these cases}
 
 \begin{align}
-\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_1 
-                                     + w_2\text{Rail}_{i,j} 
-                                     + w_3\text{Water}_{i,j} 
-                                     + w_4\text{Highway}_{i,j} \\
-                                     &+ w_5\text{Major Street}_{i,j} 
-                                     + w_6\text{Elementary School}_{i,j}\\ 
-                                     & + w_7\text{High School}_{i,j}
-                                     + w_8\text{Block Angle}_{i,j} \\
+\phi(\mathbf{s}_{i,j}, \mathbf{w}) =  & w_0 
+                                     + w_1\text{Rail}_{i,j} 
+                                     + w_2\text{Water}_{i,j} 
+                                     + w_3\text{Highway}_{i,j} \\
+                                     &+ w_4\text{Major Street}_{i,j} 
+                                     + w_5\text{Elementary School}_{i,j}\\ 
+                                     & + w_6\text{High School}_{i,j}
+                                     + w_7\text{Block Angle}_{i,j} \\
                                      &+ \text{Populated Blocks}_{i,j}\cdot\\
-                                     &\quad (w_9
-                                     + w_{10}\text{Rail}_{i,j} 
-                                     + w_{11}\text{Water}_{i,j}\\ 
-                                     &\quad+ w_{12}\text{Highway}_{i,j}
-                                     + w_{13}\text{Major Street}_{i,j}\\ 
-                                     &\quad + w_{14}\text{Elementary School}_{i,j} 
-                                     + w_{15}\text{High School}_{i,j}\\ 
-                                     &\quad + w_{16}\text{Block Angle}_{i,j}
-                                     + w_{17}\text{Family Structure}_{i,j}\\
-                                     &\quad + w_{18}\text{Race and Ethnicity}_{i_j}
-                                     + w_{19}\text{Age Structure}\\  
-                                     &\quad+ w_{20}\text{Housing Structure})\\
+                                     &\quad (w_8
+                                     + w_{9}\text{Rail}_{i,j} 
+                                     + w_{10}\text{Water}_{i,j}\\ 
+                                     &\quad+ w_{11}\text{Highway}_{i,j}
+                                     + w_{12}\text{Major Street}_{i,j}\\ 
+                                     &\quad + w_{13}\text{Elementary School}_{i,j} 
+                                     + w_{14}\text{High School}_{i,j}\\ 
+                                     &\quad + w_{15}\text{Block Angle}_{i,j}
+                                     + w_{16}\text{Family Structure}_{i,j}\\
+                                     &\quad + w_{17}\text{Race and Ethnicity}_{i,j}
+                                     + w_{18}\text{Age Structure}_{i,j}\\  
+                                     &\quad+ w_{19}\text{Housing Structure}_{i,j}
+                                     + w_{20}\text{Housing Density}_{i,j})\\
 \end{align}
 
 
 \section*{Results}
 After training the model using the PyStruct structure learning
 framework,\cite{mueller_pystruct:_????} we get two classes of results:
-predictions of Chicago neighborhoods and parameter estimates.\footnote{See \url{https://github.com/fgregg/pystruct for custom model}}
+predictions of Chicago neighborhoods and parameter
+estimates.\footnote{See \url{https://github.com/fgregg/pystruct} for
+  custom model}
 
 Given a set of learned weights we can find, approximately, a lowest
 scoring assignment of labels to neighborhoods of the city. However,
@@ -435,93 +454,69 @@ from it’s neighbors. Instead, a neighborhood will be a set of block
 that have the same label and which are connected components.  
 
 Let’s start by looking at predictions for our training blocks to
-highlight some characteristics of our model.
+highlight some characteristics of our model (Figure
+\ref{fig:predictTraining}).
 
+\begin{figure}
+<<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
+par(mfrow=c(1,2))
+par(mar=rep(0, 4), xpd = NA) 
+source('plot_training.R')
+setwd('../code/training/')
+source('plot_predictions.R')
+setwd(CURDIR)
+par(mfrow=c(1,1))
+@ 
+\caption{Predicted Neighborhoods}
+\label{fig:predictTraining}
+\end{figure}
 
-First, our model predictions are very sensitive to the choice of the regularizer
-C. We choose C by estimating the model for various values of C between
-1.0 and 0.0001 and choosing the value that maximizes the fit between the
-predicted neighborhoods and the training neighborhoods. The value of C
-that gave the best fit was 0.0046.
+First, our model depends upon C, the normalizer.  C. We choose C by
+estimating the model for various values of C between 1.0 and 0.0001
+and choosing the value that maximizes the fit between the predicted
+neighborhoods and the training neighborhoods. The value of C that gave
+the best fit was 0.0005.
 
-Second, our model predicts many, very small neighborhoods. In Figure 15,
-I have colored the 19 neighborhoods that have ten or more blocks and grayed
-out the 58 remaining, small neighborhoods. There are 32 neighborhoods that
-consist of a single block.
+Second, our model predicts many, very small neighborhoods. In Figure
+\ref{fig:predictTraining}, I have colored the
+\Sexpr{sum(hood_frequency >= 10)} neighborhoods that have ten or more
+blocks and grayed out the \Sexpr{sum(hood_frequency < 10)} remaining,
+small neighborhoods. There are \Sexpr{sum(hood_frequency ==1)}
+neighborhoods that consist of a single block.
 
-Third, our model fails to predict fine neighborhood distinctions, even
-on the training set. We have learned that neighborhoods tend to split at
-railway tracks, the river, and the highway, but school attendance boundaries,
-block orientation, and major streets do not seem to predict neighborhoods.
-Differences in family structure, race and ethnicity, age and ownership pattern
-also do not appear to be strongly predictive, at least as we’ve measured them
-here.
+Third, our model seems to do an adequate job in capturing neighborhoods!!!
 
-For ease of interpretation, all the features have a scale of 0 to 1. A
-positive parameter means that, all else equal, the total score will be
-lower if adjacent blocks are allocated to separate
-neighborhoods. Negative parameters, means that all else equal,
-adjacent blocks should be allocated to the same neighborhood. So, for
-example the negative intercepts mean that adjacent blocks that are
-identical will ‘prefer’ to be assigned to the same neighborhood.
+\emph{I know I need some sort of measurement here}
 
-Looking at the parameters for the model where at least one two
-adjacent blocks is unpopulated or sparsely populated, we see that all
-the parameters are positive with the exception of water. That means
-that the model learned that railroads, highways, major streets,
-differing elementary schools, differing high schools, and unaligned
-block angles should divide blocks into separate neighborhoods.  
+Now, turning to the parameters, we'll focus on the parameters for the
+populated blocks (Table \ref{tab:parameters}). A positive parameter
+means that, all else equal, the total score will be lower if adjacent
+blocks are allocated to separate neighborhoods. Negative parameters,
+means that all else equal, adjacent blocks should be allocated to the
+same neighborhood. So, for example the negative intercepts mean that
+adjacent blocks that are identical will ‘prefer’ to be assigned to the
+same neighborhood.
 
-The negative parameter for water is interesting. We would expect that
-it should divide neighborhoods, but in our training data, the river
-runs through industrial corridors. From our training data, we mostly
-allocate “No neighborhood” labels to these corridors. The model has
-most likely learned that these corridors should not be split into two
-separate regions.  
+Nearly all parameters for barriers and administrative zones have a
+positive sign, which is what we expect: dissimilar blocks and blocks
+separated by barriers are more apt to be placed in separate
+neighborhoods. The negative `attractive' parameter for major street is
+likely due to fact that every one of our training neighborhoods
+contains multiple major grid streets.
 
-For the populated block model, we have only
-positive parameters for only four features: railroad, water,
-differences in race and ethnicity, and differences in housing
-patterns. We expected that these features should divide neighborhoods.
-
-The negative parameters are more surprising. The negative parameters
-for major street and elementary school are likely due to fact that
-every one of our training neighborhoods contains multiple major grid
-streets and at least two elementary schools. Likewise, large
-differences in block angles appear frequently at the sub-neighborhood
-level.  
-
-The negative parameter for the high school is unexpected. The
-training neighborhoods appear to line up pretty well with the
-attendance boundaries for the public high schools. The negative
-parameters for family and age structure are likewise puzzling.
+The demographic distances are more complicated. Differences in ethnic
+and racial composition is strongly positive. Such a `divisive'
+parameter is required to have face validity in Chicago. Differences in
+the density of housing units also has the expected sign. Differences
+in median age and housing structure are unexpectedly weak, but also
+very close to 0. The relatively strong `attractive' parameter for
+differences in family structure is very surprising. According the this
+model, a block that is all families and a block that has no families
+are very apt to belong the same neighborhood. 
 
 \section*{Discussion}
-Through this paper, we have traced how we can what counts for similarity
-within a particular social phenomena. At present, the results are modest.
-We have learned that rivers, railroads, and highways tend to count in the
-grouping of blocks into neighborhoods, facts that we likely already knew.
-We have yet to uncover a set of similarities that can reproduce the groupings
-of North Side Chicago neighborhoods.
-
-At this point, I think such similarities do exist, but I have not yet
-found them. However, it is possible that my underlying theory of
-neighborhoods is wrong, and there exists no such set of
-similarities. The theory, and formal model presented here, assume that
-neighborhoods emerge from block-byblock similarities and
-differences. If, instead, neighborhood perception was due to some top
-down process that neither depended upon nor caused blockby-block
-similarities, than my approach cannot work.  
-
-At the point, I feel the
-next step must be to try to find a set of features that can produce a
-higher degree of predictive accuracy.
-
-
-%\begin{figure}
-%\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
-%\caption{Predicted Neighborhoods in Chicago}
-%\end{figure}
+I now feel very good about the technical performance of the
+model. Need rewrite with this optimism.
 
 
 
@@ -571,29 +566,27 @@ rownames(models) <- c('(Intercept)',
                       'Family Structure', 
                       'Race and Ethnicity', 
                       'Age Structure', 
-                      'Number of Housing Units',
+                      'Density of Housing Units',
                       'Housing Structure')
 
-WT <- xtable(models, digits=4)
+WT <- xtable(models, digits=4,
+             caption="Parameter Estimates for Populated Blocks",
+             label="tab:parameters")
+colnames(WT) <- c("")
+
 print(WT)
 
 @ 
 
 
-\begin{figure}
-<<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
-par(mfrow=c(1,2))
-par(mar=rep(0, 4), xpd = NA) 
-source('plot_training.R')
-setwd('../code/training/')
-source('plot_predictions.R')
-setwd(CURDIR)
-par(mfrow=c(1,1))
-@ 
-\caption{Predicted Neighborhoods}
-\end{figure}
 
 \bibliographystyle{plain}
 \bibliography{qp}
+
+\begin{figure}
+\includegraphics{../code/training/predicted_chicago_neighborhoods.pdf}
+\caption{Predicted Neighborhoods in Chicago}
+\end{figure}
+
 
 \end{document}

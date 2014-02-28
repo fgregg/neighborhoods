@@ -1,11 +1,11 @@
 \section*{Neighborhood Model Representation}
-Let's image a very small city consisting of four blocks. We can
+Let's imagine a very small city consisting of four blocks. We can
 represent this tiny town as a network where each block is connected
 to the blocks that share a street segment as a block face. In this
 representation, blocks that are kitty corner are not directly
 connected. We'll index the blocks as $1$, $2$, $3$, and $4$.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \tikz{
 \draw[help lines] (0,0) grid (2,2);
@@ -16,7 +16,7 @@ connected. We'll index the blocks as $1$, $2$, $3$, and $4$.
 }
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 
 \tikz{ %
@@ -97,7 +97,7 @@ following $\phi$'s.
 &\phi_{3,4} = 1
 \end{align*} 
 
-Then, the lowest energy assignments are the assignments that put
+Then, the assignments with the lowest scores are the ones that put
 blocks $1$ and $2$ in one neighborhood and $3$ and $4$ in the other
 neighborhood.
 
@@ -128,12 +128,12 @@ neighborhood.
 \label{table:energy}
 \end{table}
 
-In our little city, there are two ways of assigning blocks to
-neighborhoods that minimizes the score (Table \ref{table:energy}) and
-in general this will be true. For a given set of similarity measures
-between blocks, there are one or more assignment that have a lowest
-score. For small networks, we can find these best assignments by
-checking all possible patterns of assignments. Unfortunately, this
+In our little city with two neighborhoods, there are two ways of
+assigning blocks to neighborhoods that minimizes the score (Table
+\ref{table:energy}). In general, for a given set of similarity
+measures between blocks, there will be a set of assignments that have
+a lowest score. For small networks, we can find these best assignments
+by checking all possible patterns of assignments. Unfortunately, this
 becomes quickly impractical for larger cities. With two possible
 neighborhoods, the number of possible assignments is $2^N$ where N is
 the number of blocks.
@@ -161,18 +161,18 @@ cut.\cite{greig_exact_1989}
    original algorithm is not polynomial, but it was quickly improved
    to solve the problem in polynomial time.\cite{ford_maximal_1956}}
  In the 2000s, these graph cut techniques became popular in the
- computer vision community leading leading to theoretical
+ computer vision community leading to theoretical
  clarification and methodological extension.\cite{kolmogorov_what_2004}
 
 \emph{Professor Evans: Should I go more deeply into this}
 
 We now have a set of graph cut techniques that allow us to find, or
 approximately find, the lowest scoring assignment for score functions
-that have the following form.\footnote{We can also use
-  these techniques on scoring functions that have a term for the
-  relation between the properties of a block and the region
-  assignment. This is particularly useful when we already know
-  something about what categories should exist. 
+that have the following form.\footnote{We can also use these
+  techniques on scoring functions that have a term for the relation
+  between the properties of a particular block and the region
+  assignment, $\epsilon_i(y_i)$. This is particularly useful when we
+  already know something about what categories should exist.
 
   For example, if we had a strong, ecological theory of urban space,
   we might want to identify regions like `the red light district,'
@@ -367,15 +367,14 @@ The key to solving this problem is finding assignments that have the
 lowest score, where the score incorporates the empirical loss: i.e.
 %
 \begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
-  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(\mathbf{y}*, \mathbf{y})
+\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(\mathbf{y}*,
+\mathbf{y})
 \end{align}
 %
 If the loss can be decomposed over the blocks like
 %
 \begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i
-  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\sum_i^N\Delta(y_i*, y_i)
+\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\sum_i^N\Delta(y_i*, y_i)
 \end{align}
 %
 then the objective has the form that allows us to use an algorithm
