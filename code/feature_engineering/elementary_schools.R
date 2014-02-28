@@ -22,12 +22,3 @@ elementarySchools <- function(nodes, cached_edges, edge_lines) {
   return(list(crosses=crosses))
 }
 
-if (!common::from_source()) {
-  results <- elementarySchools(blocks.poly)
-  write.csv(as.numeric(results$crosses > 1),
-            file="../interchange/elementary_schools_crosses.csv", row.names=FALSE)
-  write.csv(results$distances,
-            file="../interchange/elementary_schools_distances.csv", row.names=FALSE)
-}
-
-

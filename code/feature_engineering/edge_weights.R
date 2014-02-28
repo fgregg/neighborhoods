@@ -66,23 +66,6 @@ physicalBarriers <- function(nodes,
 
 
   
-if (!common::from_source()) {
-  weights <- physicalBarriers(blocks.poly)
-  write.csv(weights$edges, file="../interchange/edges.csv", row.names=FALSE)
-  write.csv(weights$highway, file="../interchange/highway_intersects.csv", row.names=FALSE)
-  write.csv(weights$water, file="../interchange/water_intersects.csv", row.names=FALSE)
-  write.csv(weights$grid_street, file="../interchange/grid_intersects.csv", row.names=FALSE)
-  write.csv(weights$rail, file="../interchange/rail_intersects.csv", row.names=FALSE
-            )
-  write.csv(weights$highway.distance, file="../interchange/highway_distance.csv", row.names=FALSE)
-  write.csv(weights$water.distance, file="../interchange/water_distance.csv", row.names=FALSE)
-  write.csv(weights$grid.distance, file="../interchange/grid_distance.csv", row.names=FALSE)
-  write.csv(weights$rail.distance, file="../interchange/rail_distance.csv", row.names=FALSE
-            )
-
-  
-  write.csv(weights$total, file="./edge_weights.csv", row.names=FALSE)
-}
 
 
   

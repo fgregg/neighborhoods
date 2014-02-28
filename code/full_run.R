@@ -4,16 +4,25 @@ library(igraph)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
-pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
-devtools::load_all(pkg)
+ALL_CHICAGO <- TRUE
 
-NODES=chicago.blocks.poly
-EDGES = chicago.all_edges
-EDGE_LINES = chicago.edge.lines
-FILE_PREFIX = "chicago_"
+if (ALL_CHICAGO) {
+    pkg <- devtools::as.package('~/academic/neighborhoods/code/chicago')
+    devtools::load_all(pkg)
+    NODES=chicago.blocks.poly
+    EDGES = chicago.all_edges
+    EDGE_LINES = chicago.edge.lines
+    FILE_PREFIX = "chicago_"
+} else {
+    NODES=blocks.poly
+    EDGES = all_edges
+    EDGE_LINES = all_edges$lines
+    FILE_PREFIX = ""
+}    
+
 EDGELIST <- common::edgeList(NODES, edges=EDGES)
 
-
+    
 csv_columns = c("TRACT_BLOC"="factor",
     "state"="factor",
     "tract"="factor",
@@ -30,9 +39,11 @@ NODES@data = data.frame(NODES@data, chicago_blocks[alignment,])
 source('feature_engineering/census_differences.R')
 
 # AGE
-median_age <- absDistance("P0130001")
+NODES$log_median_age <- log(NODES$P0130001)
 
-write.csv(median_age,
+age_diff <- absDistance("log_median_age")
+
+write.csv(age_diff,
           file=paste("interchange/", FILE_PREFIX, "abs_age.csv", sep=""),
           row.names=FALSE)
 
@@ -63,7 +74,11 @@ write.csv(min_units,
           file=paste("interchange/", FILE_PREFIX, "min_housing_unit.csv", sep=""),
           row.names=FALSE)
 
-diff_units <- absDistance("all_units")
+NODES$unit_density <- NODES$all_units/rgeos::gArea(NODES, byid=TRUE)
+
+NODES$log_unit_density <- log(NODES$unit_density)
+
+diff_units <- absDistance("log_unit_density")
 
 write.csv(diff_units,
           file=paste("interchange/", FILE_PREFIX, "diff_housing_unit.csv", sep=""),
@@ -143,24 +158,6 @@ write.csv(as.numeric(results$crosses > 1),
           row.names=FALSE)
 write.csv(results$distances,
           file=paste("interchange/", FILE_PREFIX, "high_schools_distances.csv", sep=""), 
-          row.names=FALSE)
-
-source('feature_engineering/census_differences.R')
-differences <- censusDifferences(NODES, cached_edges=EDGES)
-write.csv(differences$race,
-          file=paste("interchange/", FILE_PREFIX, "js_race.csv", sep=""), 
-          row.names=FALSE)
-write.csv(differences$age,
-          file=paste("interchange/", FILE_PREFIX, "js_age.csv", sep=""), 
-          row.names=FALSE)
-write.csv(differences$family,
-          file=paste("interchange/", FILE_PREFIX, "js_family.csv", sep=""), 
-          row.names=FALSE)
-write.csv(differences$housing,
-          file=paste("interchange/", FILE_PREFIX, "js_housing.csv", sep=""), 
-          row.names=FALSE)
-write.csv(differences$population,
-          file=paste("interchange/", FILE_PREFIX, "min_population.csv", sep=""),
           row.names=FALSE)
 
 source('feature_engineering/block_shapes.R')

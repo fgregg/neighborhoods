@@ -14,6 +14,7 @@ chi_housing[is.na(chi_housing)] <- 100
 
 abs_age <- read.csv(paste('../interchange/', PREFIX, 'abs_age.csv', sep=""))$x
 abs_age[is.na(abs_age)] <- 100
+abs_age[is.infinite(abs_age)] <- 100
 
 rail <- read.csv(paste('../interchange/', PREFIX, 'rail_intersects.csv', sep=""))$x
 highway <- read.csv(paste('../interchange/', PREFIX, 'highway_intersects.csv', sep=""))$x
@@ -32,6 +33,7 @@ housing_units <- read.csv(paste('../interchange/', PREFIX, 'min_housing_unit.csv
 
 diff_housing_units <- read.csv(paste('../interchange/', PREFIX, 'diff_housing_unit.csv', sep=""))$x
 diff_housing_units[is.na(diff_housing_units)] <- 100
+diff_housing_units[is.infinite(diff_housing_units)] <- 100
 
 sufficient_pop <- as.numeric(population > 30)
 sufficient_households <- as.numeric(households > 5)

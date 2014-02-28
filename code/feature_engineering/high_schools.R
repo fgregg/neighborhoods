@@ -22,8 +22,3 @@ highSchools <- function(nodes, cached_edges, edge_lines) {
   return(list(crosses=crosses))
 }
 
-if (!common::from_source()) {
-  results <- highSchools(blocks.poly)
-  write.csv(results$distances,
-            file="../interchange/high_schools_distances.csv", row.names=FALSE)
-}
