@@ -72,12 +72,12 @@
 
 
 \section*{Introduction}
-Social scientists have long been concerned in dividing the social
+Social scientists have long been concerned with dividing the social
 world into meaningful components. In recent year's we have
 developed many methods to accomplish this when know what parts of the
 world are similar to one another, broadly clustering, community
 detection, and network partition techniques. Unfortunately, we are
-seldom so lucky as to already know what really matters for making one
+seldom so lucky as to already know what really counts for making one
 thing similar to another. 
 
 When our similarity is binary, i.e. did ego nominate alter as friend,
@@ -125,14 +125,16 @@ probable neighborhood assignment and assign that most likely
 neighborhood to that block. This will be our training data (Figure
 \ref{fig:training}).
 
-I would like to treat this measure as a kind of `averaged
-neighborhood perception.' Of course, it is at best a biased measure of
-that perception. There are enormous selection effect, but perhaps more
-troublesome is that listers are likely to claim neighborhoods
-strategically in order to increase the desirability of their
-listing. I have been looking for a scientific samples of neighborhood
-perception that I can compare against so as to get a sense of the
-magnitude of the biases. 
+I would like to treat this measure as a kind of `averaged neighborhood
+perception.' Of course, it is at best a biased measure of that
+perception. There are enormous selection effect. Most of the
+Craigslist listings come from the part of Chicago that have higher
+fractions of young adults. Moreover, we are only considering listings
+for roommates, sublets, and apartments. Portions of the city that are
+dominated by owner occupants are underrepresented, because home sale
+listings are excluded. Perhaps even more troublesome, the listers who
+are on Craigslist sometimes claim neighborhoods strategically in order
+to increase the desirability of their listing.
 
 However, I think it is possible that these data, biases and all, may
 be good enough. We'll have ways of checking that hope.
@@ -210,7 +212,7 @@ We will use two measures for the demographic factors. The first is the
 absolute difference. The second is the $\chi$ distance $\sqrt{
 \frac{1}{2} \sum_i^d \frac{(x_i - y_i)^2}{x_i + y_i}}$, where $x_i$ is
 the frequency of bin $i$ of the histogram $\mathbf{x}$ and similar for
-$y_i$. This is just square root of the familiar $\chi^2$ statistic. By
+$y_i$. This is just the square root of the familiar $\chi^2$ statistic. By
 taking the square root, $\chi$ becomes a metric.\cite{pele_distance_2011}
 
 For race, the distribution is the number people coded by the Census as
@@ -235,7 +237,7 @@ not calculate the demographic differences. There are
 demographic similarities.
 
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Feb 28 15:59:17 2014
+% Thu Mar 20 17:53:39 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
@@ -473,7 +475,7 @@ neighborhood to span a highway or industrial corridor, a possibility
 we do not want to preclude.
 
 We deal with this variation by using dummy variables to effectively
-learned two model at once: a nonpopulated and populated block model:
+learn two model at once: a nonpopulated and populated block model:
 
 Our overall scoring function is 
 \begin{align}
@@ -592,6 +594,9 @@ highlight some characteristics of our model (Figure
 \label{fig:predictTraining}
 \end{figure}
 
+
+
+
 First, our model depends upon C, the normalizer.  C. We choose C by
 estimating the model for various values of C between 1.0 and 0.0001
 and choosing the value that maximizes the fit between the predicted
@@ -605,9 +610,9 @@ blocks and grayed out the 980 remaining,
 small neighborhoods. There are 594
 neighborhoods that consist of a single block.
 
-Third, our model seems to do an adequate job in capturing neighborhoods!!!
-
-\emph{I know I need some sort of measurement here}
+Third, our model seems to do an adequate job in capturing
+neighborhoods. We have a Rand Index score of 0.93 and an
+Adjusted Rand of 0.33.
 
 Now, turning to the parameters, we'll focus on the parameters for the
 populated blocks (Table \ref{tab:parameters}). A positive parameter
@@ -635,14 +640,8 @@ differences in family structure is very surprising. According the this
 model, a block that is all families and a block that has no families
 are very apt to belong the same neighborhood. 
 
-\section*{Discussion}
-I now feel very good about the technical performance of the
-model. Need rewrite with this optimism.
-
-
-
 % latex table generated in R 3.0.1 by xtable 1.7-1 package
-% Fri Feb 28 16:06:47 2014
+% Thu Mar 20 18:32:33 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rr}
@@ -670,6 +669,33 @@ model. Need rewrite with this optimism.
 
 
 
+\section*{Discussion}
+While these results of modeling neighborhoods are interesting, we
+should take care to not put too much weight in them yet. Our purpose
+in this paper is to explore an \emph{approach} to modeling what counts
+for similarity and to evaluate if our models are adequate to capturing
+observed social groupings. 
+
+What we have established is that this model of neighborhoods seems to
+be able to predict, with some fidelity, the training data, and that
+the parameter values comport with our previous expectations. These
+results should give us confidence that the modeling approach can
+capture the pheonomena. 
+
+However, in order to learn from the model or extrapolate it's
+predictions beyond the training data, this approach must pass much
+more rigorous tests than simply predicting the training data for one
+city. In a future paper, I will use this approach to model
+neighborhoods in the fifty largest American urban areas, and evaluate
+the predictive power of this conception of neighborhoods. 
+
+In future work, we could use the same types of models to learn about
+the structures of intra-party factions through looking at campaign
+giving or social class-like structure by looking at marriage
+patterns. Much of this work will depend upon being able to validly
+distinguish between proximity and similarity. In cities, its easy to
+do this. In other areas of social research, it's not so simple to
+distinguish between the two.
 
 
 \bibliographystyle{plain}

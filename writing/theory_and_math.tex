@@ -61,19 +61,20 @@ $y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
 \end{figure}
 
 We want similar, neighboring blocks to belong to the same
-neighborhood. One way to formalize this is is to score every possible
+neighborhood. One way to formalize this desire is to score every possible
 assignment of neighborhoods in such a way that our preferred patterns
 have the best score.
 
 Denote a particular pattern of assignment of blocks to neighborhoods
 as $\mathbf{y}$.  The score of $\mathbf{y}$ will be
-$\operatorname{E}(\mathbf{y})$ which will take the following form:
+$\operatorname{E}(\mathbf{y})$\footnote{$\operatorname{E}$ as in
+  energy not expectation} which will take the following form:
 
 \begin{align}
 \operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
 \end{align}
 
-Where $\mathcal{N}$ is the set of 2-tuples of indices of neighboring
+Where $\mathcal{N}$ is the set of pairs of indices of neighboring
 blocks and the index of the first block is smaller than the index of
 the second block. Also, where
 
@@ -84,11 +85,11 @@ the second block. Also, where
 \end{cases}
 \end{equation}
 
-Suppose that we want the lowest score. If our similarity
-measures $\phi_{i,j}$ are positive when blocks are similar and negative
-when blocks are different, then we will encourage neighboring blocks to
-belong to the same neighborhood. Let our city have the
-following $\phi$'s.
+Suppose that we want our preferred neighborhood assignment to have the
+lowest score. If our similarity measures $\phi_{i,j}$ are positive
+when blocks are similar and negative when blocks are different, then
+we will encourage neighboring blocks to belong to the same
+neighborhood. Let our city have the following $\phi$'s.
 
 \begin{align*}
 &\phi_{1,2} = 1 \\
@@ -164,25 +165,24 @@ cut.\cite{greig_exact_1989}
  computer vision community leading to theoretical
  clarification and methodological extension.\cite{kolmogorov_what_2004}
 
-\emph{Professor Evans: Should I go more deeply into this}
-
 We now have a set of graph cut techniques that allow us to find, or
 approximately find, the lowest scoring assignment for score functions
 that have the following form.\footnote{We can also use these
   techniques on scoring functions that have a term for the relation
   between the properties of a particular block and the region
   assignment, $\epsilon_i(y_i)$. This is particularly useful when we
-  already know something about what categories should exist.
+  already know something about what meaningful categories should exist.
+
+  \begin{align}
+    \operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+  \end{align}
 
   For example, if we had a strong, ecological theory of urban space,
   we might want to identify regions like `the red light district,'
-  `the zone of industry`, `the central business district.` We would
+  `the zone of industry`, `the central business district.' We would
   want to pay a large penalty if we assigned a block that had lot of
   immigrants to `the central business district` instead of `the
   immigrant neighborhood.'
-\begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
-\end{align}
 }
 
 \begin{align}
@@ -192,16 +192,17 @@ that have the following form.\footnote{We can also use these
 We will use extensively one extension to graph cuts called the
 Quadratic Pseudo Boolean Optimization algorithm, or QPBO. This method
 allows us to approximately find the lowest scoring assignment even
-though our scoring function is not submodular. A submodular scoring
-function would be one where $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1)
-\leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$ for all $i,j$ in
-$\mathcal{N}$. If we had a submodular scoring function, we would have a
-theoretical guarantee of finding the lowest scoring assignment. Our
-scoring function is decisively not submodular because we want
-very dissimilar neighboring blocks to be assigned to different
-neighborhoods. That is, for very dissimilar blocks we want it to hold that
-$\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1) \boldsymbol{>}
-\epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
+though our scoring function is not submodular. 
+
+A submodular scoring function would be one where $\epsilon_{i,j}(0,0)
++ \epsilon_{i,j}(1,1) \leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$
+for all $i,j$ in $\mathcal{N}$. If we had a submodular scoring
+function, we would have a theoretical guarantee of finding the lowest
+scoring assignment. Our scoring function is decisively not submodular
+because we want very dissimilar neighboring blocks to be assigned to
+different neighborhoods. That is, for very dissimilar blocks we want
+it to hold that $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1)
+\boldsymbol{>} \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
 
 
 \section*{Learning similarities}
@@ -210,7 +211,7 @@ Let's consider similarity measures that take the following linear form
 \begin{align}
 \phi_{i,j} = w_0 + w_1\operatorname{S_1}(x_{i,1}, x_{j,1}) +
 w_2\operatorname{S_2}(x_{i,2}, x_{j,2}) + ... +
-w_n\operatorname{S_z}(x_{i,m},x_{j,m})
+w_n\operatorname{S_n}(x_{i,m},x_{j,m})
 \end{align} 
 
 Where $x_{i,k}$ is the $k$th feature of block $i$. These features can
@@ -221,22 +222,26 @@ features to a real number. These functions must be symmetric; for each
 $\operatorname{S}$ and features $a$ and $b$, $\operatorname{S}(a,b) =
 \operatorname{S}(b,a)$.
 
-With this choice of form, learning the similarities between blocks
-means finding the vector of weights $w_0, w_1, ..., w_{m-1}, w_m$ that
-produce similarities $\phi$'s that give a particular, target
-neighborhood assignment the lowest score of all possible ways of
-assigning blocks to neighborhoods.
+Given this choice of form, learning the similarities between blocks
+means finding the vector of weights $\mathbf{w}: \{w_0, w_1, ...,
+w_{m-1}, w_m\}$ that produce the aggregate similarities $\phi$'s which
+give our target neighborhood assignment the best score. 
 
-However, this problem does not have a unique solution. In the above
-four block assignments, the lowest score assignments would have the
-lowest scores if the similarities were 2, -2, -2, 2 or 1000, -1000,
--1000, 1000. So, we will say that we want the lowest scoring
-assignment to not just have the lowest score, but we want to find the
-weights that give the target assignment a score lower than the next
-lowest scoring assignment by the widest possible margin. To specify a
-unique vector $\mathbf{w}$, we still need an additional constraint. A
-mathematically convenient choice is to require that $\sqrt{\sum_i^M
-w_i^2 = 1}$.
+However, this learning problem does not have a unique solution. In our
+four block city, our preferred neighborhood assignment got the best
+score when the block-by-block similarities were 1, -1, -1, 1. That
+assignment would also have had the best score if the similarities had
+been 2, -2, -2, 2 or 1000, -1000, -1000,
+1000. 
+
+In order to specify a unique solution, we need to add two
+constraints. First, we will go beyond requiring that the preferred
+assignment have the lowest score. We will attempt to find $\mathbf{w}$
+such that our preferred assignment is has a lower score than any other
+assignment by the largest possible margin. 
+
+Second, we will also put a constraint on $\mathbf{w}$. A
+mathematically convenient choice is to require that $\sqrt{\sum_i^M w_i^2 = 1}$.
 
 So, now we can state the problem as 
 %
@@ -254,9 +259,10 @@ So, now we can state the problem as
 Here $\mathbf{y}*$ is the target neighborhood assignment and $\mathbf{s}$
 are similarity measures between blocks. 
 
+This is a large margin problem, and problems of this form have and
+equivalent canonical representation, which is a quadratic programming
+problem.
 
-In turns out, in a way that I need to better understand that this is
-equivalent to the following quadratic program.
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
@@ -270,7 +276,7 @@ equivalent to the following quadratic program.
 
 
 \subsection*{Learning Sketch}
-We usually can't directly solve that quadratic program because there
+We usually can't directly solve this quadratic program because there
 are so many possible assignments, however we can still find the
 optimal weights through the following procedure.
 
@@ -293,17 +299,18 @@ Update the weights by solving the quadratic program:
 
 Now find the lowest energy neighborhood assignment given the updated
 weights. Call this assignment $\mathbf{y}_2$ and add it to the
-constraint set $\mathcal{S}$. Continue until the either the lowest
-energy assignment given the weights is either the target
-assignment\cite{szummer_learning_2008}
+constraint set $\mathcal{S}$. Continue until the lowest energy
+assignment given the weights is either the target assignment or
+already in the constraint set.\cite{szummer_learning_2008}
 
 
 \subsection*{Empirical Loss}
 Some readers may have noticed that the our four-city block example
-does not have a solution for the learning problem we have set up. There
-are two different neighborhood assignments that have the same lowest
-score, and they both achieve our goal of putting similar blocks in the 
-same neighborhood and dissimilar blocks in different neighborhoods (Table \ref{table:lowest}).
+still does not have a unique solution for the learning problem we have
+set up. There are two different neighborhood assignments that have the
+same lowest score, and they both achieve our goal of putting similar
+blocks in the same neighborhood and dissimilar blocks in different
+neighborhoods (Table \ref{table:lowest}).
 
 \begin{table}
 \centering
@@ -356,10 +363,12 @@ Below we show how to incorporate the empirical loss:
   C\cdot\xi\\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq
+\Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
+& \xi \geq 0\\
 &\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
   possible neighborhood assignments}\\
-&\text{and where } \Delta \text{ is an empirical loss.}\\
+&\xi { is a slack variable and  } \Delta \text{ is an empirical loss.}\\
 \end{align*}
 %
 
