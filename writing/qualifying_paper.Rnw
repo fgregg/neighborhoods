@@ -3,6 +3,9 @@
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{adjustbox}
+\usepackage{natbib}
+\usepackage{setspace}
+\doublespacing
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{bayesnet}
@@ -45,12 +48,11 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
 
-
 \section*{Introduction}
 Social scientists have long been concerned with dividing the social
-world into meaningful components. In recent year's we have
+world into meaningful components. In recent years we have
 developed many methods to accomplish this when know what parts of the
-world are similar to one another, broadly clustering, community
+world are similar to one another--clustering, community
 detection, and network partition techniques. Unfortunately, we are
 seldom so lucky as to already know what really counts for making one
 thing similar to another. 
@@ -114,9 +116,10 @@ listings are excluded. Perhaps even more troublesome, the listers who
 are on Craigslist sometimes claim neighborhoods strategically in order
 to increase the desirability of their listing.
 
-However, I think it is possible that these data, biases and all, may
-be good enough. We'll have ways of checking that hope.
-
+For our currently purpose of understanding this modeling
+\emph{approach}, we can ignore these difficulties. In a future work,
+when we use these models to make claims about how neighborhoods work,
+we will take up this issue again.
 
 \begin{figure}
 <<plotTraining, dev='pdf', message=FALSE>>=
@@ -156,14 +159,15 @@ difference between the orientations of the blocks. We normalize the
 difference to fall in $[0, 1]$. This measure was inspired by Vivien
 Palmer's work on the persistent effect of primary settlements. 
 
-In the late 1920s, Palmer developed the theory that when a subdivision
+In the late 1920s, Palmer argued that when a subdivision
 of a city was originally opened for residential settlement, the
 area would start out largely homogenous in its building stock
 and population. This homogeneity would lead to the subdivision
 maintaining a common fate through the history of the city. The
 residents would tend to respond similarly to larger urban processes
 and the building stock would tend to have the same patterns of
-depreciation and reevaluation.\cite{palmer_primary_1932}
+depreciation and reevaluation. The primary settlement should act as
+atomic, spatial unit for urban processes.\citep{palmer_primary_1932}
 
 When subdivision were originally platted, the developers tended to
 align the streets within their subdivision. Misalignment of blocks are
@@ -183,7 +187,7 @@ absolute difference. The second is the $\chi$ distance $\sqrt{
 \frac{1}{2} \sum_i^d \frac{(x_i - y_i)^2}{x_i + y_i}}$, where $x_i$ is
 the frequency of bin $i$ of the histogram $\mathbf{x}$ and similar for
 $y_i$. This is just the square root of the familiar $\chi^2$ statistic. By
-taking the square root, $\chi$ becomes a metric.\cite{pele_distance_2011}
+taking the square root, $\chi$ becomes a metric.\citep{pele_distance_2011}
 
 For race, the distribution is the number people coded by the Census as
 ``Hispanic or Latino'', ``Not Hispanic or Latino : White alone'', ``Not Hispanic
@@ -368,8 +372,8 @@ Our overall scoring function is
 where 
 \begin{equation}
 \epsilon_{i,j}(y_i, y_j, \mathbf{s}_{i,j}, \mathbf{w}) = \begin{cases}
-    0 \quad\quad\quad y_i = y_j \\
-    \phi(\mathbf{s}_{i,j}, \mathbf{w}) \quad y_i \neq y_j \\
+    0 &y_i = y_j \\
+    \phi(\mathbf{s}_{i,j}, \mathbf{w}) &y_i \neq y_j \\
   \end{cases}
 \end{equation}
 
@@ -442,7 +446,7 @@ variables to our unpopulated model.\footnote{Actually, our model is
 
 \section*{Results}
 After training the model using the PyStruct structure learning
-framework,\cite{mueller_pystruct:_????} we get two classes of results:
+framework,\citep{mueller_pystruct:_????} we get two classes of results:
 predictions of Chicago neighborhoods and parameter
 estimates.\footnote{See \url{https://github.com/fgregg/pystruct} for
   custom model}
@@ -612,7 +616,7 @@ do this. In other areas of social research, it's not so simple to
 distinguish between the two.
 
 
-\bibliographystyle{plain}
+\bibliographystyle{asr}
 \bibliography{qp}
 
 \begin{figure}

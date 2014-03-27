@@ -80,8 +80,8 @@ the second block. Also, where
 
 \begin{equation}
 \epsilon_{i,j}(y_i,y_j\phi_{i,j}) = \begin{cases}
-  0 \quad\quad y_i = y_j \\
-  \phi_{i,j} \quad y_i \neq y_j
+  0 &y_i = y_j \\
+  \phi_{i,j} &y_i \neq y_j
 \end{cases}
 \end{equation}
 
@@ -102,26 +102,44 @@ Then, the assignments with the lowest scores are the ones that put
 blocks $1$ and $2$ in one neighborhood and $3$ and $4$ in the other
 neighborhood.
 
-\begin{figure}[!h]
+\begin{table}
 \centering
-
-\tikz{ %
-  \node[latent] (1) {$y_1$} ; %
-  \node[latent, below left=of 1] (2) {$y_2$} ; %
-  \node[latent, below right=of 1] (3) {$y_3$} ; %
-  \node[latent, below left=of 3] (4) {$y_4$} ; %
-  \factor[below left=of 1] {1-2} {$1$} {} {} ;
-  \factor[below right=of 1] {1-3} {$-1$} {} {} ;
-  \factor[below right=of 2] {2-4} {$-1$} {} {} ;
-  \factor[below left=of 3] {3-4} {$1$} {} {} ;
-  \factoredge[-] {1} {1-2} {2} ; %
-  \factoredge[-] {1} {1-3} {3} ; %
-  \factoredge[-] {2} {2-4} {4} ; %
-  \factoredge[-] {3} {3-4} {4} ; %
-  %\edge[-] {2,3} {4} ; %
-}
-
-\end{figure}
+  \begin{tabular}{cc}
+      \tikz{ %
+        \node[latent] (1) {$y_1$} ; %
+        \node[latent, below left=of 1] (2) {$y_2$} ; %
+        \node[latent, fill=black, below right=of 1] (3) {\textcolor{white}{$y_3$}} ; %
+        \node[latent, fill=black, below left=of 3] (4) {\textcolor{white}{$y_4$}} ; %
+        \factor[below left=of 1] {1-2} {$1$} {} {} ;
+        \factor[below right=of 1] {1-3} {$-1$} {} {} ;
+        \factor[below right=of 2] {2-4} {$-1$} {} {} ;
+        \factor[below left=of 3] {3-4} {$1$} {} {} ;
+        \factoredge[-] {1} {1-2} {2} ; %
+        \factoredge[-] {1} {1-3} {3} ; %
+        \factoredge[-] {2} {2-4} {4} ; %
+        \factoredge[-] {3} {3-4} {4} ; %
+      } 
+    &
+      \tikz{ %
+        \node[latent, fill=black] (1) {\textcolor{white}{$y_1$}} ; %
+        \node[latent, fill=black, below left=of 1] (2) {\textcolor{white}{$y_2$}} ; %
+        \node[latent, below right=of 1] (3) {$y_3$} ; %
+        \node[latent, below left=of 3] (4) {$y_4$} ; %
+        \factor[below left=of 1] {1-2} {$1$} {} {} ;
+        \factor[below right=of 1] {1-3} {$-1$} {} {} ;
+        \factor[below right=of 2] {2-4} {$-1$} {} {} ;
+        \factor[below left=of 3] {3-4} {$1$} {} {} ;
+        \factoredge[-] {1} {1-2} {2} ; %
+        \factoredge[-] {1} {1-3} {3} ; %
+        \factoredge[-] {2} {2-4} {4} ; %
+        \factoredge[-] {3} {3-4} {4} ; %
+      } 
+    \\
+  \end{tabular}
+  \caption{Preferred Assignment: If $y_i = 0$, the block is colored
+    white. If $y_i = 1$, the block is black.}
+  \label{table:lowest}
+\end{table}
 
 \begin{table}[h]
 \input{energy_table.tex}
@@ -148,22 +166,22 @@ intractable.\footnote{In order to converge on the mode of the
   which is the sum of the scores of all possible assignments. This is
   computationally too expensive. There have been a number of attempts
   to find an acceptable substitute for the normalizing constant, but
-  the empirical results have disappointed.\cite{li_mrf_2009}}
+  the empirical results have disappointed.\citep{li_mrf_2009}}
 
 However, researchers, largely in the field of computer vision, have
 developed methods to quickly find the lowest scoring assignment for
 problems like ours. In 1986, Greig, Porteous, and Sehult demonstrated
 that finding the lowest scoring assignment for a two neighborhood case
 was equivalent to solving the graph cutting problem of min
-cut.\cite{greig_exact_1989}
+cut.\citep{greig_exact_1989}
 
  Since the classic, 1956 result of Ford and Fulkerson, we have known
  how to solve this problem swiftly.\footnote{Ford and Fulkerson's
    original algorithm is not polynomial, but it was quickly improved
-   to solve the problem in polynomial time.\cite{ford_maximal_1956}}
+   to solve the problem in polynomial time.\citep{ford_maximal_1956}}
  In the 2000s, these graph cut techniques became popular in the
  computer vision community leading to theoretical
- clarification and methodological extension.\cite{kolmogorov_what_2004}
+ clarification and methodological extension.\citep{kolmogorov_what_2004}
 
 We now have a set of graph cut techniques that allow us to find, or
 approximately find, the lowest scoring assignment for score functions
@@ -189,7 +207,7 @@ that have the following form.\footnote{We can also use these
 \operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
 \end{align}
 
-We will use extensively one extension to graph cuts called the
+We will extensively use one extension to graph cuts called the
 Quadratic Pseudo Boolean Optimization algorithm, or QPBO. This method
 allows us to approximately find the lowest scoring assignment even
 though our scoring function is not submodular. 
@@ -228,8 +246,8 @@ w_{m-1}, w_m\}$ that produce the aggregate similarities $\phi$'s which
 give our target neighborhood assignment the best score. 
 
 However, this learning problem does not have a unique solution. In our
-four block city, our preferred neighborhood assignment got the best
-score when the block-by-block similarities were 1, -1, -1, 1. That
+four block city, our preferred neighborhood assignment had the best
+score with block-by-block similarities of 1, -1, -1, 1. That
 assignment would also have had the best score if the similarities had
 been 2, -2, -2, 2 or 1000, -1000, -1000,
 1000. 
@@ -237,7 +255,7 @@ been 2, -2, -2, 2 or 1000, -1000, -1000,
 In order to specify a unique solution, we need to add two
 constraints. First, we will go beyond requiring that the preferred
 assignment have the lowest score. We will attempt to find $\mathbf{w}$
-such that our preferred assignment is has a lower score than any other
+such that our preferred assignment has a lower score than any other
 assignment by the largest possible margin. 
 
 Second, we will also put a constraint on $\mathbf{w}$. A
@@ -301,7 +319,7 @@ Now find the lowest energy neighborhood assignment given the updated
 weights. Call this assignment $\mathbf{y}_2$ and add it to the
 constraint set $\mathcal{S}$. Continue until the lowest energy
 assignment given the weights is either the target assignment or
-already in the constraint set.\cite{szummer_learning_2008}
+already in the constraint set.\citep{szummer_learning_2008}
 
 
 \subsection*{Empirical Loss}
@@ -367,8 +385,8 @@ Below we show how to incorporate the empirical loss:
 \Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
 & \xi \geq 0\\
 &\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
-  possible neighborhood assignments}\\
-&\xi { is a slack variable and  } \Delta \text{ is an empirical loss.}\\
+  possible neighborhood assignments,}\\
+&\xi \text{ is a slack variable, and } \Delta \text{ is an empirical loss.}\\
 \end{align*}
 %
 
@@ -397,8 +415,8 @@ incorrectly assigned. If we penalize every error the same then we have
 the classic Hamming loss. 
 
 $\sum_i^N\begin{cases}
-  0 \quad y_i^* = y_i \\
-  1 \quad y_i^* \neq y_i
+  0 &y_i^* = y_i \\
+  1 &y_i^* \neq y_i
 \end{cases}$. 
 
 Incorporating this empirical loss into our learning problem means
