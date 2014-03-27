@@ -166,22 +166,22 @@ intractable.\footnote{In order to converge on the mode of the
   which is the sum of the scores of all possible assignments. This is
   computationally too expensive. There have been a number of attempts
   to find an acceptable substitute for the normalizing constant, but
-  the empirical results have disappointed.\citep{li_mrf_2009}}
+  the empirical results have disappointed.\cite{li_mrf_2009}}
 
 However, researchers, largely in the field of computer vision, have
 developed methods to quickly find the lowest scoring assignment for
 problems like ours. In 1986, Greig, Porteous, and Sehult demonstrated
 that finding the lowest scoring assignment for a two neighborhood case
 was equivalent to solving the graph cutting problem of min
-cut.\citep{greig_exact_1989}
+cut.\cite{greig_exact_1989}
 
  Since the classic, 1956 result of Ford and Fulkerson, we have known
  how to solve this problem swiftly.\footnote{Ford and Fulkerson's
    original algorithm is not polynomial, but it was quickly improved
-   to solve the problem in polynomial time.\citep{ford_maximal_1956}}
+   to solve the problem in polynomial time.\cite{ford_maximal_1956}}
  In the 2000s, these graph cut techniques became popular in the
  computer vision community leading to theoretical
- clarification and methodological extension.\citep{kolmogorov_what_2004}
+ clarification and methodological extension.\cite{kolmogorov_what_2004}
 
 We now have a set of graph cut techniques that allow us to find, or
 approximately find, the lowest scoring assignment for score functions
@@ -319,7 +319,7 @@ Now find the lowest energy neighborhood assignment given the updated
 weights. Call this assignment $\mathbf{y}_2$ and add it to the
 constraint set $\mathcal{S}$. Continue until the lowest energy
 assignment given the weights is either the target assignment or
-already in the constraint set.\citep{szummer_learning_2008}
+already in the constraint set.\cite{szummer_learning_2008}
 
 
 \subsection*{Empirical Loss}
