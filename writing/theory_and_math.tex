@@ -34,7 +34,8 @@ Suppose that, in our city, there are two neighborhoods. Each block
 belongs to either one or the other of these neighborhoods. Neighboring
 blocks that are similar are more apt to belong to the same
 neighborhood and neighboring blocks that are different are more apt to
-belong to different neighborhoods.
+belong to different neighborhoods. Only neighboring blocks can belong
+to the same neighborhood.
 
 We will denote the neighborhood that the $i$th block belongs to as
 $y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
@@ -175,8 +176,8 @@ that finding the lowest scoring assignment for a two neighborhood case
 was equivalent to solving the graph cutting problem of min
 cut.\cite{greig_exact_1989}
 
- Since the classic, 1956 result of Ford and Fulkerson, we have known
- how to solve this problem swiftly.\footnote{Ford and Fulkerson's
+ Since the classic 1956 result of Ford and Fulkerson, we have known
+ how to solve the min cut problem swiftly.\footnote{Ford and Fulkerson's
    original algorithm is not polynomial, but it was quickly improved
    to solve the problem in polynomial time.\cite{ford_maximal_1956}}
  In the 2000s, these graph cut techniques became popular in the

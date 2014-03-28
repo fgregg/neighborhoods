@@ -1,4 +1,7 @@
 \documentclass[12pt,letter]{article}
+\title{Learning Who Your Neighbors Are}
+\date{}
+\author{}
 \usepackage{amsmath}
 \usepackage{url}
 \usepackage{tikz}
@@ -6,6 +9,7 @@
 \usepackage{natbib}
 \usepackage{endnotes}
 \usepackage{setspace}
+\usepackage{endfloat}
 \doublespacing
 
 \let\footnote=\endnote
@@ -18,7 +22,7 @@
 \DeclareMathOperator*{\argmax}{\arg\!\max}
 
 \begin{document}
-
+\maketitle
 <<include=FALSE>>=
 library(xtable)
 opts_chunk$set(echo=FALSE, 
@@ -53,32 +57,47 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 
 
 \section*{Introduction}
-Social scientists have long been concerned with dividing the social
-world into meaningful components. In recent years we have
-developed many methods to accomplish this when know what parts of the
-world are similar to one another--clustering, community
-detection, and network partition techniques. Unfortunately, we are
-seldom so lucky as to already know what really counts for making one
-thing similar to another. 
+As scientists and people, we cannot fail to notice the patterns of
+human action and interaction. Unfortunately, we can easily fail to
+capture and measure those patterns, let alone account for them.
+Patterns and concepts that first appeared so clear become hazy
+when we attempt to define them precisely. The `neighborhood' is a
+classic case.
 
-When our similarity is binary, i.e. did ego nominate alter as friend,
-life is easy. But, as soon as a variable has more than two possible
-values then the researcher must choose, by hand, how to turn those
-values into similarities. In the end, we adjust the various weights
-until the groupings from our favorite clustering algorithm come out
-looking about right. We would have been better off just drawing what
-we wanted in the first place.
+Researchers, like city dwellers, see that cities contain areas where
+the patterns of action and interaction are markedly different than
+neighboring zones. From that seed of perception, scholars have 
+grown a thicket of definitions about the neighborhood and theories
+about it--what it means, how it produces its distinctive patterns, how
+it should change over time.
 
-Another way is possible. If our subjects ever group themselves, we can
-use that revealed grouping to learn what counts for similarity in a particular
-social world. We can then apply our derived similarity to group elements in
-a way that is likely to be meaningful to the types of people we learned from.
+Remarkably, almost none of these definitions or theories help us
+precisely define what parts of a city are neighborhoods, but see
+\cite{palmer_primary_1932, hunter_symbolic_1974, grannis_ground_2009}.
+It should trouble us that we have lots of theories about things called
+neighborhoods, but very little idea about how to identify these
+things.
 
-People group themselves in a variety of ways: making friends, getting
-married, joining organizations, share consumption, and
-self-labeling. In this paper, we will discuss a particular form of
-self-labeling: claims that a location belongs to a city
-neighborhood. However, the larger approach is much more general.
+We have moved too fast. As scientists and humans,
+we see that at least some part of cities have a real pattern to
+them. Our next move should not be to theorize about what kinds of
+effects the neighborhood has. Instead we should try to make our perception
+precise--what do we mean by pattern, what are the elements of the
+pattern, does this same kind of pattern appear elsewhere, do other
+people recognize this kind of pattern as distinctive. 
+
+We need a better grasp on the things of social science, and this is as
+true for status groups, classes, parties as it for neighborhoods. In
+this paper, I describe an approach for doing this. We start with
+observing how people identify themselves--in particular claiming to
+belong to a neighborhood. We see how those claims are organized in
+space. Finally, we attempt to find the local, block-by-block,
+similarities and differences that could lead to the larger scale
+patterns of neighborhoods.
+
+In this paper, we will discuss a particular form of self-labeling:
+claims that a location belongs to a city neighborhood. However, the
+larger approach is much more general.
 
 \input{theory_and_math.tex}
 
@@ -173,7 +192,7 @@ and the building stock would tend to have the same patterns of
 depreciation and reevaluation. The primary settlement should act as
 atomic, spatial unit for urban processes.\cite{palmer_primary_1932}
 
-When subdivision were originally platted, the developers tended to
+When subdivision were originally laid out, the developers tended to
 align the streets within their subdivision. Misalignment of blocks are
 a rough measure of the where different subdivision meet. 
 
@@ -365,7 +384,7 @@ neighborhood to span a highway or industrial corridor, a possibility
 we do not want to preclude.
 
 We deal with this variation by using dummy variables to effectively
-learn two model at once: a nonpopulated and populated block model:
+learn two model at once: a nonpopulated and populated block model.
 
 Our overall scoring function is 
 \begin{align}
@@ -412,7 +431,7 @@ While the model for the populated neighboring blocks will be
 \end{align}
 
 We can combine these models by creating a dummy variable that takes a
-value of 1 if neighboring block have sufficient population to support
+value of 1 if neighboring blocks have sufficient population to support
 the demographic distance measures, and 0 if the neighboring blocks do
 not. We'll interact this dummy with the populated model and add the
 variables to our unpopulated model.\footnote{Actually, our model is
@@ -453,16 +472,15 @@ After training the model using the PyStruct structure learning
 framework,\cite{mueller_pystruct:_????} we get two classes of results:
 predictions of Chicago neighborhoods and parameter
 estimates.\footnote{See \url{https://github.com/fgregg/pystruct} for
-  custom model}
-
-Given a set of learned weights we can find, approximately, a lowest
-scoring assignment of labels to neighborhoods of the city. However,
-some care must be taken to not immediately assign meaning to these
-labelings. Two blocks that have been assigned that same label do not
-necessarily belong to the same neighborhood. The labelings are only
-locally meaningful in that they distinguish a particular neighborhood
-from it’s neighbors. Instead, a neighborhood will be a set of block
-that have the same label and which are connected components.  
+  custom model} Given a set of learned weights we can find,
+approximately, a lowest scoring assignment of labels to neighborhoods
+of the city.\footnote{However, some care must be taken to not immediately
+assign meaning to these labelings. Two blocks that have been assigned that
+same label do not necessarily belong to the same neighborhood. The
+labelings are only locally meaningful in that they distinguish a
+particular neighborhood from it’s neighbors. Instead, a neighborhood
+will be a set of blocks that have the same label and which are
+connected components.}
 
 Let’s start by looking at predictions for our training blocks to
 highlight some characteristics of our model (Figure
@@ -490,7 +508,7 @@ infrequent <- hood_frequency[hoods] < 10
 rand <- phyclust::RRand(hoods[!infrequent], training_neighborhoods[!infrequent])
 @ 
 
-First, our model depends upon C, the normalizer.  C. We choose C by
+First, our model depends upon C, the normalizer. We choose C by
 estimating the model for various values of C between 1.0 and 0.0001
 and choosing the value that maximizes the fit between the predicted
 neighborhoods and the training neighborhoods. The value of C that gave
@@ -594,17 +612,17 @@ print(WT)
 \section*{Discussion}
 While these results of modeling neighborhoods are interesting, we
 should take care to not put too much weight in them yet. Our purpose
-in this paper is to explore an \emph{approach} to modeling what counts
-for similarity and to evaluate if our models are adequate to capturing
-observed social groupings. 
+in this paper is to explore an \emph{approach} to modeling
+neighborhoods, and figuring out what counts block-by-block for making
+a neighborhood.
 
 What we have established is that this model of neighborhoods seems to
 be able to predict, with some fidelity, the training data, and that
 the parameter values comport with our previous expectations. These
 results should give us confidence that the modeling approach can
-capture the pheonomena. 
+capture this thing, the neighborhood, that we are trying to grasp.
 
-However, in order to learn from the model or extrapolate it's
+However, in order to learn from the model or extrapolate 
 predictions beyond the training data, this approach must pass much
 more rigorous tests than simply predicting the training data for one
 city. In a future paper, I will use this approach to model
