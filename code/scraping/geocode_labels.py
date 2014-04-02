@@ -10,7 +10,7 @@ import optparse
 import config
 import sys
 
-
+import SECRET
 
 optp = optparse.OptionParser()
 optp.add_option('-v', '--verbose', dest='verbose', action='count',
@@ -241,7 +241,7 @@ for k, city in enumerate(config.cities) :
 
     places = parseListings(listings, city_name, state)
 
-    geo = geocoders.MapQuest('Fmjtd%7Cluub2q0bnl%2C80%3Do5-9u7xhu')
+    geo = geocoders.GeocodeFarm(SECRET.API_KEY)
 
     for i, place in enumerate(places) :
         logging.debug(" Place: %(i)i: %(place)s", {'i':i, 'place':place})
