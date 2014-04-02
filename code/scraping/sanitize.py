@@ -71,7 +71,7 @@ def sanitizeListings(c) :
         month_year = monthYear(published)
         price, bedrooms = extractPrice(title)
         c.execute("INSERT IGNORE INTO sanitized_listing VALUES "
-                  "(%s, %s, %s, %s, %s, %s, %s, %s)",
+                  "(%s, %s, %s, %s, %s, %s, ROUND(%s, -2), %s)",
                   (listing_id, month_year, bagged_title, bagged_content, 
                    rss_id, city, price, bedrooms))
                    
@@ -88,7 +88,7 @@ if __name__ == '__main__' :
     c.execute('SET CHARACTER SET utf8;')
     c.execute('SET character_set_connection=utf8;')
 
-    countWords(c)
+    #countWords(c)
     sanitizeListings(c)
     #c.execute("DELETE FROM listings")
     db.commit()
