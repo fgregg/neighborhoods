@@ -57,19 +57,182 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 
 
 \section*{Introduction}
-As scientists and people, we cannot fail to notice the patterns of
-human action and interaction. Unfortunately, we can easily fail to
-capture and measure those patterns, let alone account for them.
-Patterns and concepts that first appeared so clear become hazy
-when we attempt to define them precisely. The `neighborhood' is a
-classic case.
+Urban sociology has many theories about city neighborhoods, but little
+ability to point to where any neighborhood may be found. It is a
+strange set of affairs to have rich theories about things but poor
+ability to find the things. This state of affairs may be common in the
+social sciences, but it is still strange.
 
-Researchers, like city dwellers, see that cities contain areas where
-the patterns of action and interaction are markedly different than
-neighboring zones. From that seed of perception, scholars have 
-grown a thicket of definitions about the neighborhood and theories
-about it--what it means, how it produces its distinctive patterns, how
-it should change over time.
+Empirical researchers are forced to locate the neighborhoods they
+study, and they have responded in a variety of ways. None are very
+satisfying.
+
+Most commonly, empirical researchers have defined neighborhoods to
+mean something like a some small geographic area around each
+individual's place of residence. In turn, the researcher typically
+approximates this version of neighborhood with a convenient,
+predefined administrative geography like a census tract. This
+conception of neighborhood would be better called proximity. 
+
+If we take this conception seriously, it implies that social processes
+unfold continuously across space. We are affected by our surroundings
+in direct proportion to their geographic proximity. This may be a
+useful approximation, but a hallmark of urban form is frequent spatial
+discontinuities in land use, land value, and patterns of social
+life.\footnote{Burgess economy and community}. If there social
+processes were geographically continuous there shouldn't be sharp
+spatial discontinuities.
+
+Some scholars, going back to Burgess, have found neighborhoods by
+looking for spatial discontinuities. For Burgess, social processes
+were mainly determined by one surroundings, but those surrounding
+occurred on a fabric of city streets. If there was a discontinuity in
+the grid of streets, there would be a discontinuity in social
+processes. He divided up Chicago into 75 ``community areas'' largely
+by tracing the paths of railroads, the river, major arterial roads,
+and industrial corridors. Similarly, but at a much finer scale, Rick
+Grannis argues that ``neigboring'' activities will mainly occur within
+sections of residential streets bounded by busier roads.
+
+When we cut along these discontinuities, we tend to get divisions that
+seem too coarse. Many of Burgess's community areas included three or
+four areas that residents perceived as distinct neighborhoods and
+which had very different patterns of social life. Instead of
+focusing on discontinuity of space, some empirical researchers have
+attempted to find neighborhoods by looking for discontinuities
+complement--continuity.
+
+For the Project on Human Development in Chicago Neighborhoods,
+Raudenbush defined the projects neighborhoods by clustering 847 census
+tracts into 343 ``neighborhood clusters.'' The objective of the X
+algorithm was to put together tracts that were relatively homogenous
+on measures of X, Y, and Z. He then refined, by hand, these
+clusterings based upon local knowledge of Chicago's neighborhoods and
+barriers like highways, parks, and the river.
+
+This kind of clustering ultimately depends upon the researchers
+private understanding of where the neighborhoods are. There are near
+infinite ways for census tracts to be similar, and the researcher must
+decide which variables should count for making clusters
+homogeneous. Even upon deciding what variables to include, the
+research has to decide upon the relative importance of different
+factors. Should racial homogeneity count the same as income
+homogeneity? Twice as much? We refine our clustering until gives us
+clusters that seem about right.
+
+Unfortunately, we should be very suspicious of a private understanding
+of where the boundaries of neighborhoods are. In Albert Hunter's study
+of Chicago's perceptions of neighborhoods, he asked 801 Chicago
+residents to answer two questions: ``What is the name of this part of
+Chicago?'' and ``What are the boundaries of this area?''
+[69]. Eighty-five percent of respondents were able to provide a name,
+but only 65\% were able to provide four boundaries of the
+area. Hunter, did not reveal whether the boundaries overlapped, but
+the work of other researchers shows that residents rarely agree about
+all four boundaries of their own neighborhood.(Campbell Lee). There is
+no particularly reason to prefer a researcher's private understanding
+of neighborhood boundaries.
+
+We could interpret resident's difficulties and differences in defining
+neighborhood boundaries a few ways. On one hand, perhaps people's maps
+of their neighborhood are typically private and idiosyncratic. If
+there is consensus, that is a social fact to explain. 
+
+Alternatively, people could have difficulty identifying four
+boundaries and seem to draw such different maps because they don't
+typically think of their neighborhoods by imagining a two-dimensional
+area on a map. Instead, they may use neighborhoods to make pragmatic
+distinctions between ``this place'' and ``that place'' as they move
+through a city.  Different people, who typically visit different parts
+of a city, will get better at distinguishing places along different
+borders. Consensus on a neighborhood border will emerge to the extent
+that people visit ``that place'' and the difference between here and
+there has some pragmatic meaning.
+
+Even if that second explanation is unconvincing, it would still be
+possible that people's perceptions of that their home is in a
+particular neighborhood is highly spatially organized for some other
+reason. 
+
+
+
+
+
+
+
+
+Sometimes,
+consensus emerges, but it's the 
+particular circumstances will 
+
+
+
+
+
+
+
+
+splitting up the city based upon discontinuity in the street
+grid 
+
+From the beginning, 
+
+From the beginning
+
+
+
+
+Reasoning that discontinuities in social
+patterns will fall a
+
+
+
+
+If we
+take this version of neighborhoods, Th
+
+
+
+Proximity
+is not really a thing, but a characteristic of dwellings. 
+
+
+
+
+
+Two people couldn't both live in the same
+neighborhood unless they lived 
+
+
+there is two people couldn't live in the same neighborhood unless 
+
+
+While proximity may
+determine much of our social lives (carter butts), it quite different
+from our common-sense ideas about a neighborhoods. 
+
+For 
+
+
+is just that 
+
+There have been 
+
+
+
+This is
+a strange set of affairs 
+
+have been theorizing about neighborhoods from the
+beginning of the discipleinbut little
+ability to point to what parts of the world are neighborhoods.  
+
+Our next move should not be to theorize about what kinds of
+effects the neighborhood has. Instead we should try to make our perception
+precise--what do we mean by pattern, what are the elements of the
+pattern, does this same kind of pattern appear elsewhere, do other
+people recognize this kind of pattern as distinctive. 
+
 
 Remarkably, almost none of these definitions or theories help us
 precisely define what parts of a city are neighborhoods, but see
@@ -80,12 +243,7 @@ things.
 
 We have moved too fast. As scientists and humans,
 we see that at least some part of cities have a real pattern to
-them. Our next move should not be to theorize about what kinds of
-effects the neighborhood has. Instead we should try to make our perception
-precise--what do we mean by pattern, what are the elements of the
-pattern, does this same kind of pattern appear elsewhere, do other
-people recognize this kind of pattern as distinctive. 
-
+them. 
 We need a better grasp on the things of social science, and this is as
 true for status groups, classes, parties as it for neighborhoods. In
 this paper, I describe an approach for doing this. We start with
