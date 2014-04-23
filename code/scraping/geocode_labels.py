@@ -71,7 +71,7 @@ def placeFromCLTags(listing) :
 
     cross_street_0 = ''
     cross_street_1 = ''
-    space = ''
+    space = None
 
     # Has to be a nicer way of extracting particular tag contents from
     # the list of comment tags
@@ -132,7 +132,7 @@ def parseListing(listing) :
     return place, geolocation, geo_area
 
 
-def localLookup(cursor, place) :     
+def lookupAlias(cursor, place) :     
         # Geocoding from the Google API is expensive, and a great many of
         # listings are duplicates, so we store geocoding results in local
         # place lookup table
@@ -141,9 +141,12 @@ def localLookup(cursor, place) :
         if location_id :
             location_id = location_id[0]
 
+            logging.debug("   found place in db")
+
+
         return location_id
 
-def updateLookup(cursor, location_id, place) :
+def updateLookup(cursor, db, location_id, place) :
     c.execute("""INSERT INTO place_lookup """
               """(location_id, dirty_location) VALUES (%s, %s) """, 
               (location_id, place))
@@ -157,7 +160,7 @@ def geocode(place) :
     # If we have any other number, we have  geo.geocode() throw
     # an error.
     try :
-        georeference = geo.geocode(place, exactly_one=True)
+        georeference = geo.geocode(place.replace('/', ''), exactly_one=True)
     except Exception as e :
         georeference = None
         if "Didn't find exactly one placemark!" in str(e) :
@@ -167,46 +170,43 @@ def geocode(place) :
         else:
             raise
 
-    time.sleep(20)
-
     logging.debug("  Geocoded")
     logging.debug(georeference)
 
     return georeference
 
-def deduplicateGeoreference(cursor, place) :
+def lookupCanonical(cursor, place) :
     cursor.execute("""SELECT location_id FROM location where canonical_location = %s""", (place))
     location_id = c.fetchone()
     if location_id :
         location_id = location_id[0]
+
+        logging.debug("   found place in db")
     
     return location_id
 
 
-def updateLocations(cursor, place, geolocation) :
+def updateLocations(cursor, db, place, geolocation, city) :
     cursor.execute("""REPLACE INTO location """
-                   """(canonical_location, lat_long) """
-                   """VALUES (%s, PointFromText('POINT(%s %s)'))""", 
+                   """(canonical_location, lat_long, city) """
+                   """VALUES (%s, PointFromText('POINT(%s %s)'), %s)""", 
                    (place, 
                     geolocation[0], 
-                    geolocation[1]))
+                    geolocation[1],
+                    city))
+
     location_id = db.insert_id()
     db.commit()
-    
 
     return location_id
 
 def last_published(c, city) :
-    c.execute("""SELECT IFNULL(MIN(published),0) """
-              """       FROM listing """
-              """       WHERE """
-              """       listing_id IN (SELECT listing_id """
-              """                      FROM label """
-              """                      WHERE """
-              """                      location_id = (SELECT """
-              """                                     IFNULL(MAX(location_id),0) """
-              """                                     FROM location """
-              """                                     WHERE city = %s))""",
+    c.execute("SELECT published "
+              "FROM listing INNER JOIN claim "
+              "USING (listing_id) "
+              "WHERE listing.city = %s "
+              "ORDER BY claim_id DESC "
+              "LIMIT 1",
               city)
 
     return c.fetchone()[0]
@@ -222,43 +222,103 @@ def new_listings(c, min_published, city) :
 
     return c.fetchall()
 
-def lookupLocation(c, place, geolocation) :
-    location_id = None
+def lookupGeolocation(c, geolocation) :
+    c.execute("SELECT location_id FROM geolocation " 
+              "WHERE lat_long = PointFromText('POINT(%s %s)')",
+              geolocation)
 
+    result = c.fetchone()
+
+    if result :
+        location_id = result[0]
+    else :
+        location_id = None
+
+    return location_id
+
+def updateGeolocation(c, geolocation) :
+    c.execute("INSERT INTO geolocation "
+              "(lat_long) "
+              "VALUES "
+              "(PointFromText('POINT(%s %s)')) ",
+              geolocation)
+    
+    return c.lastrowid
+
+
+def lookupLocation(c, db, place, geolocation, geocoded=False) :
     if place :
-        location_id = localLookup(c, place)
+        c.execute("SELECT place_id, location_id "
+                  "FROM lookup "
+                  "WHERE place = %s",
+                  (place,))
 
-        if location_id is None :
-            location_id = deduplicateGeoreference(c, place)
+        results = c.fetchone()
+        
+        if results :
+            place_id, location_id = results
 
-        if location_id is None and geolocation is None :
+        elif geolocation is None :
             georeference = geocode(place)
             if georeference :
                 normalized_place, geolocation = georeference
                 
-                location_id = lookupLocation(c, 
+                location_id = lookupLocation(c,
+                                             db,
                                              normalized_place, 
-                                             geolocation)
+                                             geolocation,
+                                             geocoded=True)
 
-        if location_id is None and geolocation :
-            location_id = updateLocations(c,
-                                          place,
-                                          geolocation)
+                c.execute("INSERT INTO lookup "
+                          "(place, location_id, canonical, source) "
+                          "VALUES "
+                          "(%s, %s, %s, %s)",
+                          (place, location_id,
+                           False, "geocoder"))
+
+                place_id = c.lastrowid
+
+        elif geolocation :
+            location_id = lookupGeolocation(c, geolocation)
+                
+            if location_id is None :
+                location_id = updateGeolocation(c, geolocation)
+
+            if geocoded :
+                c.execute("INSERT INTO lookup "
+                          "(place, location_id, canonical, source) "
+                          "VALUES "
+                          "(%s, %s, %s, %s)",
+                          (place, location_id,
+                           True, "geocoder"))
+            else :
+                c.execute("INSERT INTO lookup "
+                          "(place, location_id, canonical, source) "
+                          "VALUES "
+                          "(%s, %s, %s, %s)",
+                          (place, location_id,
+                           False, "craigslist"))
+
+            place_id = c.lastrowid
 
     elif geolocation :
-        location_id = updateLocations(c,
-                                      '',
-                                      geolocation)
+        location_id = lookupGeolocation(c, geolocation)
 
-    
-    return location_id 
+        if location_id is None :
+            location_id = updateGeolocation(c, geolocation)
+
+
+        place_id = None
+
+    else :
+        location_id = None
+        place_id = None
+
+    return location_id, place_id
 
             
-    
-
-
 def label_count(c) :
-    c.execute("""SELECT COUNT(*) FROM label""")
+    c.execute("""SELECT COUNT(*) FROM claim""")
     return c.fetchone()[0]
 
 
@@ -297,17 +357,18 @@ if __name__ == '__main__' :
 
         last_listing = last_published(c, city)
 
-        if last_listing != 0 :
+        if last_listing :
             logging.debug(last_listing)
         else :
             logging.debug("No 'latest' listing can't be found, starting from beginning'")
+            last_listing = 0
 
         listings = new_listings(c, last_listing, city)
 
         i = 0
         for listing_id, listing in listings :
             try :
-                place, geolocation, label = parseListing(listing)
+                place, geolocation, geoarea = parseListing(listing)
             except :
                 print listing
                 print listing_id
@@ -320,23 +381,32 @@ if __name__ == '__main__' :
             
             if place :
                 logging.debug(" Place: %(i)i: %(place)s", {'i':i, 'place':place})
-                place = "%s, %s %s" % (place.lower().strip(), city, state)
+                place = "%s, %s %s" % (place.lower().strip(), 
+                                       city_name.lower(), state.lower())
 
             else :
                 logging.debug(" Place: %(i)i: No address", {'i':i})
 
-            location_id = lookupLocation(c, place, geolocation)
-            
-            if location_id and label :
-                logging.debug("  label: %(label)s", {"label" :label})
+            location_id, place_id = lookupLocation(c, db, place, geolocation)
+            if location_id and geoarea :
+                logging.debug("  label: %(label)s", {"label" :geoarea})
 
-                c.execute(""" REPLACE INTO label """
-                          """(location_id, listing_id, label) """
-                          """VALUES (%s, %s, %s) """, 
-                                  (location_id, listing_id, label))
+                try :
+                    c.execute("INSERT INTO claim "
+                              "(listing_id, place_id, location_id, label) "
+                              "VALUES "
+                              "(%s, %s, %s, %s)",
+                              (listing_id, place_id, location_id, geoarea))
+
+                except MySQLdb.IntegrityError :
+                    logging.debug("duplicate claim")
+                    
+
+
+
                 db.commit()
 
-        c.execute("""SELECT COUNT(*) FROM label""")
+        c.execute("""SELECT COUNT(*) FROM claim""")
         num_labels_end = c.fetchone()[0]
 
         logging.info("%(new labels)d new labels", 
