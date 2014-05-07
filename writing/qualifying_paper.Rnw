@@ -57,6 +57,205 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 
 
 \section*{Introduction}
+City residents often see their city as composed of many, usually
+distinct areas they call neighborhoods. These perceived neighborhoods
+can form the basis of how residents navigate the city, act
+collectively, choose where to live, or decide to invest. While urban
+sociologists have long argued for the importance of the perceived
+neighborhood, we have little understanding of how people come to see
+an area as a neighborhood.
+
+In part, this is because previous research has suggested that people
+do not come to see an area as a neighborhood, but that residents have
+idiosyncratic perceptions of neighborhoods. If people see very
+different areas when they see neighborhoods, then it makes little
+sense to ask how a particular area comes to be seen as a
+neighborhood--it does not. 
+
+Recent research in neighborhood perception has largely been concerned
+with how individual residents' social statuses determine their
+neighborhood perception and how residents distinguish between
+neighborhoods in order to serve status needs. However, it's not clear
+how different residents' perceptions of neighborhoods truly are.
+
+While residents give very different responses when asked to define the
+area of their neighborhood, this may have more to do with the
+difficulty of the task than different perceptions of the
+neighborhood. Defining a the area of a neighborhood is a difficult
+cognitive tasks. Respondents typically express uncertainty about one
+or more of the borders, and, if allowed, will often omit some borders
+altogether.
+
+Even if residents truly do see their neighborhoods as covering
+different areas, these areas can substantially overlap. Indeed, if we
+could collect enough perceptions of a neighborhood, we may be identify
+a particular area which residents are likely to identify as their
+neighborhood. Up to now, urban sociologists have not collected the
+necessary data to test whether these potential `average neighborhood
+perceptions' emerge.
+
+In this paper, I discuss a novel Internet source for proxy data on
+neighborhood perception. In addition, I present an approach for
+investigating what elements of the urban landscape residents may
+responding to when they see this place as different than that place. 
+
+
+
+modeling how the 
+
+
+Indeed, there
+may be well defined areas that residents tend to see as belonging the
+their neighborhood. However, in order to capture 
+In order to 
+
+
+There may be a
+well-defined area If we
+aggregated enough perceptions, the idiosyncrasies may wash out, leaving
+a well defined area of average neighborhood perception. 
+
+
+Whether This is an empirical question that 
+
+
+
+
+
+Resident's to these tasks vary a great deal, but 
+
+
+
+en pressed, residents will draw very different
+maps and nominate different boundaries. 
+
+
+Residents will also express
+uncertainty about their ability to answer  
+
+
+
+
+
+
+
+
+
+However, 
+
+However, 
+
+
+
+
+
+
+If neighborhoods are not commonly perceptible, then we must explain
+how residents see neighborhoods. 
+
+
+
+often 
+
+sociologists have taken up the e 
+
+However, 
+
+
+It is an empirical question 
+
+However, individual differences does not mean that sociologists have not investigated how much neighborhood
+perceptions vary and how. While individual residents may each perceive
+their neighborhoods differently, those perceptions may substantially
+overlap. 
+
+
+
+
+makes no sense to ask how
+people can perceive a particular area as a neighborhood--they don't.
+
+In part, this is because our research has suggested that city
+residents do not tend to agree about what area is covered by a
+neighborhoods. In Albert Hunter's study of Chicago's perceptions of
+neighborhoods, 85\% of his respondents could give the name of
+neighborhood they were in, but only 65\% could identify all the
+boundaries of that neighborhood. When Campbell and Lee had residents
+draw maps of their neighborhoods, the borders seldom overlapped. If
+neighborhood perception is idiosyncratic, 
+
+However, 
+
+This is an empirical question. Unfortunately, it's a question that
+requires a great deal of data to answer. If we had maps 
+
+Since people tend to have
+such a difficult time drawing maps of their neighborhoods, we should
+emphasize the
+
+
+
+
+
+neighborhoods, there may still be areas that most residents see as
+part of the neighborhood. This average 
+
+
+
+We could interpret resident's difficulties and differences in defining
+neighborhood boundaries a few ways. On one hand, perhaps people's maps
+of their neighborhood are typically private and idiosyncratic. If
+there is consensus, that is a social fact to explain. 
+
+
+
+
+found that 
+
+
+the boundaries of able to
+provide four boundaries of the area. Hunter, did not reveal whether
+the boundaries overlapped, but the work of other researchers shows
+that residents rarely agree about all four boundaries of their own
+neighborhood.(Campbell Lee). There is no particularly reason to prefer
+a researcher's private understanding of neighborhood boundaries.
+
+
+
+seldom used seldom
+
+
+neighborhood
+as
+
+
+We should want a gap between our theoretical definition of things and
+the things in the world? That doesn't sound right. What is a thing,
+can we discover what the things are . This definitino of neighborhood
+assumes that people are more or less right in their definition or
+pointing-to of neighborhoods. Why should we prefer their definitino?
+Well.. because it's a pointing to. We should prefer pointings-to? Why,
+because they are more likely to be pragmatically meaningful for
+shaping human action. More likely... so what, is it the right
+definition? 
+
+Because it's an interesting phenomena in-itself. Okay.. . The logic of perception?
+
+What if you don't buy the theory? We are not giving good evidence of
+it here. 
+
+Neighborhoods have nearly 
+
+Historically, empirical urban sociologists have defined neighborhoods
+axiomatically. 
+
+
+Why should we prefer general individuals definitions of neighborhoods?
+
+Because neighborhoods are consequential to 
+
+
+
 Urban sociology has many theories about city neighborhoods, but little
 ability to point to where any neighborhood may be found. It is a
 strange set of affairs to have rich theories about things but poor
@@ -120,23 +319,7 @@ factors. Should racial homogeneity count the same as income
 homogeneity? Twice as much? We refine our clustering until gives us
 clusters that seem about right.
 
-Unfortunately, we should be very suspicious of a private understanding
-of where the boundaries of neighborhoods are. In Albert Hunter's study
-of Chicago's perceptions of neighborhoods, he asked 801 Chicago
-residents to answer two questions: ``What is the name of this part of
-Chicago?'' and ``What are the boundaries of this area?''
-[69]. Eighty-five percent of respondents were able to provide a name,
-but only 65\% were able to provide four boundaries of the
-area. Hunter, did not reveal whether the boundaries overlapped, but
-the work of other researchers shows that residents rarely agree about
-all four boundaries of their own neighborhood.(Campbell Lee). There is
-no particularly reason to prefer a researcher's private understanding
-of neighborhood boundaries.
 
-We could interpret resident's difficulties and differences in defining
-neighborhood boundaries a few ways. On one hand, perhaps people's maps
-of their neighborhood are typically private and idiosyncratic. If
-there is consensus, that is a social fact to explain. 
 
 Alternatively, people could have difficulty identifying four
 boundaries and seem to draw such different maps because they don't
