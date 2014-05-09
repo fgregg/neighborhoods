@@ -55,96 +55,171 @@ default_margins = par("mar")
 CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
-
 \section*{Introduction}
-City residents often see their city as composed of many, usually
-distinct areas they call neighborhoods. These perceived neighborhoods
-can form the basis of how residents navigate the city, act
-collectively, choose where to live, or decide to invest. While urban
-sociologists have long argued for the importance of the perceived
-neighborhood, we have little understanding of how people come to see
-an area as a neighborhood.
+The neighborhood effects literature has studied the effects of
+neighborhoods in two distinct senses. First, scholars have been
+interested in neighborhood-as-community--how do characteristics like
+collective efficacy and social organization affect other social
+processes. Second, the literature has embraced a modeling strategy
+that requires a city to be split into different areal units typically
+called neighborhoods. The effects of neighborhoods are parameters
+attached to these units.
 
-In part, this is because previous research has suggested that people
-do not come to see an area as a neighborhood, but that residents have
-idiosyncratic perceptions of neighborhoods. If people see very
-different areas when they see neighborhoods, then it makes little
-sense to ask how a particular area comes to be seen as a
-neighborhood--it does not. 
+From the beginning, researchers worried about this
+coupling. Logically, neighborhood characteristics like collective
+efficacy, perceived disorder, or active social ties might change block
+to block. If so, then the researcher had to contend with a cousin of
+the 'ecological fallacy' -- the multiple areal unit problem.  When a
+researcher calculated ``neighborhood effects'' of a large area, the
+apparent effects could just be due to how the researcher carved up
+areas and aggregated individual response data to neighborhood units. 
 
-Recent research in neighborhood perception has largely been concerned
-with how individual residents' social statuses determine their
-neighborhood perception and how residents distinguish between
-neighborhoods in order to serve status needs. However, it's not clear
-how different residents' perceptions of neighborhoods truly are.
+In response to this potential problem, researchers have both called
+for study of neighborhood effects over smaller areas and developed
+statistical models that handle neighborhood effects as
+characteristics that could change smoothly and continuously across
+space. 
 
-While residents give very different responses when asked to define the
-area of their neighborhood, this may have more to do with the
-difficulty of the task than different perceptions of the
-neighborhood. Defining a the area of a neighborhood is a difficult
-cognitive tasks. Respondents typically express uncertainty about one
-or more of the borders, and, if allowed, will often omit some borders
-altogether.
+While these continuous space strategies do avoid the dangers of
+incorrectly drawn neighborhood units, they do so at a cost. The
+continuous space models assume the same local causes will have the same
+effects across a city. For example, we should not expect that
+residents from two different parts of the city with crime rates could
+have very different perceptions of crime as a problem. However, we
+know they can. (pathways to neighborhood change).
 
-Even if residents truly do see their neighborhoods as covering
-different areas, these areas can substantially overlap. Indeed, if we
-could collect enough perceptions of a neighborhood, we may be identify
-a particular area which residents are likely to identify as their
-neighborhood. Up to now, urban sociologists have not collected the
-necessary data to test whether these potential `average neighborhood
-perceptions' emerge.
+The problem with the continuous space model for neighborhood effects
+is that it does not contain neighborhoods-as-areas. However, we cannot
+simply add areas back in because we know that if we do a bad job
+defining neighborhood units we may end up merely estimating our own
+butchery. The only way forward is to directly address how we can
+validly define neighborhood units.
 
-In this paper, I discuss a novel Internet source for proxy data on
-neighborhood perception. In addition, I present an approach for
-investigating what elements of the urban landscape residents may
-responding to when they see this place as different than that place. 
+The key is perception: who you see as your neighbors and which events
+you see as having something do with you. 
 
-
-
-modeling how the 
+At the heart of neighborhood-as-community 
 
 
-Indeed, there
-may be well defined areas that residents tend to see as belonging the
-their neighborhood. However, in order to capture 
-In order to 
+t does not allow
+for social processes 
 
 
-There may be a
-well-defined area If we
-aggregated enough perceptions, the idiosyncrasies may wash out, leaving
-a well defined area of average neighborhood perception. 
+The problem with the continuous space model of neigh
+more convincing
+estimates of the effects of neighborhood-as-community characteristics,
+they also imply a very different understanding of neighborhood as
+area. The areas of neighborhoods are no longer specific, definite
+areas of a city. Under continuous space strategies, there are as many
+neighborhoods as there are residents. For each resident, their
+neighborhood is just some area near where they live.
 
 
-Whether This is an empirical question that 
+In order to go forward, we have to 
 
+On the other hand, Are there definite areas of a city that are
+sociologically meaningful units?
+If there are
+If neighborhoods are meaningful units, we would expect
+that respondents were still affected by their surroundings but that
+specifics of that influence could vary between neighborhoods. 
 
+Whether this shift is any great loss depends upon one thing. 
+Are neighborhoods real? 
 
+More precisely,  Are cities divided into areas within
+which many social processes proceed differently than across 
+borders?
 
-
-Resident's to these tasks vary a great deal, but 
-
-
-
-en pressed, residents will draw very different
-maps and nominate different boundaries. 
-
-
-Residents will also express
-uncertainty about their ability to answer  
-
-
-
-
-
+The continuous space strategy assumes that respondents will be
+affected by the same causes will have the same effects in every
+neighborhood. 
 
 
 
 
-However, 
 
-However, 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+There does not seem to be any logical necessity for 
+
+
+We would like to be able to 
+
+
+
+how
+
+
+'community' characteristic--like 
+characteristics that properly belong to an area
+
+how perception and
+social relations seem to effect 
+
+study how 
+
+
+The neighborhood effects literature 
+
+The neighborhood effects literature is about the consequence of
+differential level of neighbors working together to achieve, in
+particular to control problems. The 
+
+Dual sense that neighborhood effect is about neighborhoods (one it's
+about 'community') the second is that is about a definite area. 
+
+
+At the heart of 
+
+1. Neighborhood effects literature established that neighborhoods were
+meaningful social units. Actually, did they? They established that
+areas that were matched compositionally had different rates of murder
+and other forms of social disorder. Well, it could still be
+compositional just compositional of something not measured. That
+doesn't actually seem like the right basis to establish
+neighborhoods. 
+
+
+
+
+
+``neighborhoods'' are scientifically distinct things that effect social
+processes and the literature has provided a set of tools for measuring
+those effects.
+
+
+
+main contributions 
+
+
+The neighborhood effects literature has demonstrated that there
+contexts that have some effect. 
+
+
+The neighborhood effects literature has demonstrated that there 
+The orginal genius of the 
+The neighborhood effects literature hasaccomplished a remarkable
+feat. It demonhas established that neighborhoods  
+
+
+Thanks to the innovative design and modeling 
 
 
 
