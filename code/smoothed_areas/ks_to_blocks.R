@@ -5,55 +5,75 @@ pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
 labelNodes <- function(nodes) {
+    con <- dbConnect(MySQL(), dbname="neighborhood")
 
-  # Import Neighborhood Label Point Data
-  con <- dbConnect(MySQL(), dbname="neighborhood")
+    names <- dbGetQuery(con, "
+      SELECT 
+      COUNT(DISTINCT(location_id)) as num_locations,
+      LOWER(label) AS neighborhood
+      FROM claim, listing
+      WHERE claim.listing_id = listing.listing_id
+      AND listing.city = 'chicago'
+      group by lower(label)")
 
-  listings <- dbGetQuery(con, "
-  SELECT DISTINCT
-  X(lat_long) AS y,
-  Y(lat_long) AS x,
-  label.label AS neighborhood
-  FROM location, label
-  WHERE location.location_id = label.location_id
-  AND city = 'chicago'"
-                         ) 
-  dbDisconnect(con)
+    dbDisconnect(con)
 
+    normalized_neighborhood <- common::normalizedNames(names, 'chicago',
+                                                       'il')
 
-  listings$neighborhood <- common::cleanLabels(listings$neighborhood)
+    # remove compound neighborhood
+    normalized_neighborhood <- normalized_neighborhood[!grepl("/",
+                                                              normalized_neighborhood)]
 
-  listings <- sp::SpatialPointsDataFrame(coords = listings[, c("x", "y")],
-                                         data = data.frame(listings$neighborhood),
+    # Import Neighborhood Label Point Data
+    con <- dbConnect(MySQL(), dbname="neighborhood")
+
+    claims <- dbGetQuery(con, "
+      SELECT
+      DISTINCT
+      X(lat_long) AS y,
+      Y(lat_long) AS x,
+      LOWER(label) AS neighborhood
+      FROM claim, listing, geolocation
+      WHERE claim.listing_id = listing.listing_id
+      AND claim.location_id = geolocation.location_id
+      AND listing.city = 'chicago'")
+
+    dbDisconnect(con)
+
+    claims$neighborhood <- as.factor(normalized_neighborhood[claims$neighborhood])
+    freq_names <- table(claims$neighborhood)
+
+    claims <- claims[(freq_names[claims$neighborhood] >= 10
+                      & !is.na(claims$neighborhood)),]
+
+    claims$neighborhood <- factor(claims$neighborhood)
+
+    print(sort(table(claims$neighborhood)))
+
+    claims <- sp::SpatialPointsDataFrame(coords = claims[, c("x", "y")],
+                                         data = data.frame(claims$neighborhood),
                                          proj4string = CRS("+proj=longlat")
                                          )
-  names(listings) <- c("neighborhood")
-  listings <- sp::spTransform(listings, CRS(projection))
+    names(claims) <- c("neighborhood")
+    claims <- sp::spTransform(claims, CRS(projection))
 
-  neighborhoods <- c("lakeview","lincoln park", "roscoe village",
-                     "buena park", "southport corridor", "wrigleyville",
-                     "boystown", "uptown", "north center", "ravenswood",
-                     "lincoln square", "avondale", "old town",
-                     "logan square", "bucktown", "wicker park",
-                     "humboldt park", "andersonville", "albany park",
-                     "river north", "river west", "ukrainian village",
-                     "east village", "noble square", "streeterville",
-                     "west town", "magnificent mile", "gold coast")
+    neighborhoods <- unique(claims$neighbohood)
+    
+    centroids <- sp::coordinates(nodes)
+    # Estimate KDE
+    classes = common::trainKDE(claims,
+        neighborhoods,
+        centroids,
+        range,
+        common::ks.pi,
+        0.0000015)
 
-  centroids <- sp::coordinates(nodes)
-  # Estimate KDE
-  classes = common::trainKDE(listings,
-    neighborhoods,
-    centroids,
-    range,
-    common::ks.pi,
-    0.0000015)
-
-  # Unary Potentials of Block Labels
-  unary <- log(classes)
-  minimum.val = min(unary[is.finite(unary)])
-  unary[is.infinite(unary)] <- minimum.val
-  return(unary)
+    # Unary Potentials of Block Labels
+    unary <- log(classes)
+    minimum.val = min(unary[is.finite(unary)])
+    unary[is.infinite(unary)] <- minimum.val
+    return(unary)
 }
   
 if (!common::from_source()) {
@@ -74,3 +94,13 @@ if (!common::from_source()) {
   segments <- common::hoodsToSegments(ks_labels, G)
   write.csv(segments, file="../interchange/ks_label.csv", row.names=FALSE)
 }
+
+
+    
+
+
+
+
+
+
+
