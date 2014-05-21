@@ -56,464 +56,72 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
 \section*{Introduction}
-The neighborhood effects literature has studied the effects of
-neighborhoods in two distinct senses. First, scholars have been
-interested in neighborhood-as-community--how do characteristics like
-collective efficacy and social organization affect other social
-processes. Second, the literature has embraced a modeling strategy
-that requires a city to be split into different areal units typically
-called neighborhoods. The effects of neighborhoods are parameters
-attached to these units.
+Within the neighborhoods effect literature, neighborhoods face
+collective action problems and much of the variation of social goods
+and ills across neighborhoods should be explained by differences in
+neighbors' efficacy in responding to these problems.
+
+If we want to understand variation in neighbors' ability to coordinate
+a response to common concerns, than we face a fundamental
+methodological task: identifying the residents who have concerns in
+common. We need to understand which residents count as relevant
+co-actors, that is, which residents count as neighbors.
+
+One possibility is that residents see their neighbors as those who
+simply live nearby. If so, then the neighborhood facing collective
+action problems is specific to each resident, and the ability for
+neighbors to effectively respond to their common concerns can vary
+continuously block-to-block.\footnote{The literature has tended
+  towards this definition neighborhood, using smaller and smaller
+  areal definitions of neighborhoods and continuous-space modeling
+  strategies \cite{savitz_exploiting_2009}.}
+
+If the collective action problem requires joint action between
+neighbors, than this may be the right definition of neighborhoods. We
+know that for mere proximity is the most important factor for forming
+the real, personal social ties that can form the basis of further,
+costly joint action \cite{hipp_simultaneous_2009, grannis_ground_2009}.
+
+However, within the neighborhood effects literature few of the
+collective problems truly require joint action. Instead, the problems
+depends upon individual's interdependent beliefs about their
+neighbors. 
+
+The classic example is individual choices of a property owners to
+invest in a property. People should invest in their property when they
+expect a positive return, but their expectation is related to the
+perception that others are investing
+\cite{taub_paths_1987}. Similarly, effective informal social control,
+like intervening if kids are skipping school, depends upon individual
+action influenced by beliefs about how others would
+act.\cite{sampson_neighborhoods_1997}
+
+For these perception-based problems, we do not have a good
+understanding of what area contains the perceived, relevant co-actors
+and the area may well vary for different concerns. However, we can
+start with the areas that residents perceive as their neighborhood.
+
+On occasion, urban sociologists have tried to identify neighborhoods
+by asking residents to define them for us. What we have repeatedly
+found is that individual residents are uncertain about the limits of
+their neighborhood and that groups of residents will draw different
+boundaries for the same neighborhood.
+
+However, all past surveys of neighborhood perception have had small
+samples or been spread out over a large geographic area. If we had
+sufficient, overlapping data, these vague and conflicting neighborhood
+perceptions may average out to reveal that that different areas of a
+city have a strong and distinct tendencies to be seen as different
+neighborhood.
+
+In this paper, I discuss a novel Internet source for data on
+neighborhood perception, demonstrate that this data coheres together,
+and provide evidence that these differences in perception line up with
+differences in the physical and social organization of different
+areas. Further, I show how we can use these data to predict what areas
+of a city are likely to be seen as distinct by residents even when we
+don't have data on those resident's perceptions.
 
-From the beginning, researchers worried about this
-coupling. Logically, neighborhood characteristics like collective
-efficacy, perceived disorder, or active social ties might change block
-to block. If so, then the researcher had to contend with a cousin of
-the 'ecological fallacy' -- the multiple areal unit problem.  When a
-researcher calculated ``neighborhood effects'' of a large area, the
-apparent effects could just be due to how the researcher carved up
-areas and aggregated individual response data to neighborhood units. 
-
-In response to this potential problem, researchers have both called
-for study of neighborhood effects over smaller areas and developed
-statistical models that handle neighborhood effects as
-characteristics that could change smoothly and continuously across
-space. 
-
-While these continuous space strategies do avoid the dangers of
-incorrectly drawn neighborhood units, they do so at a cost. The
-continuous space models assume the same local causes will have the same
-effects across a city. For example, we should not expect that
-residents from two different parts of the city with crime rates could
-have very different perceptions of crime as a problem. However, we
-know they can. (pathways to neighborhood change).
-
-The problem with the continuous space model for neighborhood effects
-is that it does not contain neighborhoods-as-areas. However, we cannot
-simply add areas back in because we know that if we do a bad job
-defining neighborhood units we may end up merely estimating our own
-butchery. The only way forward is to directly address how we can
-validly define neighborhood units.
-
-The key is perception: who you see as your neighbors and which events
-you see as having something do with you. 
-
-At the heart of neighborhood-as-community 
-
-
-t does not allow
-for social processes 
-
-
-The problem with the continuous space model of neigh
-more convincing
-estimates of the effects of neighborhood-as-community characteristics,
-they also imply a very different understanding of neighborhood as
-area. The areas of neighborhoods are no longer specific, definite
-areas of a city. Under continuous space strategies, there are as many
-neighborhoods as there are residents. For each resident, their
-neighborhood is just some area near where they live.
-
-
-In order to go forward, we have to 
-
-On the other hand, Are there definite areas of a city that are
-sociologically meaningful units?
-If there are
-If neighborhoods are meaningful units, we would expect
-that respondents were still affected by their surroundings but that
-specifics of that influence could vary between neighborhoods. 
-
-Whether this shift is any great loss depends upon one thing. 
-Are neighborhoods real? 
-
-More precisely,  Are cities divided into areas within
-which many social processes proceed differently than across 
-borders?
-
-The continuous space strategy assumes that respondents will be
-affected by the same causes will have the same effects in every
-neighborhood. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-There does not seem to be any logical necessity for 
-
-
-We would like to be able to 
-
-
-
-how
-
-
-'community' characteristic--like 
-characteristics that properly belong to an area
-
-how perception and
-social relations seem to effect 
-
-study how 
-
-
-The neighborhood effects literature 
-
-The neighborhood effects literature is about the consequence of
-differential level of neighbors working together to achieve, in
-particular to control problems. The 
-
-Dual sense that neighborhood effect is about neighborhoods (one it's
-about 'community') the second is that is about a definite area. 
-
-
-At the heart of 
-
-1. Neighborhood effects literature established that neighborhoods were
-meaningful social units. Actually, did they? They established that
-areas that were matched compositionally had different rates of murder
-and other forms of social disorder. Well, it could still be
-compositional just compositional of something not measured. That
-doesn't actually seem like the right basis to establish
-neighborhoods. 
-
-
-
-
-
-``neighborhoods'' are scientifically distinct things that effect social
-processes and the literature has provided a set of tools for measuring
-those effects.
-
-
-
-main contributions 
-
-
-The neighborhood effects literature has demonstrated that there
-contexts that have some effect. 
-
-
-The neighborhood effects literature has demonstrated that there 
-The orginal genius of the 
-The neighborhood effects literature hasaccomplished a remarkable
-feat. It demonhas established that neighborhoods  
-
-
-Thanks to the innovative design and modeling 
-
-
-
-
-
-If neighborhoods are not commonly perceptible, then we must explain
-how residents see neighborhoods. 
-
-
-
-often 
-
-sociologists have taken up the e 
-
-However, 
-
-
-It is an empirical question 
-
-However, individual differences does not mean that sociologists have not investigated how much neighborhood
-perceptions vary and how. While individual residents may each perceive
-their neighborhoods differently, those perceptions may substantially
-overlap. 
-
-
-
-
-makes no sense to ask how
-people can perceive a particular area as a neighborhood--they don't.
-
-In part, this is because our research has suggested that city
-residents do not tend to agree about what area is covered by a
-neighborhoods. In Albert Hunter's study of Chicago's perceptions of
-neighborhoods, 85\% of his respondents could give the name of
-neighborhood they were in, but only 65\% could identify all the
-boundaries of that neighborhood. When Campbell and Lee had residents
-draw maps of their neighborhoods, the borders seldom overlapped. If
-neighborhood perception is idiosyncratic, 
-
-However, 
-
-This is an empirical question. Unfortunately, it's a question that
-requires a great deal of data to answer. If we had maps 
-
-Since people tend to have
-such a difficult time drawing maps of their neighborhoods, we should
-emphasize the
-
-
-
-
-
-neighborhoods, there may still be areas that most residents see as
-part of the neighborhood. This average 
-
-
-
-We could interpret resident's difficulties and differences in defining
-neighborhood boundaries a few ways. On one hand, perhaps people's maps
-of their neighborhood are typically private and idiosyncratic. If
-there is consensus, that is a social fact to explain. 
-
-
-
-
-found that 
-
-
-the boundaries of able to
-provide four boundaries of the area. Hunter, did not reveal whether
-the boundaries overlapped, but the work of other researchers shows
-that residents rarely agree about all four boundaries of their own
-neighborhood.(Campbell Lee). There is no particularly reason to prefer
-a researcher's private understanding of neighborhood boundaries.
-
-
-
-seldom used seldom
-
-
-neighborhood
-as
-
-
-We should want a gap between our theoretical definition of things and
-the things in the world? That doesn't sound right. What is a thing,
-can we discover what the things are . This definitino of neighborhood
-assumes that people are more or less right in their definition or
-pointing-to of neighborhoods. Why should we prefer their definitino?
-Well.. because it's a pointing to. We should prefer pointings-to? Why,
-because they are more likely to be pragmatically meaningful for
-shaping human action. More likely... so what, is it the right
-definition? 
-
-Because it's an interesting phenomena in-itself. Okay.. . The logic of perception?
-
-What if you don't buy the theory? We are not giving good evidence of
-it here. 
-
-Neighborhoods have nearly 
-
-Historically, empirical urban sociologists have defined neighborhoods
-axiomatically. 
-
-
-Why should we prefer general individuals definitions of neighborhoods?
-
-Because neighborhoods are consequential to 
-
-
-
-Urban sociology has many theories about city neighborhoods, but little
-ability to point to where any neighborhood may be found. It is a
-strange set of affairs to have rich theories about things but poor
-ability to find the things. This state of affairs may be common in the
-social sciences, but it is still strange.
-
-Empirical researchers are forced to locate the neighborhoods they
-study, and they have responded in a variety of ways. None are very
-satisfying.
-
-Most commonly, empirical researchers have defined neighborhoods to
-mean something like a some small geographic area around each
-individual's place of residence. In turn, the researcher typically
-approximates this version of neighborhood with a convenient,
-predefined administrative geography like a census tract. This
-conception of neighborhood would be better called proximity. 
-
-If we take this conception seriously, it implies that social processes
-unfold continuously across space. We are affected by our surroundings
-in direct proportion to their geographic proximity. This may be a
-useful approximation, but a hallmark of urban form is frequent spatial
-discontinuities in land use, land value, and patterns of social
-life.\footnote{Burgess economy and community}. If there social
-processes were geographically continuous there shouldn't be sharp
-spatial discontinuities.
-
-Some scholars, going back to Burgess, have found neighborhoods by
-looking for spatial discontinuities. For Burgess, social processes
-were mainly determined by one surroundings, but those surrounding
-occurred on a fabric of city streets. If there was a discontinuity in
-the grid of streets, there would be a discontinuity in social
-processes. He divided up Chicago into 75 ``community areas'' largely
-by tracing the paths of railroads, the river, major arterial roads,
-and industrial corridors. Similarly, but at a much finer scale, Rick
-Grannis argues that ``neigboring'' activities will mainly occur within
-sections of residential streets bounded by busier roads.
-
-When we cut along these discontinuities, we tend to get divisions that
-seem too coarse. Many of Burgess's community areas included three or
-four areas that residents perceived as distinct neighborhoods and
-which had very different patterns of social life. Instead of
-focusing on discontinuity of space, some empirical researchers have
-attempted to find neighborhoods by looking for discontinuities
-complement--continuity.
-
-For the Project on Human Development in Chicago Neighborhoods,
-Raudenbush defined the projects neighborhoods by clustering 847 census
-tracts into 343 ``neighborhood clusters.'' The objective of the X
-algorithm was to put together tracts that were relatively homogenous
-on measures of X, Y, and Z. He then refined, by hand, these
-clusterings based upon local knowledge of Chicago's neighborhoods and
-barriers like highways, parks, and the river.
-
-This kind of clustering ultimately depends upon the researchers
-private understanding of where the neighborhoods are. There are near
-infinite ways for census tracts to be similar, and the researcher must
-decide which variables should count for making clusters
-homogeneous. Even upon deciding what variables to include, the
-research has to decide upon the relative importance of different
-factors. Should racial homogeneity count the same as income
-homogeneity? Twice as much? We refine our clustering until gives us
-clusters that seem about right.
-
-
-
-Alternatively, people could have difficulty identifying four
-boundaries and seem to draw such different maps because they don't
-typically think of their neighborhoods by imagining a two-dimensional
-area on a map. Instead, they may use neighborhoods to make pragmatic
-distinctions between ``this place'' and ``that place'' as they move
-through a city.  Different people, who typically visit different parts
-of a city, will get better at distinguishing places along different
-borders. Consensus on a neighborhood border will emerge to the extent
-that people visit ``that place'' and the difference between here and
-there has some pragmatic meaning.
-
-Even if that second explanation is unconvincing, it would still be
-possible that people's perceptions of that their home is in a
-particular neighborhood is highly spatially organized for some other
-reason. 
-
-
-
-
-
-
-
-
-Sometimes,
-consensus emerges, but it's the 
-particular circumstances will 
-
-
-
-
-
-
-
-
-splitting up the city based upon discontinuity in the street
-grid 
-
-From the beginning, 
-
-From the beginning
-
-
-
-
-Reasoning that discontinuities in social
-patterns will fall a
-
-
-
-
-If we
-take this version of neighborhoods, Th
-
-
-
-Proximity
-is not really a thing, but a characteristic of dwellings. 
-
-
-
-
-
-Two people couldn't both live in the same
-neighborhood unless they lived 
-
-
-there is two people couldn't live in the same neighborhood unless 
-
-
-While proximity may
-determine much of our social lives (carter butts), it quite different
-from our common-sense ideas about a neighborhoods. 
-
-For 
-
-
-is just that 
-
-There have been 
-
-
-
-This is
-a strange set of affairs 
-
-have been theorizing about neighborhoods from the
-beginning of the discipleinbut little
-ability to point to what parts of the world are neighborhoods.  
-
-Our next move should not be to theorize about what kinds of
-effects the neighborhood has. Instead we should try to make our perception
-precise--what do we mean by pattern, what are the elements of the
-pattern, does this same kind of pattern appear elsewhere, do other
-people recognize this kind of pattern as distinctive. 
-
-
-Remarkably, almost none of these definitions or theories help us
-precisely define what parts of a city are neighborhoods, but see
-\cite{palmer_primary_1932, hunter_symbolic_1974, grannis_ground_2009}.
-It should trouble us that we have lots of theories about things called
-neighborhoods, but very little idea about how to identify these
-things.
-
-We have moved too fast. As scientists and humans,
-we see that at least some part of cities have a real pattern to
-them. 
-We need a better grasp on the things of social science, and this is as
-true for status groups, classes, parties as it for neighborhoods. In
-this paper, I describe an approach for doing this. We start with
-observing how people identify themselves--in particular claiming to
-belong to a neighborhood. We see how those claims are organized in
-space. Finally, we attempt to find the local, block-by-block,
-similarities and differences that could lead to the larger scale
-patterns of neighborhoods.
-
-In this paper, we will discuss a particular form of self-labeling:
-claims that a location belongs to a city neighborhood. However, the
-larger approach is much more general.
 
 \input{theory_and_math.tex}
 
@@ -885,7 +493,7 @@ variables to our unpopulated model.\footnote{Actually, our model is
 
 \section*{Results}
 After training the model using the PyStruct structure learning
-framework,\cite{mueller_pystruct:_????} we get two classes of results:
+framework,\cite{mueller_pystruct:_2014} we get two classes of results:
 predictions of Chicago neighborhoods and parameter
 estimates.\footnote{See \url{https://github.com/fgregg/pystruct} for
   custom model} Given a set of learned weights we can find,
