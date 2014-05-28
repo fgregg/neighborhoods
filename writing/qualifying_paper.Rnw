@@ -56,13 +56,13 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
 \section*{Introduction}
-Within the neighborhoods effect literature, neighborhoods face
-collective action problems and much of the variation of social goods
-and ills across neighborhoods should be explained by differences in
-neighbors' efficacy in responding to these problems.
+In the neighborhoods effect literature, neighborhoods face collective
+action problems but vary in their abilities to respond. Neighborhoods
+differ in their share of social goods and ills due, in part, to
+neighbors' power to respond to their common concerns.
 
-If we want to understand variation in neighbors' ability to coordinate
-a response to common concerns, than we face a fundamental
+To understand how some neighbors' can coordinate an effective response
+to common concerns while others cannot, we face a fundamental
 methodological task: identifying the residents who have concerns in
 common. We need to understand which residents count as relevant
 co-actors, that is, which residents count as neighbors.
@@ -78,41 +78,40 @@ continuously block-to-block.\footnote{The literature has tended
 
 If the collective action problem requires joint action between
 neighbors, than this may be the right definition of neighborhoods. We
-know that for mere proximity is the most important factor for forming
+know that mere proximity is an important factor for forming
 the real, personal social ties that can form the basis of further,
 costly joint action \cite{hipp_simultaneous_2009, grannis_ground_2009}.
 
-However, within the neighborhood effects literature few of the
+However, within the neighborhood effects literature, few of the
 collective problems truly require joint action. Instead, the problems
 depends upon individual's interdependent beliefs about their
 neighbors. 
 
-The classic example is individual choices of a property owners to
-invest in a property. People should invest in their property when they
-expect a positive return, but their expectation is related to the
-perception that others are investing
-\cite{taub_paths_1987}. Similarly, effective informal social control,
-like intervening if kids are skipping school, depends upon individual
-action influenced by beliefs about how others would
-act.\cite{sampson_neighborhoods_1997}
+The classic example is the choice of a property owners to invest in a
+property. People should invest in their property when they expect a
+positive return, but their expectation is related to the perception
+that others are investing \cite{taub_paths_1987}. Similarly, effective
+informal social control, like intervening if kids are skipping school,
+depends upon individual action influenced by beliefs about how others
+would act.\cite{sampson_neighborhoods_1997}
 
-For these perception-based problems, we do not have a good
-understanding of what area contains the perceived, relevant co-actors
-and the area may well vary for different concerns. However, we can
-start with the areas that residents perceive as their neighborhood.
+For perception-based problems, we do not yet have a good understanding
+of what area contains the perceived relevant co-actors.  The area may
+well vary for different concerns. However, we can start with the areas
+that residents perceive as their neighborhood. 
 
 On occasion, urban sociologists have tried to identify neighborhoods
 by asking residents to define them for us. What we have repeatedly
 found is that individual residents are uncertain about the limits of
 their neighborhood and that groups of residents will draw different
-boundaries for the same neighborhood.
+boundaries for the same neighborhood \cite{hunter_symbolic_1974, campbell_subjective_2009}.
 
 However, all past surveys of neighborhood perception have had small
 samples or been spread out over a large geographic area. If we had
 sufficient, overlapping data, these vague and conflicting neighborhood
 perceptions may average out to reveal that that different areas of a
 city have a strong and distinct tendencies to be seen as different
-neighborhood.
+neighborhoods.
 
 In this paper, I discuss a novel Internet source for data on
 neighborhood perception, demonstrate that this data coheres together,
@@ -122,12 +121,67 @@ areas. Further, I show how we can use these data to predict what areas
 of a city are likely to be seen as distinct by residents even when we
 don't have data on those resident's perceptions.
 
+\section*{Neighborhood Claims}
+Craigslist is the largest classified listing service. It
+has about 60 million visitors each month from the United States. The
+service is organized into more than 700 city specific sites. On a city
+specific site, like \url{http://chicago.craigslist.org}, the
+classified listings are organized into categories like ``Housing'' and 
+subcategories like ``Sublets/Temporary.'' 
 
-\input{theory_and_math.tex}
+It is free to read the classified ads and free to post ads except for
+a few subcategories. It is free to post in all the ``Housing''
+categories except for brokered apartment rentals in New York City. 
 
-\section*{Results}
-So much for theory, let's see how this works in practice. Let's take
-the case of Chicago neighborhoods.  
+Both private individuals and real estate companies use Craigslist to
+advertise housing listings. However, the listings in the categories
+for roommates, shared housing, sublets, are mainly made by
+individuals. The listings for apartments are mainly made by landlords
+both large and small. 
+
+When an advertiser posts a housing listing on Craigslist they have the
+option of putting in an address of the listing or a nearby street
+intersection. If the advertiser puts in the geographic information,
+she will be shown a map with a pin over the listing's location. If the
+pin is not in the correct place, the advertiser can move the pin as
+necessary. The advertiser can also put a pin in the desired location
+without entering in address or street intersection information. When
+the listing is published, the geographic coordinates of the posting
+are embedded in the posting's web page.
+
+In addition, to location of the listing, the advertiser also has the
+option of filling out a field entitled ``Specific location.'' The
+advertiser can put whatever text she wants to in this field, but
+typically advertisers put in the name of a neighborhood. This
+information is also embedded in the published listing.
+
+If a housing listing has a neighborhood name in the ``Specific
+location'' and the geographic coordinates of the listing location, the
+listing represents a claim that a particular point in the city is part
+of a neighborhood.
+
+I have written a computer program that checks for and downloads, every
+night, listings in the ``apts/housing'', ``rooms/shared'', and
+``sublets/temporary'' subcategories for the following cities:
+
+New York, Los Angeles, Houston, Philadelphia, Phoenix, San Antonio,
+San Diego, Dallas, Jacksonville, Indianapolis, San Francisco, Austin,
+Columbus, Charlotte, Detroit, El Paso, Memphis, Baltimore, Boston,
+Seattle, Washington D.C., Nashville, Denver, Louisville, Milwaukee,
+Portland, Las Vegas, Oklahoma City, Albuquerque, Tucson, Fresno,
+Sacramento, Kansas City, Atlanta, Colorado Springs, Omaha, Raleigh,
+Miami, Cleveland, Tulsa, Minneapolis, Wichita, Knoxville, Asheville
+
+Another computer program parses the downloaded web page (a HTML
+document) and extracts the geographic information and the contents of
+the ``Specific location'' field. If the geographic coordinates are
+missing, but address or street intersection information is available,
+the program attempt to lookup the geographic coordinates associated with
+this information using a geocoding service. (citation)
+
+* information on how many posts
+* how many claims
+
 
 \subsection*{Data}
 <<loadFeatures, include=FALSE, cache=FALSE>>= 
@@ -163,6 +217,10 @@ listings are excluded. Perhaps even more troublesome, the listers who
 are on Craigslist sometimes claim neighborhoods strategically in order
 to increase the desirability of their listing.
 
+\input{theory_and_math.tex}
+
+
+
 For our currently purpose of understanding this modeling
 \emph{approach}, we can ignore these difficulties. In a future work,
 when we use these models to make claims about how neighborhoods work,
@@ -175,6 +233,7 @@ source('plot_training.R')
 \caption{Training Data}
 \label{fig:training}
 \end{figure}
+
 
 In addition to these data about neighborhood perception, we also have
 block level census data as well as a trove of unaggregated data from
