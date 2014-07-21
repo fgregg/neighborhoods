@@ -56,6 +56,129 @@ CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
 \section*{Introduction}
+City residents face a variety of problems that require coordinating
+with neighbors: informal social control of youth, maintaining or
+increasing property values, keeping the sidewalk free of ice 
+in winter, electing officials, or getting permits for a block party. 
+
+Residents are able to coordinate their actions through personal
+contacts with neighbors, formal organizations, or shared perceptions
+and beliefs about the neighborhood. These different bases for action
+imply different sets of relevant neighbors. For keeping an eye out for
+truant school children, the relevant neighbors are mainly other
+residents on the block, known by and to the resident. For electing a
+city councilor, the relevant neighbors are all voters in an arbitrary
+political district. For calculating whether to buy a home, the
+relevant neighbors are those whose recent actions and fate in the
+market is especially informative about the economic fortunes of an
+area.
+
+In researching how neighbors develop capacity to act collectively,
+scholars have focused on the first two: investigating how residents
+come to have personal relations with their neighbors and the ways that
+local and city-wide organizations can solve local coordination
+problems.
+
+This is not because researchers think that beliefs and perceptions are
+unimportant. The key results in the neighborhood effects literature
+are result about beliefs. Resident's beliefs about neighbors, as
+reported in survey research, appear to influence a variety of measures
+of social order. From the place making literature, we know that local
+activists and developers also believe that the fate of an area can
+depend upon beliefs about what the area is or will be.
+
+However, we know very little about a.) how residents come to perceive some
+common region of the city as their neighborhood, and b.) how they form
+beliefs about this area. In large part, this is because we have not
+had any means to systematically and reliably identify the parts of a
+city that residents will tend to see as their neighborhood. It's hard
+to study how a thing emerges and changes if we can't locate the thing.
+
+In this paper, I discuss a novel Internet source for data on
+neighborhood perception, demonstrate that this data coheres together,
+and provide evidence that these differences in perception line up with
+differences in the physical and social organization of different
+areas. Further, I show how we can use these data to predict what areas
+of a city are likely to be seen as distinct areas by residents even
+when we don't have data on those resident's perceptions.
+
+
+
+
+
+
+
+Yet, 
+
+
+While we have some understanding
+of how residents develop personal relations with their neighbors and
+how formal organizations can solve local coordination problems, we
+know little about how residents come to share perceptions and beliefs
+about neighborhoods.
+
+Teh 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+In the neighborhood effects
+literature, the problem is typically informal social control,
+particularly of youth. 
+
+either coordinated,
+joint action with their neighbors or upon resident's private beliefs
+about what their neighbors will do. Classically, examples include
+informal maintenance of social order and investment or disinvestment
+in real property.
+
+The neighborhood effects literature has demonstrated that residents in
+different parts of cities differ in their beliefs about their
+neighbors likelihood to act to maintain social order. Areas where
+residents report that their neighbors are likely to act are more
+likely to have X,Y,Z and less likely to have A,B,C. These
+'neighborhood effects' persist after controlling for poverty, x, z.
+
+
+
+We have much to learn about what produces these differences in beliefs
+about neighbors and about the relation between those beliefs and
+social order within an area. We can start by who counts as neighbors
+and for which types of collective action problems. If a neighborhood
+faces collective action problems, is capacity to respond depends on
+who is in the collective.
+
+
+
+
+
+
+
+
+should
+start by understanding which sets of people are party to the different
+collective action problems faced by residents.
+
+
+
+
+
+
+
+
 In the neighborhoods effect literature, neighborhoods face collective
 action problems but vary in their abilities to respond. Neighborhoods
 differ in their share of social goods and ills due, in part, to
