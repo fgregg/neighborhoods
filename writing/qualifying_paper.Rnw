@@ -61,10 +61,10 @@ with neighbors: informal social control of youth, maintaining or
 increasing property values, keeping the sidewalk free of ice 
 in winter, electing officials, or getting permits for a block party. 
 
-Residents are able to coordinate their actions through personal
-contacts with neighbors, formal organizations, or shared perceptions
-and beliefs about the neighborhood. These different bases for action
-imply different sets of relevant neighbors. For keeping an eye out for
+Residents coordinate their actions through personal contacts with
+neighbors, formal organizations, or shared perceptions and beliefs
+about the neighborhood \cite{needed}. These different bases for action imply
+different sets of relevant neighbors. For keeping an eye out for
 truant school children, the relevant neighbors are mainly other
 residents on the block, known by and to the resident. For electing a
 city councilor, the relevant neighbors are all voters in an arbitrary
@@ -94,6 +94,25 @@ had any means to systematically and reliably identify the parts of a
 city that residents will tend to see as their neighborhood. It's hard
 to study how a thing emerges and changes if we can't locate the thing.
 
+A number of researchers have attempted to identify perceived
+neighborhoods by surveying city residents, typically by asking
+residents to draw maps of their neighborhood. These studies
+persistently find that residents draw very idiosyncratic maps, often
+with little overlap.\cite{hunter_symbolic_1974, campbell_subjective_2009}.
+
+A resident's ability to draw a map of their neighborhood is influenced
+where they live, their daily rounds of movement, how long they have
+lived in the area, their life stage, their overall level of mobility,
+and a raft of other personalistic factors\cite{needed}. Yet, even with great
+individual level variation, there can still be definite districts of
+a city wherein residents will all tend to perceive that area as their
+neighborhood.
+
+However, in order to observe these average perceived neighborhoods, we
+need enough data to wash out the personalistic variation of individual
+residents. Historically, it has not been practical to collect these
+data at the volume and spatial resolution necessary.
+
 In this paper, I discuss a novel Internet source for data on
 neighborhood perception, demonstrate that this data coheres together,
 and provide evidence that these differences in perception line up with
@@ -101,148 +120,6 @@ differences in the physical and social organization of different
 areas. Further, I show how we can use these data to predict what areas
 of a city are likely to be seen as distinct areas by residents even
 when we don't have data on those resident's perceptions.
-
-
-
-
-
-
-
-Yet, 
-
-
-While we have some understanding
-of how residents develop personal relations with their neighbors and
-how formal organizations can solve local coordination problems, we
-know little about how residents come to share perceptions and beliefs
-about neighborhoods.
-
-Teh 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-In the neighborhood effects
-literature, the problem is typically informal social control,
-particularly of youth. 
-
-either coordinated,
-joint action with their neighbors or upon resident's private beliefs
-about what their neighbors will do. Classically, examples include
-informal maintenance of social order and investment or disinvestment
-in real property.
-
-The neighborhood effects literature has demonstrated that residents in
-different parts of cities differ in their beliefs about their
-neighbors likelihood to act to maintain social order. Areas where
-residents report that their neighbors are likely to act are more
-likely to have X,Y,Z and less likely to have A,B,C. These
-'neighborhood effects' persist after controlling for poverty, x, z.
-
-
-
-We have much to learn about what produces these differences in beliefs
-about neighbors and about the relation between those beliefs and
-social order within an area. We can start by who counts as neighbors
-and for which types of collective action problems. If a neighborhood
-faces collective action problems, is capacity to respond depends on
-who is in the collective.
-
-
-
-
-
-
-
-
-should
-start by understanding which sets of people are party to the different
-collective action problems faced by residents.
-
-
-
-
-
-
-
-
-In the neighborhoods effect literature, neighborhoods face collective
-action problems but vary in their abilities to respond. Neighborhoods
-differ in their share of social goods and ills due, in part, to
-neighbors' power to respond to their common concerns.
-
-To understand how some neighbors' can coordinate an effective response
-to common concerns while others cannot, we face a fundamental
-methodological task: identifying the residents who have concerns in
-common. We need to understand which residents count as relevant
-co-actors, that is, which residents count as neighbors.
-
-One possibility is that residents see their neighbors as those who
-simply live nearby. If so, then the neighborhood facing collective
-action problems is specific to each resident, and the ability for
-neighbors to effectively respond to their common concerns can vary
-continuously block-to-block.\footnote{The literature has tended
-  towards this definition neighborhood, using smaller and smaller
-  areal definitions of neighborhoods and continuous-space modeling
-  strategies \cite{savitz_exploiting_2009}.}
-
-If the collective action problem requires joint action between
-neighbors, than this may be the right definition of neighborhoods. We
-know that mere proximity is an important factor for forming
-the real, personal social ties that can form the basis of further,
-costly joint action \cite{hipp_simultaneous_2009, grannis_ground_2009}.
-
-However, within the neighborhood effects literature, few of the
-collective problems truly require joint action. Instead, the problems
-depends upon individual's interdependent beliefs about their
-neighbors. 
-
-The classic example is the choice of a property owners to invest in a
-property. People should invest in their property when they expect a
-positive return, but their expectation is related to the perception
-that others are investing \cite{taub_paths_1987}. Similarly, effective
-informal social control, like intervening if kids are skipping school,
-depends upon individual action influenced by beliefs about how others
-would act.\cite{sampson_neighborhoods_1997}
-
-For perception-based problems, we do not yet have a good understanding
-of what area contains the perceived relevant co-actors.  The area may
-well vary for different concerns. However, we can start with the areas
-that residents perceive as their neighborhood. 
-
-On occasion, urban sociologists have tried to identify neighborhoods
-by asking residents to define them for us. What we have repeatedly
-found is that individual residents are uncertain about the limits of
-their neighborhood and that groups of residents will draw different
-boundaries for the same neighborhood \cite{hunter_symbolic_1974, campbell_subjective_2009}.
-
-However, all past surveys of neighborhood perception have had small
-samples or been spread out over a large geographic area. If we had
-sufficient, overlapping data, these vague and conflicting neighborhood
-perceptions may average out to reveal that that different areas of a
-city have a strong and distinct tendencies to be seen as different
-neighborhoods.
-
-In this paper, I discuss a novel Internet source for data on
-neighborhood perception, demonstrate that this data coheres together,
-and provide evidence that these differences in perception line up with
-differences in the physical and social organization of different
-areas. Further, I show how we can use these data to predict what areas
-of a city are likely to be seen as distinct by residents even when we
-don't have data on those resident's perceptions.
 
 \section*{Neighborhood Claims}
 Craigslist is the largest classified listing service. It
@@ -293,14 +170,14 @@ Columbus, Charlotte, Detroit, El Paso, Memphis, Baltimore, Boston,
 Seattle, Washington D.C., Nashville, Denver, Louisville, Milwaukee,
 Portland, Las Vegas, Oklahoma City, Albuquerque, Tucson, Fresno,
 Sacramento, Kansas City, Atlanta, Colorado Springs, Omaha, Raleigh,
-Miami, Cleveland, Tulsa, Minneapolis, Wichita, Knoxville, Asheville
+Miami, Cleveland, Tulsa, Minneapolis, Wichita, Knoxville, and Asheville.
 
 Another computer program parses the downloaded web page (a HTML
 document) and extracts the geographic information and the contents of
 the ``Specific location'' field. If the geographic coordinates are
 missing, but address or street intersection information is available,
 the program attempt to lookup the geographic coordinates associated with
-this information using a geocoding service. (citation)
+this information using a geocoding service \cite{needed}. 
 
 * information on how many posts
 * how many claims
@@ -313,21 +190,110 @@ source('features.R')
 setwd(CURDIR)
 @ 
 
+Using these claims about specific locations, we can estimate the areas
+that advertisers will claim to be a different neighborhoods. This will
+be a two step process. First, we will use claims about discrete
+locations to estimate how likely we are to see a particular
+neighborhood claim over continuous, geographic space. Second,
+comparing these likelihoods, we will identify the areas where a
+particular neighborhood is more likely to be claimed than any other
+alternative. These regions, where the plurality of neighborhood claims
+favor one neighborhood, will be a measure of average perceived
+neighborhoods.
 
-I have a nightly updated database of geocoded Craigslist apartment
-rentals, sublet, and roommate listings. For most of these listings,
-the poster entered some text in a ``Specific Location'' field. With
-some minimal pre-processing, we can use these data as observations of
-claims that geographical points are in some neighborhood.
+For a particular neighborhood name, the probability that the name will
+appear in a listings's ``Specific location'' field can vary depending
+upon the location the listing is about. In other words, the claims for
+a particular neighborhood name has a probability distribution over
+geographic space. 
 
-Using kernel density estimation, we can use this point data to
-estimate a continuous probability distributions that any point in the
-city will be claimed to be in any of the neighborhoods. 
+Given a particular neighborhood claim distribution, we can think of
+our observed neighborhood claims as random draws from this
+distribution. This means that we can estimate this unobserved
+distribution over space by looking at the empirical concentration of
+observed neighborhood claims. 
 
-At the center of every census block, we will calculate the most
+There are many ways to estimate a distribution over space from
+observed point data. For one dimensional space, the classic histogram
+is the most familiar method. We'll use a simple method called Kernel
+Density Estimation (KDE). It behaves much like smoothed histogram
+(Figure 1).
+
+With KDE, we replace every observed point with a two-dimensional
+normal distribution. For each location in space, there is some
+probability density associated with every observation. For this
+location, if we sum up all these densities, we arrive at an estimate
+of the density of the distribution of neighborhood claims over space
+at this location. To estimate the entire distribution of neighborhood
+claims, we repeat this summation for every single point in space.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Comparison_of_1D_histogram_and_KDE.png}
+\caption{Histogram and KDE in One-dimensional Space \cite{wikipedia}}
+\end{figure}
+
+Using KDE, we estimate the geographic probability distribution for
+every neighborhood name we observe. With this in hand, we can estimate
+the probability of seeing a neighborhood claim at any location in the
+city for any neighborhood: $\hat{\Pr}(\text{Location}_j \mid
+\text{Hood}_i)$
+
+Next, we transform these probabilities into the probabilities of
+observing a particular neighborhood claim given a location. Since
+distributions of different neighborhood claims will overlap, this will
+be a multinomial probability conditional on location.
+
+\begin{equation}
+  \Pr(\text{Hood}_i \mid \text{Location}_j) = 
+  \frac{\Pr(\text{Hood}_i)\Pr(\text{Location}_j \mid \text{Hood}_i)}
+       {\sum_k^N \Pr(\text{Hood}_k)\Pr(\text{Location}_j \mid \text{Hood}_k)}
+\end{equation}
+
+\noindent
+approximated by
+
+\begin{equation}
+  \hat{\Pr}(\text{Hood}_i \mid \text{Location}_j) = 
+  \frac{n_i\hat{\Pr}(\text{Location}_j \mid \text{Hood}_i)}
+       {\sum_k^N n_k\hat{\Pr}(\text{Location}_j \mid \text{Hood}_k)}
+\end{equation}
+
+\noindent 
+Where $n_i$ is the number of observations of neighborhood name $i$.
+
+In Figure \ref{fig:prob}, we visualize the estimated probabilities for
+neighborhood claims on a map of the North Side of Chicago. Each color
+represents a different neighborhood claim distribution. The dark lines
+between mark the where the most probable neighborhood claim switches
+from one neighborhood to another. For context, the map shows the
+lakefront park, the north branch of the Chicago river, railroad
+embankments (brown-dashed lines), and, in gray, the borders of
+Community Areas--areas defined by Ernest Burgess in the 1920s, which
+he believed had and would continue to have distinct social histories.
+
+\begin{figure}
+  \centering
+  \includegraphics{probability.pdf}
+  \caption{Estimated probabilities for neighborhood claims}
+\label{fig:prob}
+\end{figure}
+
+
+
+For context, this 
+
+Finally, at the center of every census block, we will calculate the most
 probable neighborhood assignment and assign that most likely
-neighborhood to that block. This will be our training data (Figure
-\ref{fig:training}).
+neighborhood to that block. (Figure \ref{fig:training}).
+
+\begin{figure}
+<<plotTraining, dev='pdf', message=FALSE>>=
+source('plot_training.R')
+@ 
+\caption{Training Data}
+\label{fig:training}
+\end{figure}
+
 
 I would like to treat this measure as a kind of `averaged neighborhood
 perception.' Of course, it is at best a biased measure of that
@@ -349,13 +315,6 @@ For our currently purpose of understanding this modeling
 when we use these models to make claims about how neighborhoods work,
 we will take up this issue again.
 
-\begin{figure}
-<<plotTraining, dev='pdf', message=FALSE>>=
-source('plot_training.R')
-@ 
-\caption{Training Data}
-\label{fig:training}
-\end{figure}
 
 
 In addition to these data about neighborhood perception, we also have
