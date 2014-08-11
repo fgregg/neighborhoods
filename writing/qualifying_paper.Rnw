@@ -232,6 +232,8 @@ claims, we repeat this summation for every single point in space.
 \caption{Histogram and KDE in One-dimensional Space \cite{wikipedia}}
 \end{figure}
 
+\section*{Are claimed neighborhoods coherent?}
+
 Using KDE, we estimate the geographic probability distribution for
 every neighborhood name we observe. With this in hand, we can estimate
 the probability of seeing a neighborhood claim at any location in the
@@ -261,15 +263,11 @@ approximated by
 \noindent 
 Where $n_i$ is the number of observations of neighborhood name $i$.
 
-In Figure \ref{fig:prob}, we visualize the estimated probabilities for
-neighborhood claims on a map of the North Side of Chicago. Each color
+In Figure \ref{fig:prob}, we map the estimated probabilities for
+neighborhood claims on the North Side of Chicago. Each color
 represents a different neighborhood claim distribution. The dark lines
 between mark the where the most probable neighborhood claim switches
-from one neighborhood to another. For context, the map shows the
-lakefront park, the north branch of the Chicago river, railroad
-embankments (brown-dashed lines), and, in gray, the borders of
-Community Areas--areas defined by Ernest Burgess in the 1920s, which
-he believed had and would continue to have distinct social histories.
+from one neighborhood to another.
 
 \begin{figure}
   \centering
@@ -277,6 +275,48 @@ he believed had and would continue to have distinct social histories.
   \caption{Estimated probabilities for neighborhood claims}
 \label{fig:prob}
 \end{figure}
+
+Visually, we can notice that each 'neighborhood' is contiguous. There
+is no neighborhood name that dominates in two separate, disconnected
+areas. There are definite districts of the city wherein Craigslist
+advertisers tend to claim that area is a neighborhood.
+
+\section*{Spatial and Social Organization}
+
+Moreover, the distribution of claims of Craiglist advertisers likely
+generalizes to the distribution of perceptions of residents. The
+spatial organization of `claimed neighborhoods' is associated with the
+physical barriers and sociological similarities and differences that
+urban sociologists have long associated with neighborhood
+formation. We'll make this case first visually and
+impressionalistically, and then formally and mathematically.
+
+In the Figure \ref{fig:prob}, the map also shows the large parks, the
+north branch of the Chicago river and railroad embankments (dashed
+line). Neighborhoods are generally separated by these large physical
+features. In light gray, we have also plotted the borders of Community
+Areas--areas defined by Ernest Burgess in the 1920s, which he believed
+had and would continue to have distinct social histories. The `claimed
+neighborhoods' toe the lines of Burgess's areas.
+
+In order make these associations mathematically precise, we need a
+means of associating the spatial organization of a claimed
+neighborhood with the spatial organization of sociological factors and
+the locations of physical borders. 
+
+As a first step, we could split the city up into a large number of
+small areal cells. Then for each cell we can attempt to predict the
+dominant neighborhood claim. The prediction for a particular cell
+would depend upon what we predict for the neighboring cells, the
+sociological similarities between the cell and its neighbors, and
+whether or not the cells were separated by a physical border. It's a
+problem of multinomial regression where all the predictors are in
+spatial autocorrelation terms.
+
+
+
+
+
 
 
 
