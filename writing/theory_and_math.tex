@@ -34,8 +34,7 @@ Suppose that, in our city, there are two neighborhoods. Each block
 belongs to either one or the other of these neighborhoods. Neighboring
 blocks that are similar are more apt to belong to the same
 neighborhood and neighboring blocks that are different are more apt to
-belong to different neighborhoods. Only neighboring blocks can belong
-to the same neighborhood.
+belong to different neighborhoods. 
 
 We will denote the neighborhood that the $i$th block belongs to as
 $y_i$, and the similarity between blocks $i$ and $j$ as $\phi_{i,j}$.
@@ -72,15 +71,15 @@ $\operatorname{E}(\mathbf{y})$\footnote{$\operatorname{E}$ as in
   energy not expectation} which will take the following form:
 
 \begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\operatorname{E}(\mathbf{y}) = \sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
 \end{align}
 
-Where $\mathcal{N}$ is the set of pairs of indices of neighboring
-blocks and the index of the first block is smaller than the index of
-the second block. Also, where
+Where $<i,j>$ are indices of a pair of neighboring blocks and such
+that $i < j$.  $\mathcal{N}$ is the set of all such pairs of indices.
+Also, where
 
 \begin{equation}
-\epsilon_{i,j}(y_i,y_j\phi_{i,j}) = \begin{cases}
+\epsilon_{i,j}(y_i,y_j,\phi_{i,j}) = \begin{cases}
   0 &y_i = y_j \\
   \phi_{i,j} &y_i \neq y_j
 \end{cases}
@@ -89,7 +88,7 @@ the second block. Also, where
 Suppose that we want our preferred neighborhood assignment to have the
 lowest score. If our similarity measures $\phi_{i,j}$ are positive
 when blocks are similar and negative when blocks are different, then
-we will encourage neighboring blocks to belong to the same
+we will encourage similar, neighboring blocks to belong to the same
 neighborhood. Let our city have the following $\phi$'s.
 
 \begin{align*}
@@ -101,7 +100,8 @@ neighborhood. Let our city have the following $\phi$'s.
 
 Then, the assignments with the lowest scores are the ones that put
 blocks $1$ and $2$ in one neighborhood and $3$ and $4$ in the other
-neighborhood.
+neighborhood, just as we wished (Table \ref{table:lowest}, Table
+\ref{table:energy}).
 
 \begin{table}
 \centering
@@ -148,119 +148,253 @@ neighborhood.
 \label{table:energy}
 \end{table}
 
-In our little city with two neighborhoods, there are two ways of
-assigning blocks to neighborhoods that minimizes the score (Table
-\ref{table:energy}). In general, for a given set of similarity
-measures between blocks, there will be a set of assignments that have
-a lowest score. For small networks, we can find these best assignments
-by checking all possible patterns of assignments. Unfortunately, this
+For small networks, we can find these best scoring assignments by
+checking all possible patterns of assignments. Unfortunately, this
 becomes quickly impractical for larger cities. With two possible
 neighborhoods, the number of possible assignments is $2^N$ where N is
-the number of blocks.
+the number of blocks. This permutational explosion means that for even
+small cities, we cannot possibly check every possible neighborhood
+assignment in human-scale time. For the same reason, traditional
+Markov Chain Monte Carlo methods for finding the lowest scoring
+assignment also prove intractable.\footnote{In order to converge on
+  the mode of the distribution of scores, we have to calculate a
+  normalizing constant, which is the sum of the scores of all possible
+  assignments. This is computationally too expensive. There have been
+  a number of attempts to find an acceptable substitute for the
+  normalizing constant, but the empirical results have
+  disappointed.\cite{li_mrf_2009}}
 
-This permutational explosion means that for even small cities, we
-cannot possibly check every possible neighborhood assignment in
-human-scale time. For the same reason, traditional Markov Chain Monte
-Carlo methods for finding the lowest scoring assignment also prove
-intractable.\footnote{In order to converge on the mode of the
-  distribution of scores, we have to calculate a normalizing constant,
-  which is the sum of the scores of all possible assignments. This is
-  computationally too expensive. There have been a number of attempts
-  to find an acceptable substitute for the normalizing constant, but
-  the empirical results have disappointed.\cite{li_mrf_2009}}
+\subsection*{Graph Methods}
+Fortunately, researchers, largely in the field of computer vision,
+have developed methods to quickly find the lowest scoring assignment
+for problems like ours. This work traces back to a 1986 paper by
+Greig, Porteous, and Sehult, where they demonstrated that finding
+lowest scoring assignment for a two neighborhood case was equivalent
+to solving the problem of finding the minimum cut of a
+graph.\cite{greig_exact_1989}
 
-However, researchers, largely in the field of computer vision, have
-developed methods to quickly find the lowest scoring assignment for
-problems like ours. In 1986, Greig, Porteous, and Sehult demonstrated
-that finding the lowest scoring assignment for a two neighborhood case
-was equivalent to solving the graph cutting problem of min
-cut.\cite{greig_exact_1989}
-
- Since the classic 1956 result of Ford and Fulkerson, we have known
- how to solve the min cut problem swiftly.\footnote{Ford and Fulkerson's
-   original algorithm is not polynomial, but it was quickly improved
-   to solve the problem in polynomial time.\cite{ford_maximal_1956}}
- In the 2000s, these graph cut techniques became popular in the
- computer vision community leading to theoretical
- clarification and methodological extension.\cite{kolmogorov_what_2004}
-
-We now have a set of graph cut techniques that allow us to find, or
-approximately find, the lowest scoring assignment for score functions
-that have the following form.\footnote{We can also use these
-  techniques on scoring functions that have a term for the relation
-  between the properties of a particular block and the region
-  assignment, $\epsilon_i(y_i)$. This is particularly useful when we
-  already know something about what meaningful categories should exist.
-
-  \begin{align}
-    \operatorname{E}(\mathbf{y}) = \sum_i^N\epsilon_i(y_i) + \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
-  \end{align}
-
-  For example, if we had a strong, ecological theory of urban space,
-  we might want to identify regions like `the red light district,'
-  `the zone of industry`, `the central business district.' We would
-  want to pay a large penalty if we assigned a block that had lot of
-  immigrants to `the central business district` instead of `the
-  immigrant neighborhood.'
-}
+In that paper, the authors set up an scoring problem that is slightly
+different than ours. In addition to terms that depended upon pairs of
+neighbors, their score also included terms for individual nodes.
 
 \begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j)
+\operatorname{E}(\mathbf{y}) = \sum_i\epsilon_i(y_i) + \sum_{<i
+  j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
 \end{align}
 
-We will extensively use one extension to graph cuts called the
-Quadratic Pseudo Boolean Optimization algorithm, or QPBO. This method
-allows us to approximately find the lowest scoring assignment even
-though our scoring function is not submodular. 
+\noindent
+The node terms were of one of two forms, either
 
-A submodular scoring function would be one where $\epsilon_{i,j}(0,0)
-+ \epsilon_{i,j}(1,1) \leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$
-for all $i,j$ in $\mathcal{N}$. If we had a submodular scoring
-function, we would have a theoretical guarantee of finding the lowest
-scoring assignment. Our scoring function is decisively not submodular
-because we want very dissimilar neighboring blocks to be assigned to
-different neighborhoods. That is, for very dissimilar blocks we want
-it to hold that $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1)
-\boldsymbol{>} \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
+\begin{equation}
+\epsilon_{i}(y_i) = \begin{cases}
+  0 &y_i = 0 \\
+  \phi_{i} \geq 0 &y_i = 1
+\end{cases}
+\end{equation}
 
+\noindent
+or 
+
+\begin{equation}
+\epsilon_{i}(y_i) = \begin{cases}
+  \phi_{i} \geq 0 &y_i = 0 \\
+  0 &y_i = 1
+\end{cases}
+\end{equation}
+
+\noindent
+They had the same form of $\epsilon_{i,j}$
+
+\begin{equation}
+\epsilon_{i,j}(y_i,y_j,\phi_{i,j}) = \begin{cases}
+  0 &y_i = y_j \\
+  \phi_{i,j} &y_i \neq y_j
+\end{cases}
+\end{equation}
+
+\noindent
+but unlike us, $\phi_{i,j} \geq 0$ for all $<i, j>$ in $\mathcal{N}$. 
+
+One of their networks could look like this
+
+\begin{figure}[!h]
+\centering
+
+\tikz{ %
+  \node[latent] (1) {$y_1$} ; %
+  \node[latent, below left=of 1] (2) {$y_2$} ; %
+  \node[latent, below right=of 1] (3) {$y_3$} ; %
+  \node[latent, below left=of 3] (4) {$y_4$} ; %
+  \factor[below left=of 1] {1-2} {$1$} {} {} ;
+  \factor[below right=of 1] {1-3} {$1$} {} {} ;
+  \factor[below right=of 2] {2-4} {$1$} {} {} ;
+  \factor[below left=of 3] {3-4} {$1$} {} {} ;
+  \factoredge[-] {1} {1-2} {2} ; %
+  \factoredge[-] {1} {1-3} {3} ; %
+  \factoredge[-] {2} {2-4} {4} ; %
+  \factoredge[-] {3} {3-4} {4} ; %
+  %\edge[-] {2,3} {4} ; %
+}
+
+\end{figure}
+
+Based on this undirected network, Greig and his co-authors constructed
+a special, directed network where every edge has a cost associated
+with it. For every variable $y_i$ in the undirected network, the
+directed network contains a node $z_i$.  For every edge $(y_i, y_j)$ in the
+undirected graph, we introduce a directed edge from $z_i$ to $z_j$ and
+another from $z_j$ to $z_i$ with associated costs of $\phi_{i,j}$.
+
+In addition to the original nodes, we also introduce two special
+nodes: a source node called $s$ and a target, or sink, node called
+$t$. If $\epsilon_i(0) = 0$ then there would be a directed edge from
+$s$ to the $i$th node. If $\epsilon_i(1) = 0$ then there would be
+directed edge from the $i$th node to $t$.
+
+Suppose that $\epsilon_1(1)=2$, $\epsilon_2(0)=1$, $\epsilon_3(1)=3$,
+and $\epsilon_4(0)=3$. The corresponding directed graph is shown in
+Figure \ref{fig:directed}. 
+
+\begin{figure}[!h]
+\centering
+
+\begin{tikzpicture}[auto, >= stealth', shorten >= 1pt, node
+    distance=2cm, thick]
+\tikzset{vertex/.style = {shape=circle, draw, minimum size = 1.5em}}
+\tikzset{Dedge/.style = {->}}
+\tikzset{Uedge/.style = {<->}}
+
+\node[vertex, above=of 1] (0) {$s$} ; %
+\node[vertex] (1) {$y_1$} ; %
+\node[vertex, below left=of 1] (2) {$y_2$} ; %
+\node[vertex, below right=of 1] (3) {$y_3$} ; %
+\node[vertex, below left=of 3] (4) {$y_4$} ; %
+\node[vertex, below=of 4] (5) {$t$} ; %
+\path
+  (0) edge [Dedge] node {2} (1)
+  (0) edge [Dedge, bend left] node[right] {3} (3)
+  (1) edge [Uedge] node {1} (2) 
+  (1) edge [Uedge] node {1} (3) 
+  (2) edge [Uedge] node {1} (4) 
+  (3) edge [Uedge] node {1} (4) 
+  (2) edge [Dedge, bend right] node[left] {1} (5)
+  (4) edge [Dedge] node {3} (5)  ;
+
+\end{tikzpicture}
+\caption{S-T Network}
+\label{fig:directed}
+\end{figure}
+
+In this type of network, an s-t cut is a set of edges that if removed,
+or cut, would result in the original network being split into disjoint
+subneworks, one which included the source node and the other the
+target node. The minimal cut problem is finding the s-t cut where the
+sum of the associated costs of the cut edges is minimal. In our
+example, removing the edges $(z_2, t)$ and $(z_4, t)$ is an s-t cut,
+but not the minimum cut. The minimum cut would be removing edges
+$(z_1, z_2)$ and $(z_3, z_4)$.
+
+Every s-t cut can be mapped onto a pattern of neighborhood block
+assignments by letting $y_i = 1$ if node $z_i$ ends up in the $t$
+subnetwork and $y_i = 0$ otherwise.
+
+Greig and his coauthors demonstrated that the minimum cut of the $s-t$
+directed graph always corresponded to the minimum scoring pattern of
+block assignment. Because computer scientists have known how to solve
+the min cut problem swiftly since the 1950s, this mean that a large
+class of network configurations problems were now tractable \cite{ford_maximal_1956}.
+
+Greig's original result only applied to scoring functions where there
+where blocks could belong to only one of two classes and where the
+scoring function had important property called submodularity.  A
+submodular scoring function would be one where $\epsilon_{i,j}(0,0) +
+\epsilon_{i,j}(1,1) \leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$
+for all $i,j$ in $\mathcal{N}$. Our scoring function is decisively not
+submodular because we want it to cost more to put together very
+dissimilar neighboring blocks than to assign them to them to different
+neighborhoods. That is, for very dissimilar blocks we want it to hold
+that $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1) \boldsymbol{>}
+\epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
+
+Since we have submodular scoring functions and more than two
+neighborhood names, we can't use the minimum cuts algorithm
+directly. However, since the 1980s there have been a number of
+extensions that that allow us to find approximate solutions to
+multi-label non-submodular scoring problems like ours \cite{something}.
 
 \section*{Learning similarities}
-Let's consider similarity measures that take the following linear form
+In the previous section, we showed how we could construct a scoring
+function so that a preferred pattern of block assignments would have
+the best score. Now we will turn to how, given a preferred assignment,
+we can learn such a scoring function. 
+
+We will first make our lives easier by only considering simple, linear
+similarity terms.. As before, the scoring function will be
 
 \begin{align}
-\phi_{i,j} = w_0 + w_1\operatorname{S_1}(x_{i,1}, x_{j,1}) +
-w_2\operatorname{S_2}(x_{i,2}, x_{j,2}) + ... +
-w_n\operatorname{S_n}(x_{i,m},x_{j,m})
+\operatorname{E}(\mathbf{y}) = \sum_{<i,j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j,\phi_{i,j})
+\end{align}
+
+\noindent
+and
+
+\begin{equation}
+\epsilon_{i,j}(y_i,y_j,\phi_{i,j}) = \begin{cases}
+  0 &y_i = y_j \\
+  \phi_{i,j} &y_i \neq y_j
+\end{cases}
+\end{equation}
+
+\noindent
+the similarity term $\phi_{i,j}$ will be the weighted sum of
+observed similarities between block $i$ and $j$. 
+
+\begin{align}
+\phi_{i,j} = w_0 + w_1s_{1,i,j} + w_2s_{2,i,j} + ... + w_ns_{n,i,j}
 \end{align} 
 
-Where $x_{i,k}$ is the $k$th feature of block $i$. These features can
-be scalars or vectors of numbers and could correspond to attributes
-like population or distribution of race and ethnicity. A function
-$\operatorname{S}$ is similarity or distance function that maps two
-features to a real number. These functions must be symmetric; for each
-$\operatorname{S}$ and features $a$ and $b$, $\operatorname{S}(a,b) =
-\operatorname{S}(b,a)$.
+\noindent
+An observed inter-block similarity could be absolute difference in
+population, or dummy variable indicating whether the blocks are
+separated by a railroad, or similar.
 
-Given this choice of form, learning the similarities between blocks
-means finding the vector of weights $\mathbf{w}: \{w_0, w_1, ...,
-w_{m-1}, w_m\}$ that produce the aggregate similarities $\phi$'s which
-give our target neighborhood assignment the best score. 
+\noindent
 
-However, this learning problem does not have a unique solution. In our
-four block city, our preferred neighborhood assignment had the best
-score with block-by-block similarities of 1, -1, -1, 1. That
-assignment would also have had the best score if the similarities had
-been 2, -2, -2, 2 or 1000, -1000, -1000,
-1000. 
+With this form, learning a scoring function means finding the weights
+$\mathbf{w}: \{w_0, w_1, ..., w_{m-1}, w_m\}$ that give a better score
+to our preferred pattern of neighborhood assignments than any other
+pattern.
 
-In order to specify a unique solution, we need to add two
-constraints. First, we will go beyond requiring that the preferred
-assignment have the lowest score. We will attempt to find $\mathbf{w}$
-such that our preferred assignment has a lower score than any other
-assignment by the largest possible margin. 
+As stated, this learning task is under defined. There will not be only
+one set of weights that will give our preferred pattern a lower score
+than any other pattern. If there is single set of weights that does
+so, there will be an infinite number of other sets of weights that
+will do the same. In our four block city, our preferred
+neighborhood assignment had the best score with block-by-block
+similarities of 1, -1, -1, 1. That assignment would also have had the
+best score if the similarities had been 2, -2, -2, 2 or 1000, -1500,
+-2000, 4000.
 
-Second, we will also put a constraint on $\mathbf{w}$. A
-mathematically convenient choice is to require that $\sqrt{\sum_i^M w_i^2 = 1}$.
+In order to specify a unique set of weights, we need to add two
+constraints. First, observe that if a set of weights gives the
+preferred assignment a lower score than any other assignment, there is
+some difference between the score of the preferred assignment and the
+score of the next best scoring assignment. Call this difference the
+'margin. The first condition is that we seek the set weights that give
+our preferred assignment the largest margin. Formally,
+
+\begin{align}
+&\argmax_{\mathbf{w}} \mathbf{\gamma} \\
+&\text{such that} \\
+&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 
+\end{align}
+
+This still does not specify a unique set of weights. To do that, we
+constrain the sizes of the weights. We could do this by
+limiting the sum of the absolute values of the weights. A similar, but
+more mathematically convenient choice is to require that
+$\sqrt{\sum_i^M w_i^2 = 1}$. 
 
 So, now we can state the problem as 
 %
@@ -278,10 +412,8 @@ So, now we can state the problem as
 Here $\mathbf{y}*$ is the target neighborhood assignment and $\mathbf{s}$
 are similarity measures between blocks. 
 
-This is a large margin problem, and problems of this form have and
-equivalent canonical representation, which is a quadratic programming
-problem.
-
+Large margin problems like this one have an equivalent canonical
+representation: 
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
@@ -293,6 +425,7 @@ problem.
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
 \end{align*}
 
+This is a quadratic problem, so .. szummer.
 
 \subsection*{Learning Sketch}
 We usually can't directly solve this quadratic program because there
@@ -423,3 +556,18 @@ $\sum_i^N\begin{cases}
 Incorporating this empirical loss into our learning problem means
 that, of a set of previously equivalent assignments, only the
 assignment closest to the training data will be have the lowest score.
+
+
+\section*{Maybe Ditch}
+scalar similarity 
+and where 
+Let's consider similarity measures that take the following linear form
+
+
+Where $x_{i,k}$ is the $k$th feature of block $i$. These features can
+be scalars or vectors of numbers and could correspond to attributes
+like population or distribution of race and ethnicity. A function
+$\operatorname{S}$ is similarity or distance function that maps two
+features to a real number. These functions must be symmetric; for each
+$\operatorname{S}$ and features $a$ and $b$, $\operatorname{S}(a,b) =
+\operatorname{S}(b,a)$.
