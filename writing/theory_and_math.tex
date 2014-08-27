@@ -418,8 +418,9 @@ equations:
 \geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
 \end{equations}
 
-Where \mathbf{y}^* is our preferred pattern, and M is the number of
-possible neighborhood patterns.
+Where \mathbf{y}^* is our preferred pattern, M is the number of
+possible neighborhood patterns, and $\mathbf{s}$ are the similarities
+between blocks.
 
 \subsubsection*{Specifying a unique solution}
 In order to use some convenient machinery, we will modify the learning
@@ -447,10 +448,10 @@ weights that give our preferred assignment the largest margin.
 \end{align}
 
 This still does not specify a unique set of weights. To do that, we
-constrain the sizes of the weights. We could do this by
-limiting the sum of the absolute values of the weights. A similar, but
-more mathematically convenient choice is to require that
-$\sqrt{\sum_i^M w_i^2 = 1}$. 
+constrain the sizes of the weights. We could do this by limiting the
+sum of the absolute values of the weights. A will be momentarily
+clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2
+  = 1}$. The learning problem is now:
 
 %
 \begin{align*}
@@ -464,11 +465,10 @@ $\sqrt{\sum_i^M w_i^2 = 1}$.
 \end{align*}
 %
 
-Here $\mathbf{y}*$ is the target neighborhood assignment and $\mathbf{s}$
-are similarity measures between blocks. 
-
-Large margin problems like this one have an equivalent canonical
-representation: 
+With these two modifications, the learning problem is now a quadratic
+program, a well known class of constrained optimization
+problems.\footnote{The problem is easier to recognize as a quadratic
+  program in it's dual, canonical form:
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
@@ -479,21 +479,21 @@ representation:
   possible neighborhood assignments}\\
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
 \end{align*}
+}
 
-This is quadratic program, a well known class of constrained
-optimization problems. Unfortunately, we cannot solve this problem
-directly because the number of constraints is typically too
-large. That is, we require every possible pattern to have a
-higher score than our target pattern, and the number of possible
-patterns grows exponentially with the number of blocks.
+Unfortunately, we cannot directly use an off-the-shelf quadratic
+program solver, because the number of constraints will typically be
+too large. We require every possible pattern to have a higher
+score than our target pattern, and the number of possible patterns
+grows exponentially with the number of blocks.
 
-Instead, we'll solve similar problem that, in practice, we can solve
-quickly, and will also learn a set of weights that still will give our
-target pattern lower energy than any other
-pattern.\cite{szummer_learning_2008}
+Instead, we will solve a similar problem that takes advantage of the
+network cutting algorithm but which can be solved
+quickly. The algorithm for solving this problem is typically called
+the ``structured support vector machine.''\cite{szummer_learning_2008}
  
 
-\subsection*{Learning Routine}
+\subsubsection*{Structured Support Vector Machine}
 First, we initialize the weights to some starting value, create an
 empty set of constraints $\mathcal{K}$, and set a counter $i$ to $0$.
 \begin{enumerate}
@@ -505,10 +505,10 @@ empty set of constraints $\mathcal{K}$, and set a counter $i$ to $0$.
 \item Update the weights by solving the quadratic program: 
 %
 \begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
+&\argmax_{\mathbf{w}:\sqrt{\sum_i^M w_i^2 = 1}=1} \mathbf{\gamma} \\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq 1 \\ 
+- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 
 &\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in } \mathcal{K}\\
 &\text{and } \mathbf{y} \neq \mathbf{y}^*
 \end{align*}
@@ -520,119 +520,23 @@ empty set of constraints $\mathcal{K}$, and set a counter $i$ to $0$.
 
 If we find a set of weights that gives our target pattern a lower
 energy then any pattern in the constraint set $\mathcal{K}$, then we
-are assured that our target pattern has a lower energy than any other
+are assured that our target pattern has a lower score than any other
 possible pattern. If another pattern had a lower score given the final
 set of weights, then it would have been added to $\mathcal{K}$ in step
 1, and our optimization routine would have continued. 
 
-\subsection*{Empirical Loss}
-Some readers may have noticed that the our original four-city block example
-still does not have a unique solution for the learning problem we have
-set up. There are two different neighborhood assignments that have the
-same lowest score, and they both achieve our goal of putting similar
-blocks in the same neighborhood and dissimilar blocks in different
-neighborhoods (Table \ref{table:lowest}).
+With this structured support vector machine, we have the means of
+efficiently learning weights that give a targeted pattern a better
+score than any other pattern, if those weights exist. 
 
-\begin{table}
-\centering
-  \begin{tabular}{cc}
-      \tikz{ %
-        \node[latent] (1) {$0$} ; %
-        \node[latent, below left=of 1] (2) {$0$} ; %
-        \node[latent, fill=black, below right=of 1] (3) {\textcolor{white}{$1$}} ; %
-        \node[latent, fill=black, below left=of 3] (4) {\textcolor{white}{$1$}} ; %
-        \factor[below left=of 1] {1-2} {} {} {} ;
-        \factor[below right=of 1] {1-3} {} {} {} ;
-        \factor[below right=of 2] {2-4} {} {} {} ;
-        \factor[below left=of 3] {3-4} {} {} {} ;
-        \factoredge[-] {1} {1-2} {2} ; %
-        \factoredge[-] {1} {1-3} {3} ; %
-        \factoredge[-] {2} {2-4} {4} ; %
-        \factoredge[-] {3} {3-4} {4} ; %
-      } 
-    &
-      \tikz{ %
-        \node[latent, fill=black] (1) {\textcolor{white}{$1$}} ; %
-        \node[latent, fill=black, below left=of 1] (2) {\textcolor{white}{$1$}} ; %
-        \node[latent, below right=of 1] (3) {$0$} ; %
-        \node[latent, below left=of 3] (4) {$0$} ; %
-        \factor[below left=of 1] {1-2} {} {} {} ;
-        \factor[below right=of 1] {1-3} {} {} {} ;
-        \factor[below right=of 2] {2-4} {} {} {} ;
-        \factor[below left=of 3] {3-4} {} {} {} ;
-        \factoredge[-] {1} {1-2} {2} ; %
-        \factoredge[-] {1} {1-3} {3} ; %
-        \factoredge[-] {2} {2-4} {4} ; %
-        \factoredge[-] {3} {3-4} {4} ; %
-      } 
-    \\
-  \end{tabular}
-  \caption{Equivalent Lowest Assignments}
-  \label{table:lowest}
-\end{table}
+There is a similar, but more general form for finding the weights that
+give the target assignment a lower score or for finding the weights
+that minimize the difference between the score of the target pattern
+and the lowest scoring pattern. There are also a tweaks that penalize
+the scores of patterns that empirically diverge from the target
+pattern, and which can help the algorithm learn better weights for
+predicting new patterns. 
 
-Happily, and for unrelated reasons, practicioners have found that good
-performance for this type of learning problem depends upon incorporating an
-empirical loss function into the objective function. If we follow
-suit, we will also side step this problem of multiple equivalent
-assignments. 
-
-The learning routine is largely the same as above, but we change the
-quadratic program in step 2:
-%
-\begin{align*}
-&\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 +
-  C\cdot\xi\\
-&\text{such that} \\
-&\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
-- \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq
-\Delta(\mathbf{y}^*, \mathbf{y}) - \xi\\ 
-& \xi \geq 0\\
-&\text{for all } \mathbf{y} \text{ where } \mathbf{y} \text{ is in the set of
-  possible neighborhood assignments,}\\
-&\xi \text{ is a slack variable, and } \Delta \text{ is an empirical loss.}\\
-\end{align*}
-%
-
-The key to solving this problem is finding assignments that have the
-lowest score, where the score incorporates the empirical loss: i.e.
-%
-\begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\Delta(\mathbf{y}*,
-\mathbf{y})
-\end{align}
-%
-If the loss can be decomposed over the blocks like
-%
-\begin{align}
-\operatorname{E}(\mathbf{y}) = \sum_{<i j>}^{\mathcal{N}}\epsilon_{i,j}(y_i,y_j) + C\cdot\sum_i^N\Delta(y_i*, y_i)
-\end{align}
-%
-then the objective has the form that allows us to use graph cutting
-problems to find an exact or approximate minimum pattern. If the
-loss function does not decompose we have to check an exponentially
-many possible assignment, typically an intractable problem.
-
-Ideally, we want loss function that increases the further we are from our
-target assignment. A natural choice is to penalize every block that is
-incorrectly assigned. If we penalize every error the same then we have
-the classic Hamming loss. 
-
-$\sum_i^N\begin{cases}
-  0 &y_i^* = y_i \\
-  1 &y_i^* \neq y_i
-\end{cases}$. 
-
-Incorporating this empirical loss into our learning problem means
-that, of a set of previously equivalent assignments, only the
-assignment closest to the training data will be have the lowest score.
-
-
-For the same reason, traditional Markov Chain Monte Carlo
-methods for finding the lowest scoring assignment also prove
-intractable.\footnote{In order to converge on the mode of the
-  distribution of scores, we have to calculate a normalizing constant,
-  which is the sum of the scores of all possible assignments. This is
-  computationally too expensive. There have been a number of attempts
-  to find an acceptable substitute for the normalizing constant, but
-  the empirical results have disappointed.\cite{li_mrf_2009}}
+The details of these extensions are best found in x, y or z. For our
+current purposes, we use one the extensions, where the slack variables
+are weighted by block-by-block Hamming loss.
