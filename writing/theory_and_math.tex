@@ -1,4 +1,4 @@
-\section*{Neighborhood Model Representation}
+\subsection{Neighborhood Model Representation}
 Let's imagine a very small city consisting of four blocks. We can
 represent this tiny town as a network where two blocks are connected
 if they face the same street. In this representation, blocks that are
@@ -109,7 +109,7 @@ If we now score every possible pattern of neighborhood labels, we will
 find that the lowest scoring assignments are ones that put blocks $1$
 and $2$ in one neighborhood and $3$ and $4$ in the other (Table
 \ref{table:lowest}, Table \ref{table:energy}). By choosing the right
-\phi$'s we can have made our preferred pattern have the lowest scores.
+$\phi$'s we can have made our preferred pattern have the lowest scores.
 
 \begin{table}
 \centering
@@ -165,7 +165,7 @@ permutational explosion means that for even small cities, we cannot
 possibly check every possible neighborhood assignment in human-scale
 time. 
 
-\subsection*{Network Methods}
+\subsection{Network Methods}
 Fortunately, researchers, largely in the field of computer vision,
 have developed methods to quickly find the lowest scoring assignment
 for problems like ours. This work traces back to a 1986 paper by
@@ -341,7 +341,7 @@ checking every possible pattern out of exponentially possibilities, we
 can now find the best scoring pattern directly and
 quickly.\cite{ford_maximal_1956}
 
-\subsubsection*{Submodularity}
+\subsubsection{Submodularity}
 Greig's original result only applied to scoring functions 
 where blocks could belong to only one of two classes and where the
 scoring function had an important property called submodularity.  A
@@ -362,7 +362,7 @@ other graph cutting methods that allow us to find approximate
 solutions to multi-label non-submodular scoring problems like ours
 \cite{something}.
 
-\section*{Learning similarities}
+\subsection{Learning similarities}
 In the previous section, we showed how we could construct a scoring
 function so that a preferred pattern of block assignments would have
 the best score. Now we will turn to how, given a preferred assignment,
@@ -406,23 +406,23 @@ assignments than any other pattern. In other words, we want to find
 some weights, $\mathbf{w}$, that solves this system of linear
 equations:
 
-\begin*{equations}
-\operatorname{E}(\mathbf{y}_1, \mathbf{s}, \mathbf{w})
+\begin{align*}
+&\operatorname{E}(\mathbf{y}_1, \mathbf{s}, \mathbf{w})
 \geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
-\operatorname{E}(\mathbf{y}_2, \mathbf{s}, \mathbf{w})
+&\operatorname{E}(\mathbf{y}_2, \mathbf{s}, \mathbf{w})
+\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+&\ldots \\
+&\operatorname{E}(\mathbf{y}_{M-1}, \mathbf{s}, \mathbf{w})
+\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+&\operatorname{E}(\mathbf{y}_{M}, \mathbf{s}, \mathbf{w})
 \geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
-\ldots \\
-\operatorname{E}(\mathbf{y}_{M-1}, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
-\operatorname{E}(\mathbf{y}_{M}, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
-\end{equations}
+\end{align*}
 
-Where \mathbf{y}^* is our preferred pattern, M is the number of
+Where $\mathbf{y}^*$ is our preferred pattern, M is the number of
 possible neighborhood patterns, and $\mathbf{s}$ are the similarities
 between blocks.
 
-\subsubsection*{Specifying a unique solution}
+\subsubsection{Specifying a unique solution}
 In order to use some convenient machinery, we will modify the learning
 problem somewhat. These modifications will only act to specify a
 particular solution to the system of inequalities. Any solution to the
@@ -433,7 +433,7 @@ solution to the modified problems.
 First, observe that if a set of weights gives the preferred assignment
 a lower score than any other assignment, there is some difference
 between the score of the preferred assignment and the score of the
-next best scoring assignment. Call this difference the 'margin. Our
+next best scoring assignment. Call this difference the `margin. Our
 first modification to the learning problem is that we now seek the
 weights that give our preferred assignment the largest margin.
 
@@ -450,12 +450,12 @@ weights that give our preferred assignment the largest margin.
 This still does not specify a unique set of weights. To do that, we
 constrain the sizes of the weights. We could do this by limiting the
 sum of the absolute values of the weights. A will be momentarily
-clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2
-  = 1}$. The learning problem is now:
+clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2}
+  = 1$. The learning problem is now:
 
 %
 \begin{align*}
-&\argmax_{\mathbf{w}:\sqrt{\sum_i^M w_i^2 = 1}=1} \mathbf{\gamma} \\
+&\argmax_{\mathbf{w}:\sqrt{\sum_i^M w_i^2}=1} \mathbf{\gamma} \\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
 - \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 
@@ -493,7 +493,7 @@ quickly. The algorithm for solving this problem is typically called
 the ``structured support vector machine.''\cite{szummer_learning_2008}
  
 
-\subsubsection*{Structured Support Vector Machine}
+\subsubsection{Structured Support Vector Machine}
 First, we initialize the weights to some starting value, create an
 empty set of constraints $\mathcal{K}$, and set a counter $i$ to $0$.
 \begin{enumerate}
@@ -505,7 +505,7 @@ empty set of constraints $\mathcal{K}$, and set a counter $i$ to $0$.
 \item Update the weights by solving the quadratic program: 
 %
 \begin{align*}
-&\argmax_{\mathbf{w}:\sqrt{\sum_i^M w_i^2 = 1}=1} \mathbf{\gamma} \\
+&\argmax_{\mathbf{w}:\sqrt{\sum_i^M w_i^2}=1} \mathbf{\gamma} \\
 &\text{such that} \\
 &\operatorname{E}(\mathbf{y}, \mathbf{s}, \mathbf{w})
 - \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \geq \gamma\\ 

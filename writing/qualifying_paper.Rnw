@@ -11,6 +11,7 @@
 \usepackage{setspace}
 \usepackage{endfloat}
 \doublespacing
+\setcounter{tocdepth}{5}
 
 \let\footnote=\endnote
 \let\cite=\citep
@@ -55,7 +56,9 @@ default_margins = par("mar")
 CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
-\section*{Introduction}
+\tableofcontents
+
+\section{Introduction}
 City residents face a variety of problems that require coordinating
 with neighbors: informal social control of youth, maintaining or
 increasing property values, keeping the sidewalk free of ice 
@@ -83,9 +86,10 @@ This is not because researchers think that beliefs and perceptions are
 unimportant. The key results in the neighborhood effects literature
 are result about beliefs. Resident's beliefs about neighbors, as
 reported in survey research, appear to influence a variety of measures
-of social order. From the place making literature, we know that local
-activists and developers also believe that the fate of an area can
-depend upon beliefs about what the area is or will be.
+of social order \cite{something}. From the place making literature, we
+know that local activists and developers also believe that the fate of
+an area can depend upon beliefs about what the area is or will be
+\cite{something}.
 
 However, we know very little about a.) how residents come to perceive some
 common region of the city as their neighborhood, and b.) how they form
@@ -98,19 +102,13 @@ A number of researchers have attempted to identify perceived
 neighborhoods by surveying city residents, typically by asking
 residents to draw maps of their neighborhood. These studies
 persistently find that residents draw very idiosyncratic maps, often
-with little overlap.\cite{hunter_symbolic_1974, campbell_subjective_2009}.
-
-A resident's ability to draw a map of their neighborhood is influenced
-where they live, their daily rounds of movement, how long they have
-lived in the area, their life stage, their overall level of mobility,
-and a raft of other personalistic factors\cite{needed}. Yet, even with great
-individual level variation, there can still be definite districts of
-a city wherein residents will all tend to perceive that area as their
-neighborhood.
+with little overlap.\cite{hunter_symbolic_1974,
+  campbell_subjective_2009}.  Yet, even with great individual level
+variation, there can still be definite districts of a city wherein
+residents will tend to perceive that area as their neighborhood.
 
 However, in order to observe these average perceived neighborhoods, we
-need enough data to wash out the personalistic variation of individual
-residents. Historically, it has not been practical to collect these
+need enough data. Historically, it has not been practical to collect these
 data at the volume and spatial resolution necessary.
 
 In this paper, I discuss a novel Internet source for data on
@@ -121,13 +119,19 @@ areas. Further, I show how we can use these data to predict what areas
 of a city are likely to be seen as distinct areas by residents even
 when we don't have data on those resident's perceptions.
 
-\section*{Neighborhood Claims}
-Craigslist is the largest classified listing service. It
-has about 60 million visitors each month from the United States. The
-service is organized into more than 700 city specific sites. On a city
-specific site, like \url{http://chicago.craigslist.org}, the
-classified listings are organized into categories like ``Housing'' and 
-subcategories like ``Sublets/Temporary.'' 
+\section{Neighborhood Claims}
+Craigslist a large, online classified listing service, with about 60
+million visitors each month from the United States
+\cite{something}. Many of the listings for sublets, roommates,
+and apartments on the service contain claims that the advertised
+location is part of a particular neighborhood. In aggregate, these
+claims can inform us about neighborhood perception.
+
+\subsubsection{Craigslist Listings}
+Craigslist is organized into more than 700 city specific sites. On a
+city specific site, like \url{http://chicago.craigslist.org}, the
+classified listings are organized into categories like ``Housing'' and
+subcategories like ``Sublets/Temporary.''
 
 It is free to read the classified ads and free to post ads except for
 a few subcategories. It is free to post in all the ``Housing''
@@ -164,6 +168,7 @@ I have written a computer program that checks for and downloads, every
 night, listings in the ``apts/housing'', ``rooms/shared'', and
 ``sublets/temporary'' subcategories for the following cities:
 
+\noindent
 New York, Los Angeles, Houston, Philadelphia, Phoenix, San Antonio,
 San Diego, Dallas, Jacksonville, Indianapolis, San Francisco, Austin,
 Columbus, Charlotte, Detroit, El Paso, Memphis, Baltimore, Boston,
@@ -179,11 +184,16 @@ missing, but address or street intersection information is available,
 the program attempt to lookup the geographic coordinates associated with
 this information using a geocoding service \cite{needed}. 
 
-* information on how many posts
-* how many claims
+For Chicago in 2014, there were about 230 new postings a day in the
+sublet, roommate, and apartment listings. Of these, about 130 listings
+include a claim that identifiable, geographic location belongs to some 
+``Specific location.''
 
+%  select AVG(daily_count) from (select count(listing_id) as daily_count from listing where city = 'chicago' and published > '2014-01-01' group by (date(published)) having daily_count < 10000) as t1;
 
-\subsection*{Data}
+%  select avg(daily_count) from (select count(claim_id) as daily_count from listing inner join claim using(listing_id) where city = 'chicago' and published > '2014-01-01' group by (date(published)) having daily_count < 10000) as t1;
+
+\subsection{Distribution of Claims}
 <<loadFeatures, include=FALSE, cache=FALSE>>= 
 setwd('../code/training/')
 source('features.R')
@@ -194,45 +204,45 @@ Using these claims about specific locations, we can estimate the areas
 that advertisers will claim to be a different neighborhoods. This will
 be a two step process. First, we will use claims about discrete
 locations to estimate how likely we are to see a particular
-neighborhood claim over continuous, geographic space. Second,
-comparing these likelihoods, we will identify the areas where a
-particular neighborhood is more likely to be claimed than any other
-alternative. These regions, where the plurality of neighborhood claims
-favor one neighborhood, will be a measure of average perceived
-neighborhoods.
+neighborhood claim over an area of a city. Second, comparing these
+likelihoods, we will identify the areas where a particular
+neighborhood is more likely to be claimed than any other
+alternative. We will take these regions, where the plurality of
+neighborhood claims favor one neighborhood, to be measures of average
+perceived neighborhoods.
 
 For a particular neighborhood name, the probability that the name will
-appear in a listings's ``Specific location'' field can vary depending
-upon the location the listing is about. In other words, the claims for
+appear in a listings's ``Specific location'' field can depends
+upon the location of the listing. In other words, the claims for
 a particular neighborhood name has a probability distribution over
-geographic space. 
+geographic space over the space of the city. 
 
-Given a particular neighborhood claim distribution, we can think of
-our observed neighborhood claims as random draws from this
-distribution. This means that we can estimate this unobserved
-distribution over space by looking at the empirical concentration of
-observed neighborhood claims. 
+For a particular neighborhood, we can imagine that the location of
+claims is generated by a draw from this distribution. If so, we can
+estimate this probability distribution by looking at the empirical
+distribution of observed neighborhood claims.
 
-There are many ways to estimate a distribution over space from
-observed point data. For one dimensional space, the classic histogram
+\subsubsection{Kernel Density Estimation}
+There are many ways to estimate a probability distribution from
+observed location data. For one dimensional space, the classic histogram
 is the most familiar method. We'll use a simple method called Kernel
 Density Estimation (KDE). It behaves much like smoothed histogram
 (Figure 1).
 
-With KDE, we replace every observed point with a two-dimensional
-normal distribution. For each location in space, there is some
-probability density associated with every observation. For this
-location, if we sum up all these densities, we arrive at an estimate
-of the density of the distribution of neighborhood claims over space
-at this location. To estimate the entire distribution of neighborhood
-claims, we repeat this summation for every single point in space.
+With KDE, we associate every observed point with a two-dimensional
+normal distribution centered on the point. At any location in space,
+every observation's associated normal distribution will have some
+probability density. At a particular location, if we sum up all these
+densities, we will get an estimate of the overall probability
+distribution. For the neighborhood case, we will get an estimate of
+observing a neighborhood claim at this location. 
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Comparison_of_1D_histogram_and_KDE.png}
 \caption{Histogram and KDE in One-dimensional Space \cite{wikipedia}}
 \end{figure}
 
-\section*{Are claimed neighborhoods coherent?}
+\subsection{Neighborhood Areas}
 
 Using KDE, we estimate the geographic probability distribution for
 every neighborhood name we observe. With this in hand, we can estimate
@@ -241,9 +251,10 @@ city for any neighborhood: $\hat{\Pr}(\text{Location}_j \mid
 \text{Hood}_i)$
 
 Next, we transform these probabilities into the probabilities of
-observing a particular neighborhood claim given a location. Since
-distributions of different neighborhood claims will overlap, this will
-be a multinomial probability conditional on location.
+observing a particular neighborhood claim given a location. This
+depends not just on the probability of seeing a claim for a particular
+neighborhood, but will also depend upon probabilities for of seeing a
+claim for each and every neighborhood.
 
 \begin{equation}
   \Pr(\text{Hood}_i \mid \text{Location}_j) = 
@@ -276,12 +287,12 @@ from one neighborhood to another.
 \label{fig:prob}
 \end{figure}
 
-Visually, we can notice that each 'neighborhood' is contiguous. There
+Visually, we can notice that each `neighborhood' is contiguous. There
 is no neighborhood name that dominates in two separate, disconnected
 areas. There are definite districts of the city wherein Craigslist
 advertisers tend to claim that area is a neighborhood.
 
-\section*{Spatial and Social Organization}
+\section{Spatial and Social Organization}
 
 Moreover, the distribution of claims of Craiglist advertisers likely
 generalizes to the distribution of perceptions of residents. The
@@ -305,17 +316,32 @@ neighborhood with the spatial organization of sociological factors and
 the locations of physical borders. 
 
 As a first step, we could split the city up into a large number of
-small areal cells. Then for each cell we can attempt to predict the
-dominant neighborhood claim. The prediction for a particular cell
-would depend upon what we predict for the neighboring cells, the
-sociological similarities between the cell and its neighbors, and
-whether or not the cells were separated by a physical border. It's a
-problem of multinomial regression where all the predictors are in
-spatial autocorrelation terms.
+small areas, say city blocks. Then, for each block, we can attempt to
+predict the dominant neighborhood claim. The prediction for a
+particular block should depend upon what we predict for the
+neighboring blocks. This is a problem of multinomial regression with
+spatial autocorrelation. 
 
+This type of problem is not tractable using classic techniques of
+maximum likelihood or MCMC methods. The inter-block coupling of
+discrete variables requires that we calculate terms for ever possible
+configuration of assignments of neighborhood claims to blocks. With
+just a few blocks and possible neighborhood claims, the combinatorial
+explosion makes this computationally unfeasible.
 
+However, computer scientists have developed techniques for just this
+kind of problem, called structured Support Vector Machines. In brief,
+this technique puts together four ideas. First, a formalism that can
+represent a probability distribution over coupled discrete random
+variables as an undirected graph. Second, the result that the Maximum
+a priori configuration of that distribution is equivalent to a special
+partition of the graph called max flow/min cut. Third, a method of
+finding the max flow/min cut partition of a graph in polynomial
+time. Fourth, and finally, an optimization routine that works with
+very limited exploration of the space of possibilties. Let us now
+describe this method bit by bit.
 
-
+\input{theory_and_math.tex}
 
 
 
@@ -346,7 +372,6 @@ listings are excluded. Perhaps even more troublesome, the listers who
 are on Craigslist sometimes claim neighborhoods strategically in order
 to increase the desirability of their listing.
 
-\input{theory_and_math.tex}
 
 
 
@@ -363,7 +388,7 @@ the City of Chicago on the built environment, crimes, 311 reports,
 zoning, and the similar. We'd like to set them in relation to each
 other.
 
-\section*{Data Details}
+\section{Data Details}
 The ultimate units of measurement are U.S. Census blocks and the edges
 between them. The U.S. Census blocks mainly correspond to city face blocks.
 We use a rook adjacency to define the edges, i.e. all edges are between blocks
@@ -374,7 +399,7 @@ there are \Sexpr{dim(blocks.poly)[1]} blocks and
 For the inter-block similarities, we will use physical, demographic, and
 administrative features (Table \ref{tab:Distribution}).
 
-\subsection*{Physical Barriers}
+\subsection{Physical Barriers}
 Highways, rail lines, rivers, and major streets often act as neighborhood
 boundaries. For each of these types of features, we code an edge feature
 variable as 1 if the two adjacent blocks are separated by the feature or code
@@ -401,11 +426,11 @@ When subdivision were originally laid out, the developers tended to
 align the streets within their subdivision. Misalignment of blocks are
 a rough measure of the where different subdivision meet. 
 
-\subsection*{School Boundaries}
+\subsection{School Boundaries}
 If two adjacent blocks are in different elementary school attendance boundary
 then we code an edge feature with 1, 0 otherwise. Similar for high schools.
 
-\subsection*{Demographic Features}
+\subsection{Demographic Features}
 From the U.S. Census, we have block level information on race, age, family
 structure, and housing ownership patterns. We can define measures between
 blocks for these data.
@@ -579,7 +604,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
 
-\section*{Modeling}
+\section{Modeling}
 Since many census blocks are empty, the demographic similarity between
 these blocks is not well defined. We might be tempted to ignore these
 cases, but deleting these cases would change the topology of the
@@ -672,7 +697,7 @@ variables to our unpopulated model.\footnote{Actually, our model is
 \end{align}
 
 
-\section*{Results}
+\section{Results}
 After training the model using the PyStruct structure learning
 framework,\cite{mueller_pystruct:_2014} we get two classes of results:
 predictions of Chicago neighborhoods and parameter
@@ -814,7 +839,7 @@ print(WT)
 
 @ 
 
-\section*{Discussion}
+\section{Discussion}
 While these results of modeling neighborhoods are interesting, we
 should take care to not put too much weight in them yet. Our purpose
 in this paper is to explore an \emph{approach} to modeling
