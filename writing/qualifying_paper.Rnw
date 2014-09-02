@@ -287,12 +287,23 @@ from one neighborhood to another.
 \label{fig:prob}
 \end{figure}
 
+\section{Spatial and Social Organization}
+
 Visually, we can notice that each `neighborhood' is contiguous. There
 is no neighborhood name that dominates in two separate, disconnected
 areas. There are definite districts of the city wherein Craigslist
 advertisers tend to claim that area is a neighborhood.
 
-\section{Spatial and Social Organization}
+I would like to treat this measure as a kind of `averaged neighborhood
+perception.' Of course, it is at best a biased measure of that
+perception. There are enormous selection effect. Most of the
+Craigslist listings come from the part of Chicago that have higher
+fractions of young adults. Moreover, we are only considering listings
+for roommates, sublets, and apartments. Portions of the city that are
+dominated by owner occupants are underrepresented, because home sale
+listings are excluded. Perhaps even more troublesome, the listers who
+are on Craigslist sometimes claim neighborhoods strategically in order
+to increase the desirability of their listing.
 
 Moreover, the distribution of claims of Craiglist advertisers likely
 generalizes to the distribution of perceptions of residents. The
@@ -330,76 +341,49 @@ just a few blocks and possible neighborhood claims, the combinatorial
 explosion makes this computationally unfeasible.
 
 However, computer scientists have developed techniques for just this
-kind of problem, called structured Support Vector Machines. In brief,
-this technique puts together four ideas. First, a formalism that can
-represent a probability distribution over coupled discrete random
-variables as an undirected graph. Second, the result that the Maximum
-a priori configuration of that distribution is equivalent to a special
-partition of the graph called max flow/min cut. Third, a method of
-finding the max flow/min cut partition of a graph in polynomial
-time. Fourth, and finally, an optimization routine that works with
-very limited exploration of the space of possibilties. Let us now
+kind of problem, called structured support vector machines. In brief,
+this technique puts together three ideas. First, a formalism that 
+represents a distribution over coupled discrete random variables as an
+undirected graph. Second, a result that the best scoring 
+configuration of that distribution is equivalent to a special
+division of the network called a minimum cut. Finally, a method of
+finding the minimum cut of a network in polynomial time. Let us now
 describe this method bit by bit.
 
 \input{theory_and_math.tex}
 
+\section{Modeling}
 
+Now that we have the machinery, we can now measure the association
+between the spatial organization of our estimated neighborhoods and
+the spatial organization of physical and social factors in a
+city. First, we'll describe the data.
 
+\subsection{Data}
 
-For context, this 
-
-Finally, at the center of every census block, we will calculate the most
-probable neighborhood assignment and assign that most likely
-neighborhood to that block. (Figure \ref{fig:training}).
+Our basic units will the Census block, a geographic unit which, in
+Chicago typically covers half a city block. Using census blocks gives
+us a fine geographic resolution and also allows for convenient use of
+Census data. For each census block, we will calculate the most likely
+neighborhood from our estimated neighborhood distributions (Figure
+\ref{fig:training}). 
 
 \begin{figure}
 <<plotTraining, dev='pdf', message=FALSE>>=
 source('plot_training.R')
 @ 
-\caption{Training Data}
 \label{fig:training}
+\caption{Training Data}
 \end{figure}
 
-
-I would like to treat this measure as a kind of `averaged neighborhood
-perception.' Of course, it is at best a biased measure of that
-perception. There are enormous selection effect. Most of the
-Craigslist listings come from the part of Chicago that have higher
-fractions of young adults. Moreover, we are only considering listings
-for roommates, sublets, and apartments. Portions of the city that are
-dominated by owner occupants are underrepresented, because home sale
-listings are excluded. Perhaps even more troublesome, the listers who
-are on Craigslist sometimes claim neighborhoods strategically in order
-to increase the desirability of their listing.
-
-
-
-
-For our currently purpose of understanding this modeling
-\emph{approach}, we can ignore these difficulties. In a future work,
-when we use these models to make claims about how neighborhoods work,
-we will take up this issue again.
-
-
-
-In addition to these data about neighborhood perception, we also have
-block level census data as well as a trove of unaggregated data from
-the City of Chicago on the built environment, crimes, 311 reports,
-zoning, and the similar. We'd like to set them in relation to each
-other.
-
-\section{Data Details}
-The ultimate units of measurement are U.S. Census blocks and the edges
-between them. The U.S. Census blocks mainly correspond to city face blocks.
-We use a rook adjacency to define the edges, i.e. all edges are between blocks
-that share a common border of length greater than 0. In the training data,
-there are \Sexpr{dim(blocks.poly)[1]} blocks and
-  \Sexpr{dim(features)[1]} edges.
+We will count two blocks as neighbors if they a bordering street or
+alley. In the training data, there are \Sexpr{dim(blocks.poly)[1]}
+blocks and \Sexpr{dim(features)[1]} block-neighbors.
 
 For the inter-block similarities, we will use physical, demographic, and
 administrative features (Table \ref{tab:Distribution}).
 
-\subsection{Physical Barriers}
+\subsubsection{Physical Barriers}
 Highways, rail lines, rivers, and major streets often act as neighborhood
 boundaries. For each of these types of features, we code an edge feature
 variable as 1 if the two adjacent blocks are separated by the feature or code

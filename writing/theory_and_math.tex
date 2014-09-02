@@ -36,14 +36,14 @@ blocks that are similar are more apt to belong to the same
 neighborhood and neighboring blocks that are different are more apt to
 belong to different neighborhoods.
 
-We want similar, neighboring blocks to belong to the same
+We want similar blocks to belong to the same
 neighborhood. One way to formalize this desire is to score every
 possible pattern of neighborhood labels in such a way that our
 preferred patterns have the best score.
 
 First, we need some more precise terms. Let the two neighborhoods be
-called $0$ and $1$. Every block belongs to either neighborhood $0$ or
-$1$. We will denote this membership as $y_i$, so that $y_1=0$ is
+called $0$ and $1$. A block belongs to either neighborhood $0$ or
+$1$, and we will denote this membership as $y_i$, so that $y_1=0$ is
 equivalent to saying that block $1$ belongs to the $0$
 neighborhood. Let the similarity between blocks $i$ and $j$ be called
 $\phi_{i,j}$.
@@ -80,7 +80,8 @@ $\operatorname{E}(\mathbf{y})$\footnote{$\operatorname{E}$ as in
 \end{align}
 
 Where $<i,j>$ indexes a pair of neighboring blocks, and where $i < j$.
-$\mathcal{N}$ are all these indices of neighboring blocks.
+$\mathcal{N}$ are all these indices of neighboring blocks. The
+$\epsilon_{i,j}$ function is 
 
 \begin{equation}
 \epsilon_{i,j}(y_i,y_j,\phi_{i,j}) = \begin{cases}
@@ -156,23 +157,29 @@ $\phi$'s we can have made our preferred pattern have the lowest scores.
 \label{table:energy}
 \end{table}
 
-For small networks, can check the scores for each individual pattern
-to see if our preferred pattern really has the lowest score. This
-exhaustive strategy becomes quickly impractical for larger
-cities. With two possible neighborhoods, the number of possible
-assignments is $2^N$ where N is the number of blocks. This
+\subsection{Learning similarities}
+Suppose we knew that we wanted some particular pattern of
+neighborhoods, but we didn't what similarity scores, $\phi$'s would
+give that pattern the lowest score. In order to find the $phi$'s we
+might start with a likely looking set of $\phi$'s, and check that
+these similarities gave the preferred pattern the best score.
+
+For small networks, we could check the scores for each individual
+pattern, but this exhaustive strategy becomes quickly impractical
+for larger cities. With two possible neighborhoods, the number of
+possible assignments is $2^N$ where N is the number of blocks. This
 permutational explosion means that for even small cities, we cannot
 possibly check every possible neighborhood assignment in human-scale
-time. 
+time.
 
-\subsection{Network Methods}
+\subsubsection{Network Methods}
 Fortunately, researchers, largely in the field of computer vision,
 have developed methods to quickly find the lowest scoring assignment
 for problems like ours. This work traces back to a 1986 paper by
 Greig, Porteous, and Sehult, where they demonstrated that finding
 lowest scoring assignment for a two neighborhood case was equivalent
 to solving the problem of finding the minimum cut of a
-graph.\cite{greig_exact_1989}
+network.\cite{greig_exact_1989}
 
 In that paper, the authors set up an scoring problem that is slightly
 different than ours. In addition to terms that depended upon pairs of
@@ -204,7 +211,7 @@ or
 \end{equation}
 
 \noindent
-They had the same form of $\epsilon_{i,j}$
+They had the same form of $\epsilon_{i,j}$ as we do
 
 \begin{equation}
 \epsilon_{i,j}(y_i,y_j,\phi_{i,j}) = \begin{cases}
@@ -243,7 +250,7 @@ Based on this undirected network, Greig and his co-authors constructed
 a special, directed network where every edge has a cost associated
 with it. For every variable $y_i$ in the undirected network, the
 directed network contains a node $z_i$.  For every edge $(y_i, y_j)$ in the
-undirected graph, they introduced a directed edge from $z_i$ to $z_j$ and
+undirected network, they introduced a directed edge from $z_i$ to $z_j$ and
 another from $z_j$ to $z_i$ with associated costs of $\phi_{i,j}$.
 
 In addition to the original nodes, they also introduced two special
@@ -254,7 +261,7 @@ directed edge from the $i$th node to $t$. Networks like this are
 called s-t networks.
 
 Suppose that $\epsilon_1(1)=2$, $\epsilon_2(0)=1$, $\epsilon_3(1)=3$,
-and $\epsilon_4(0)=3$. The corresponding directed graph is shown in
+and $\epsilon_4(0)=3$. The corresponding directed network is shown in
 Figure \ref{fig:directed}. 
 
 \begin{figure}[!h]
@@ -330,7 +337,7 @@ $(z_1, z_2)$ and $(z_3, z_4)$ (Figure \ref{fig:mincut}).
 Every s-t cut can be mapped onto a pattern of neighborhood block
 labels by letting $y_i = 1$ if node $z_i$ ends up in the $t$
 subnetwork and $y_i = 0$ otherwise. Greig and his coauthors
-demonstrated that the minimum s-t cut their constructed s-t network
+demonstrated that the minimum cut of their constructed s-t network
 always corresponded to the minimum scoring pattern of block
 assignment.
 
@@ -341,8 +348,17 @@ checking every possible pattern out of exponentially possibilities, we
 can now find the best scoring pattern directly and
 quickly.\cite{ford_maximal_1956}
 
-\subsubsection{Submodularity}
-Greig's original result only applied to scoring functions 
+In particular, if we want to see if a certain set of similarities,
+$\phi's$ gives a preferred pattern of neighborhood labels a lower
+score than any other pattern, we can apply Greig's approach. If the
+minimum cut of the associated s-t network corresponds to our preferred
+pattern, then we know that a set of similarities gives us our
+preferred pattern the lowest score. If the minimum cut corresponds to
+some other pattern, then we know that these $\phi$'s do not give our
+preferred pattern the lowest score.
+
+\paragraph{Submodularity}
+Greig and his coauthors' original result only applied to scoring functions 
 where blocks could belong to only one of two classes and where the
 scoring function had an important property called submodularity.  A
 submodular scoring function would be one where $\epsilon_{i,j}(0,0) +
@@ -363,12 +379,13 @@ solutions to multi-label non-submodular scoring problems like ours
 \cite{something}.
 
 \subsection{Learning similarities}
-In the previous section, we showed how we could construct a scoring
-function so that a preferred pattern of block assignments would have
-the best score. Now we will turn to how, given a preferred assignment,
-we can learn such a scoring function. 
+These network methods mean that we can quickly check if a
+particular set of inter-block similarities gives a preferred
+neighborhood pattern the best score. We will now describe how to use
+this to efficiently inter-block similarities that will give a
+preferred pattern the lowest score.
 
-We will first make our lives easier by only considering simple, linear
+We will make our lives easier by only considering simple, linear
 similarity terms. As before, the scoring function will be
 
 \begin{align}
@@ -407,15 +424,15 @@ some weights, $\mathbf{w}$, that solves this system of linear
 equations:
 
 \begin{align*}
-&\operatorname{E}(\mathbf{y}_1, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
-&\operatorname{E}(\mathbf{y}_2, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+\operatorname{E}(\mathbf{y}_1, \mathbf{s}, \mathbf{w})
+&\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+\operatorname{E}(\mathbf{y}_2, \mathbf{s}, \mathbf{w})
+&\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
 &\ldots \\
-&\operatorname{E}(\mathbf{y}_{M-1}, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
-&\operatorname{E}(\mathbf{y}_{M}, \mathbf{s}, \mathbf{w})
-\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
+\operatorname{E}(\mathbf{y}_{M-1}, \mathbf{s}, \mathbf{w})
+&\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w}) \\
+\operatorname{E}(\mathbf{y}_{M}, \mathbf{s}, \mathbf{w})
+&\geq \operatorname{E}(\mathbf{y}^*, \mathbf{s}, \mathbf{w})
 \end{align*}
 
 Where $\mathbf{y}^*$ is our preferred pattern, M is the number of
@@ -433,7 +450,7 @@ solution to the modified problems.
 First, observe that if a set of weights gives the preferred assignment
 a lower score than any other assignment, there is some difference
 between the score of the preferred assignment and the score of the
-next best scoring assignment. Call this difference the `margin. Our
+next best scoring assignment. Call this difference the `margin.' Our
 first modification to the learning problem is that we now seek the
 weights that give our preferred assignment the largest margin.
 
@@ -449,7 +466,7 @@ weights that give our preferred assignment the largest margin.
 
 This still does not specify a unique set of weights. To do that, we
 constrain the sizes of the weights. We could do this by limiting the
-sum of the absolute values of the weights. A will be momentarily
+sum of the absolute values of the weights. As will be momentarily
 clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2}
   = 1$. The learning problem is now:
 
@@ -490,7 +507,7 @@ grows exponentially with the number of blocks.
 Instead, we will solve a similar problem that takes advantage of the
 network cutting algorithm but which can be solved
 quickly. The algorithm for solving this problem is typically called
-the ``structured support vector machine.''\cite{szummer_learning_2008}
+the `structured support vector machine.'\cite{szummer_learning_2008}
  
 
 \subsubsection{Structured Support Vector Machine}
@@ -529,13 +546,13 @@ With this structured support vector machine, we have the means of
 efficiently learning weights that give a targeted pattern a better
 score than any other pattern, if those weights exist. 
 
-There is a similar, but more general form for finding the weights that
-give the target assignment a lower score or for finding the weights
-that minimize the difference between the score of the target pattern
-and the lowest scoring pattern. There are also a tweaks that penalize
-the scores of patterns that empirically diverge from the target
-pattern, and which can help the algorithm learn better weights for
-predicting new patterns. 
+There is a similar, but more general form that can find weights that
+either give the target pattern the lowest score or minimize the
+difference between the score of the target pattern and the another,
+lowest scoring pattern. There are also a tweaks that penalize the
+scores of patterns that empirically diverge from the target pattern,
+and which can help the algorithm learn better weights for predicting
+new patterns.
 
 The details of these extensions are best found in x, y or z. For our
 current purposes, we use one the extensions, where the slack variables
