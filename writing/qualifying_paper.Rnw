@@ -1,7 +1,6 @@
 \documentclass[12pt,letter]{article}
-\title{Learning Who Your Neighbors Are}
-\date{}
-\author{}
+\title{DRAFT: Learning Who Your Neighbors Are}
+\author{Forest Gregg}
 \usepackage{amsmath}
 \usepackage{url}
 \usepackage{tikz}
@@ -9,7 +8,7 @@
 \usepackage{natbib}
 \usepackage{endnotes}
 \usepackage{setspace}
-\usepackage{endfloat}
+%\usepackage{endfloat}
 \doublespacing
 \setcounter{tocdepth}{5}
 
@@ -56,25 +55,220 @@ default_margins = par("mar")
 CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
-\tableofcontents
+%\tableofcontents
 
 \section{Introduction}
-City residents face a variety of problems that require coordinating
-with neighbors: informal social control of youth, maintaining or
-increasing property values, keeping the sidewalk free of ice 
-in winter, electing officials, or getting permits for a block party. 
+City residents face a variety of problems that depend upon
+coordinating with neighbors: informal social control of youth,
+maintaining or increasing property values, keeping the sidewalk free
+of ice in winter, electing officials, or getting permits for a block
+party. Neighbors differ in how effectively they coordinate which can
+affect the overall welfare of an area. This variation in ability to
+coordinate is often called 'neighborhood effects.'\cite{sampson}
 
-Residents coordinate their actions through personal contacts with
-neighbors, formal organizations, or shared perceptions and beliefs
-about the neighborhood \cite{needed}. These different bases for action imply
+As a name, `neighborhood effects' has produced some confusion, as it
+has directed attention to the neighborhood as an area and away from
+groups of residents facing common coordination problems. When we
+focus on the coordination problems, we can see that different
+types of problems have their own characteristic geographies. Each problem
+has it's own neighborhood.
+
+Residents handle many small scale through praising,
+encouraging, exhorting, shaming, or otherwise pressuring their
+neighbors to keep in line. This informal social control depends upon
+the neighbors knowing one another, and therefore has a small
+geographic scope. Whether or not a resident knows her neighbor depends
+very strongly on distance. Most people know their immediate neighbors,
+but the proportion of neighbors they know falls exponentially with
+distance. Very few people know any of their neighbors ten houses
+away.\cite{Grannis, 109; Hampel}. For keeping an eye out for truant
+school children, the relevant neighbors are mainly residents on the
+same block, known by and to the resident. 
+
+Many larger scale coordination problems are handled by
+organizations--police departments, special service taxing districts,
+chambers of commerce. Different organizations or different parts of
+the same organization serve separate parts of a city through electoral
+districts, police beats, and service areas. These administrative
+divisions can produce a spatially defined public affected by an
+organization. Redrawing an electoral district changes the spatial
+distribution of political spoils or shifting police beats shift levels
+of police response.
+
+Residents also face many coordination problems that are much
+larger then their individuals networks but which are uncontrolled by
+local organizations. In urban sociology, the classic example is the
+problem of maintaining or increasing property values. Individual,
+small property owners have very little control of the values of
+property in their area. Except in some, extraordinary cases, local
+organizations have also been ineffective in regulating area prices (but
+see OakPark, arnold hirsh). Yet, property owners do coordinate, by
+sharing perceptions and beliefs about the fate of an area.
+
+If a property owner believes that the area is and will be attractive
+for buyers and renters, she will want to invest in the maintenance or
+improvement of her property. She forms this belief about the future,
+in part, from what she sees and hears about what other property owners
+are doing. If she sees neighbors building a new deck or hears about a
+new stores opening up, this is news that might encourage her to
+tuckpoint her building this year. Other owner observe the newly
+renewed edifice as news that figure into their own calculations. 
+
+This positive feedback loop between individual beliefs about the
+future of an area and perceptible changes in the area produces the
+cycles of investment and disinvestment that characterize local real
+estate markets in American cities, and the cascading pattern of
+neighborhood transitions.\cite{Taub, Raudenbush SSA} 
+
+For these types of coordination problems, the set of relevant
+neighbors are the ones whose actions provide information about the
+future of the area. Urban sociologists have not been able to
+characterize these areas of relevant news. 
+
+This is not because researchers think that beliefs and perceptions are
+unimportant. The key results in the neighborhood effects literature
+are result about beliefs. Resident's beliefs about neighbors, as
+reported in survey research, appear to influence a variety of measures
+of social order \cite{sampson_neighborhoods_1997}. From the place
+making literature, we know that local activists and developers also
+believe that the fate of an area can depend upon beliefs about what
+the area is or will be \cite{martin_place-framing_2003}.
+
+However, we know very little about a.) how residents come to perceive some
+common region of the city as their neighborhood, and b.) how they form
+beliefs about this area. In large part, this is because we have not
+had any means to systematically and reliably identify the parts of a
+city that residents will tend to see as their neighborhood. It's hard
+to study how a thing emerges and changes if we can't ever locate the thing.
+
+Some researchers have attempted to identify perceived
+neighborhoods by surveying city residents, typically by asking
+residents to draw maps of their neighborhood. These studies
+persistently find that residents draw very idiosyncratic maps, often
+with little overlap.\cite{hunter_symbolic_1974,
+  campbell_subjective_2009}.  However, with great individual level
+variation, there can still be definite districts of a city which
+residents will tend to perceive as their neighborhood. We need more
+data, at a finer resolution to uncover them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Organizations may operate differently depending on the areas
+they serve, and through their operation make areas different. 
+
+However, 
+
+City dwellers manage their small scale, excludable problems through
+exchange. In the contemporary American city, most exchanges are not
+between individuals but between individuals and organizations are
+between organizations. As individuals, we still exchange friendship
+and poorer residents often 
+friendship. Poorer residents often materially depend upon made at
+special locations organized for exchange, away from the home: offices,
+shops, single bars, etc. However, poorer residents often depend on on
+social exchange among friends and family(citation needed). As social
+exchange also depends upon knowing relations, it will also have a
+small geographic scope, but will be more likely extend out to the
+neighbors of neighbors.\cite{grannis here}
+
+Large scale, excludable problems are usually met by organizations. 
+
+Many larger scale, nonexcludable problems are met by organizations. We
+should see this in two cases. First, if an organization is rewarded
+for solving the coordination problem of others. For example, a local
+political party is able to aggregate a majority votes for it's
+candidates and wins spoils it can allocate to party workers. Second,
+and more commonly, when an organization that was created to solve a
+coordination problem gains the ability to reward and discipline it's
+members regardless of its effectiveness. Local chambers
+of commerce offer many membership benefits unrelated to whether or not
+the district is growing more prosperous.
+
+
+
+
+
+For some coordination problems, the  solution of the coordination
+problem provides additional excludable benefits 
+
+we see organizations emerge because an
+organization can better solve the coordination problem and by solving
+the coordination problem the organizatino 
+
+is more effective than isolated individuals in doing the
+work to coordinate  that can
+solve the coordination problem will secure excludable benefits that
+reward organization members, for example when a local political party
+is able to aggregate the majority of votes and award the spoils. More
+commonly, organizations are 
+
+Other
+times, organizations set up to solve a coordination problem may gain a
+secondary means to reward and discipline members even if they don't
+solve the coordination problem. For example a special service taxing
+district may be able to reward individuals even if the overall
+prosperity is not increasing in the district.  Finally,
+
+
+
+sare dealt with by organizations
+with a specific geographic scope, like local political parties,
+special taxing service areas, or chambers of commerce. Such
+organizations 
+
+
+
+
+
+
+
+Larger scale, excludable problems are managed by organizations. 
+
+
+
+
+
+Exchange, social and otherwise, deals with small scale, 
+excludable problems. Formal organizations manage excludable problems
+with large scale. Nonexcludable 
+
+e
+scale,
+excludable problems. 
+exchange, social and otheswise. Large scale, excludable problems are 
+
+For different types of problems, residents will need to coordinate
+with 
+
+roblems have different scales of
+coordination. Some problems 
+
+For different types of problems, residents coordinate in different
+ways. They can use personal contacts with neighbors, formal
+organizations, or shared perceptions and beliefs about the
+neighborhood \cite{hunter_symbolic_1974, taub_paths_1987,
+  bursik_neighborhoods_1993}. These means of coordination different bases for action imply
 different sets of relevant neighbors. For keeping an eye out for
 truant school children, the relevant neighbors are mainly other
 residents on the block, known by and to the resident. For electing a
 city councilor, the relevant neighbors are all voters in an arbitrary
-political district. For calculating whether to buy a home, the
-relevant neighbors are those whose recent actions and fate in the
-market is especially informative about the economic fortunes of an
-area.
+political district. In reckoning whether to buy a home, the relevant
+neighbors are those whose recent fate seems especially informative
+about the economic fortunes of an area.
 
 In researching how neighbors develop capacity to act collectively,
 scholars have focused on the first two: investigating how residents
@@ -82,47 +276,23 @@ come to have personal relations with their neighbors and the ways that
 local and city-wide organizations can solve local coordination
 problems.
 
-This is not because researchers think that beliefs and perceptions are
-unimportant. The key results in the neighborhood effects literature
-are result about beliefs. Resident's beliefs about neighbors, as
-reported in survey research, appear to influence a variety of measures
-of social order \cite{something}. From the place making literature, we
-know that local activists and developers also believe that the fate of
-an area can depend upon beliefs about what the area is or will be
-\cite{something}.
 
-However, we know very little about a.) how residents come to perceive some
-common region of the city as their neighborhood, and b.) how they form
-beliefs about this area. In large part, this is because we have not
-had any means to systematically and reliably identify the parts of a
-city that residents will tend to see as their neighborhood. It's hard
-to study how a thing emerges and changes if we can't locate the thing.
-
-A number of researchers have attempted to identify perceived
-neighborhoods by surveying city residents, typically by asking
-residents to draw maps of their neighborhood. These studies
-persistently find that residents draw very idiosyncratic maps, often
-with little overlap.\cite{hunter_symbolic_1974,
-  campbell_subjective_2009}.  Yet, even with great individual level
-variation, there can still be definite districts of a city wherein
-residents will tend to perceive that area as their neighborhood.
-
-However, in order to observe these average perceived neighborhoods, we
+In order to observe these average perceived neighborhoods, we
 need enough data. Historically, it has not been practical to collect these
 data at the volume and spatial resolution necessary.
 
 In this paper, I discuss a novel Internet source for data on
 neighborhood perception, demonstrate that this data coheres together,
-and provide evidence that these differences in perception line up with
-differences in the physical and social organization of different
-areas. Further, I show how we can use these data to predict what areas
-of a city are likely to be seen as distinct areas by residents even
-when we don't have data on those resident's perceptions.
+and provide evidence that these differences in perception line up
+physical features and the spatial organization of social
+factors. Further, I show how we can use these data to predict what
+areas of a city are likely to be seen as distinct areas by residents
+even when we don't have data on those resident's perceptions.
 
 \section{Neighborhood Claims}
 Craigslist a large, online classified listing service, with about 60
 million visitors each month from the United States
-\cite{something}. Many of the listings for sublets, roommates,
+\cite{craigslist_????}. Many of the listings for sublets, roommates,
 and apartments on the service contain claims that the advertised
 location is part of a particular neighborhood. In aggregate, these
 claims can inform us about neighborhood perception.
@@ -177,16 +347,16 @@ Portland, Las Vegas, Oklahoma City, Albuquerque, Tucson, Fresno,
 Sacramento, Kansas City, Atlanta, Colorado Springs, Omaha, Raleigh,
 Miami, Cleveland, Tulsa, Minneapolis, Wichita, Knoxville, and Asheville.
 
-Another computer program parses the downloaded web page (a HTML
+Another computer program parses the listing (a HTML
 document) and extracts the geographic information and the contents of
 the ``Specific location'' field. If the geographic coordinates are
 missing, but address or street intersection information is available,
 the program attempt to lookup the geographic coordinates associated with
-this information using a geocoding service \cite{needed}. 
+this information using a geocoding service \cite{kemp_geocoding_2008}. 
 
 For Chicago in 2014, there were about 230 new postings a day in the
 sublet, roommate, and apartment listings. Of these, about 130 listings
-include a claim that identifiable, geographic location belongs to some 
+include a claim that an identifiable, geographic location belongs to some 
 ``Specific location.''
 
 %  select AVG(daily_count) from (select count(listing_id) as daily_count from listing where city = 'chicago' and published > '2014-01-01' group by (date(published)) having daily_count < 10000) as t1;
@@ -212,15 +382,15 @@ neighborhood claims favor one neighborhood, to be measures of average
 perceived neighborhoods.
 
 For a particular neighborhood name, the probability that the name will
-appear in a listings's ``Specific location'' field can depends
-upon the location of the listing. In other words, the claims for
-a particular neighborhood name has a probability distribution over
-geographic space over the space of the city. 
+appear in a listings's ``Specific location'' field can depends upon
+the location of the listing. In other words, the claims for a
+particular neighborhood name has a probability distribution across the
+space of the city.
 
-For a particular neighborhood, we can imagine that the location of
-claims is generated by a draw from this distribution. If so, we can
-estimate this probability distribution by looking at the empirical
-distribution of observed neighborhood claims.
+For a particular neighborhood, we can imagine that the location of a
+particular claim is generated by a draw from this distribution. If so,
+we can estimate this probability distribution by looking at the
+empirical distribution of observed neighborhood claims.
 
 \subsubsection{Kernel Density Estimation}
 There are many ways to estimate a probability distribution from
@@ -234,24 +404,25 @@ normal distribution centered on the point. At any location in space,
 every observation's associated normal distribution will have some
 probability density. At a particular location, if we sum up all these
 densities, we will get an estimate of the overall probability
-distribution. For the neighborhood case, we will get an estimate of
-observing a neighborhood claim at this location. 
+distribution, i.e. we will get an estimate of the probability density
+of observing a neighborhood claim at this location.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Comparison_of_1D_histogram_and_KDE.png}
-\caption{Histogram and KDE in One-dimensional Space \cite{wikipedia}}
+\caption{Histogram and KDE in One-dimensional Space \cite{drleft_file:comparison_2014}}
 \end{figure}
 
 \subsection{Neighborhood Areas}
 
-Using KDE, we estimate the geographic probability distribution for
-every neighborhood name we observe. With this in hand, we can estimate
-the probability of seeing a neighborhood claim at any location in the
-city for any neighborhood: $\hat{\Pr}(\text{Location}_j \mid
+Using KDE, we estimate the probability distribution for every
+neighborhood name we observe. With this in hand, we can estimate the
+probability of seeing a neighborhood claim at any location in the city
+for any neighborhood: $\hat{\Pr}(\text{Location}_j \mid
 \text{Hood}_i)$
 
 Next, we transform these probabilities into the probabilities of
-observing a particular neighborhood claim given a location. This
+observing a particular neighborhood claim given a location, $\hat{\Pr}(\text{Hood}_i \mid
+\text{Location}_j)$. This
 depends not just on the probability of seeing a claim for a particular
 neighborhood, but will also depend upon probabilities for of seeing a
 claim for each and every neighborhood.
@@ -295,18 +466,15 @@ areas. There are definite districts of the city wherein Craigslist
 advertisers tend to claim that area is a neighborhood.
 
 I would like to treat this measure as a kind of `averaged neighborhood
-perception.' Of course, it is at best a biased measure of that
-perception. There are enormous selection effect. Most of the
-Craigslist listings come from the part of Chicago that have higher
-fractions of young adults. Moreover, we are only considering listings
-for roommates, sublets, and apartments. Portions of the city that are
-dominated by owner occupants are underrepresented, because home sale
-listings are excluded. Perhaps even more troublesome, the listers who
-are on Craigslist sometimes claim neighborhoods strategically in order
-to increase the desirability of their listing.
+perception.' Of course, it is a measure biased by both selection and
+strategy. As we are using listings for apartments, sublets, and
+roommates, we have much less data for parts of the city where most
+housing is owner occupied and single family. Moreover, listers are
+advertising, and they may be more likely to claim a desirable
+neighborhood than one with some stigma.
 
-Moreover, the distribution of claims of Craiglist advertisers likely
-generalizes to the distribution of perceptions of residents. The
+However, the distribution of claims of Craiglist advertisers may still
+generalize to the distribution of perceptions of residents. The
 spatial organization of `claimed neighborhoods' is associated with the
 physical barriers and sociological similarities and differences that
 urban sociologists have long associated with neighborhood
@@ -326,19 +494,25 @@ means of associating the spatial organization of a claimed
 neighborhood with the spatial organization of sociological factors and
 the locations of physical borders. 
 
-As a first step, we could split the city up into a large number of
+As a first step, we could split the city up into many
 small areas, say city blocks. Then, for each block, we can attempt to
-predict the dominant neighborhood claim. The prediction for a
-particular block should depend upon what we predict for the
-neighboring blocks. This is a problem of multinomial regression with
-spatial autocorrelation. 
+predict the dominant neighborhood claim. Regardless of what else we
+put in the model, a prediction for a particular block should depend
+upon what we predict for the neighboring blocks. This is a problem of
+multinomial regression with spatial autocorrelation.
 
 This type of problem is not tractable using classic techniques of
 maximum likelihood or MCMC methods. The inter-block coupling of
 discrete variables requires that we calculate terms for ever possible
 configuration of assignments of neighborhood claims to blocks. With
 just a few blocks and possible neighborhood claims, the combinatorial
-explosion makes this computationally unfeasible.
+explosion makes this computationally unfeasible.\footnote{In order to
+  converge on the mode of the distribution of scores, we have to
+  calculate a normalizing constant, which is the sum of the scores of
+  all possible assignments. This is computationally too
+  expensive. There have been a number of attempts to find an
+  acceptable substitute for the normalizing constant, but the
+  empirical results have disappointed.\cite{li_mrf_2009}}
 
 However, computer scientists have developed techniques for just this
 kind of problem, called structured support vector machines. In brief,
@@ -365,8 +539,9 @@ Our basic units will the Census block, a geographic unit which, in
 Chicago typically covers half a city block. Using census blocks gives
 us a fine geographic resolution and also allows for convenient use of
 Census data. For each census block, we will calculate the most likely
-neighborhood from our estimated neighborhood distributions (Figure
-\ref{fig:training}). 
+neighborhood from our estimated neighborhood distributions at the
+center of each block. The most likely neighborhood will be our block
+label $y_i$ (Figure \ref{fig:training}).
 
 \begin{figure}
 <<plotTraining, dev='pdf', message=FALSE>>=
@@ -376,18 +551,19 @@ source('plot_training.R')
 \caption{Training Data}
 \end{figure}
 
-We will count two blocks as neighbors if they a bordering street or
-alley. In the training data, there are \Sexpr{dim(blocks.poly)[1]}
-blocks and \Sexpr{dim(features)[1]} block-neighbors.
+We will count two blocks as neighbors if they a both share a bordering
+street or alley. In the training data, there are
+\Sexpr{dim(blocks.poly)[1]} blocks and \Sexpr{dim(features)[1]}
+block-neighbors.
 
+\subsubsection{Physical Barriers}
 For the inter-block similarities, we will use physical, demographic, and
 administrative features (Table \ref{tab:Distribution}).
 
-\subsubsection{Physical Barriers}
-Highways, rail lines, rivers, and major streets often act as neighborhood
-boundaries. For each of these types of features, we code an edge feature
-variable as 1 if the two adjacent blocks are separated by the feature or code
-and 0 otherwise.
+Highways, rail lines, rivers, and major streets often act as
+neighborhood boundaries. For each of these types of features, we code
+a similarity feature, $s$, as 1 if the two adjacent blocks are
+separated by the feature or code and 0 otherwise.
 
 We also measure the difference in orientation between blocks. Blocks
 are nearly all longer than they are wide, and we calculate the angle
@@ -411,8 +587,9 @@ align the streets within their subdivision. Misalignment of blocks are
 a rough measure of the where different subdivision meet. 
 
 \subsection{School Boundaries}
-If two adjacent blocks are in different elementary school attendance boundary
-then we code an edge feature with 1, 0 otherwise. Similar for high schools.
+If two adjacent blocks are in different elementary school attendance
+boundary then we code a similarity feature with 1, 0
+otherwise. Similar for high schools.
 
 \subsection{Demographic Features}
 From the U.S. Census, we have block level information on race, age, family
@@ -682,69 +859,17 @@ variables to our unpopulated model.\footnote{Actually, our model is
 
 
 \section{Results}
-After training the model using the PyStruct structure learning
-framework,\cite{mueller_pystruct:_2014} we get two classes of results:
-predictions of Chicago neighborhoods and parameter
-estimates.\footnote{See \url{https://github.com/fgregg/pystruct} for
-  custom model} Given a set of learned weights we can find,
-approximately, a lowest scoring assignment of labels to neighborhoods
-of the city.\footnote{However, some care must be taken to not immediately
-assign meaning to these labelings. Two blocks that have been assigned that
-same label do not necessarily belong to the same neighborhood. The
-labelings are only locally meaningful in that they distinguish a
-particular neighborhood from it’s neighbors. Instead, a neighborhood
-will be a set of blocks that have the same label and which are
-connected components.}
+After estimating the model using the PyStruct structure learning
+framework,\cite{muller_pystruct_2014} we see that the average,
+perceived neighborhoods are associated with the location of physical
+barriers and the spatial organization of social factors.
 
-Let’s start by looking at predictions for our training blocks to
-highlight some characteristics of our model (Figure
-\ref{fig:predictTraining}).
-
-\begin{figure}
-<<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
-par(mfrow=c(1,2))
-par(mar=rep(0, 4), xpd = NA) 
-source('plot_training.R')
-setwd('../code/training/')
-source('plot_predictions.R')
-setwd(CURDIR)
-par(mfrow=c(1,1))
-@ 
-\caption{Predicted Neighborhoods}
-\label{fig:predictTraining}
-\end{figure}
-
-<<RandIndex>>=
-
-library(phyclust)
-training_neighborhoods <- read.csv("../code/interchange/ks_label_semantic.csv")$x
-infrequent <- hood_frequency[hoods] < 10
-rand <- phyclust::RRand(hoods[!infrequent], training_neighborhoods[!infrequent])
-@ 
-
-First, our model depends upon C, the normalizer. We choose C by
-estimating the model for various values of C between 1.0 and 0.0001
-and choosing the value that maximizes the fit between the predicted
-neighborhoods and the training neighborhoods. The value of C that gave
-the best fit was 0.0005.
-
-Second, our model predicts many, very small neighborhoods. In Figure
-\ref{fig:predictTraining}, I have colored the
-\Sexpr{sum(hood_frequency >= 10)} neighborhoods that have ten or more
-blocks and grayed out the \Sexpr{sum(hood_frequency < 10)} remaining,
-small neighborhoods. There are \Sexpr{sum(hood_frequency ==1)}
-neighborhoods that consist of a single block.
-
-Third, our model seems to do an adequate job in capturing
-neighborhoods. We have a Rand Index score of \Sexpr{formatC(rand$Rand, format="f", digits=2)} and an
-Adjusted Rand of \Sexpr{formatC(rand$adjRand, format="f", digits=2)}.
-
-Now, turning to the parameters, we'll focus on the parameters for the
-populated blocks (Table \ref{tab:parameters}). A positive parameter
-means that, all else equal, the total score will be lower if adjacent
-blocks are allocated to separate neighborhoods. Negative parameters,
-means that all else equal, adjacent blocks should be allocated to the
-same neighborhood. So, for example the negative intercepts mean that
+We'll focus on the parameters for the populated blocks (Table
+\ref{tab:parameters}). A positive parameter means that, all else
+equal, the total score will be lower if adjacent blocks are allocated
+to separate neighborhoods. Negative parameters, means that all else
+equal, adjacent blocks should be allocated to the same
+neighborhood. So, for example the negative intercepts mean that
 adjacent blocks that are identical will ‘prefer’ to be assigned to the
 same neighborhood.
 
@@ -761,7 +886,7 @@ parameter is required to have face validity in Chicago. Differences in
 the density of housing units also has the expected sign. Differences
 in median age and housing structure are unexpectedly weak, but also
 very close to 0. The relatively strong `attractive' parameter for
-differences in family structure is very surprising. According the this
+differences in family structure is very surprising. According this
 model, a block that is all families and a block that has no families
 are very apt to belong the same neighborhood. 
 
@@ -823,44 +948,124 @@ print(WT)
 
 @ 
 
-\section{Discussion}
-While these results of modeling neighborhoods are interesting, we
-should take care to not put too much weight in them yet. Our purpose
-in this paper is to explore an \emph{approach} to modeling
-neighborhoods, and figuring out what counts block-by-block for making
-a neighborhood.
 
-What we have established is that this model of neighborhoods seems to
-be able to predict, with some fidelity, the training data, and that
-the parameter values comport with our previous expectations. These
-results should give us confidence that the modeling approach can
-capture this thing, the neighborhood, that we are trying to grasp.
+\subsection*{Model Fit}
+In order to evaluate our model fit, we will compare the neighborhoods
+our model predicts with the training data (Figure \ref{fig:predictTraining}).
 
-However, in order to learn from the model or extrapolate 
-predictions beyond the training data, this approach must pass much
-more rigorous tests than simply predicting the training data for one
-city. In a future paper, I will use this approach to model
-neighborhoods in the fifty largest American urban areas, and evaluate
-the predictive power of this conception of neighborhoods. 
+\begin{figure}
+<<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
+par(mfrow=c(1,2))
+par(mar=rep(0, 4), xpd = NA) 
+source('plot_training.R')
+setwd('../code/training/')
+source('plot_predictions.R')
+setwd(CURDIR)
+par(mfrow=c(1,1))
+@ 
+\caption{Predicted Neighborhoods}
+\label{fig:predictTraining}
+\end{figure}
 
-In future work, we could use the same types of models to learn about
-the structures of intra-party factions through looking at campaign
-giving or social class-like structure by looking at marriage
-patterns. Much of this work will depend upon being able to validly
-distinguish between proximity and similarity. In cities, its easy to
-do this. In other areas of social research, it's not so simple to
-distinguish between the two.
+<<RandIndex>>=
+
+library(phyclust)
+training_neighborhoods <- read.csv("../code/interchange/ks_label_semantic.csv")$x
+infrequent <- hood_frequency[hoods] < 10
+rand <- phyclust::RRand(hoods[!infrequent], training_neighborhoods[!infrequent])
+@ 
+
+
+Third, our model seems to do an adequate job in capturing
+neighborhoods. We have a Rand Index score of \Sexpr{formatC(rand$Rand, format="f", digits=2)} and an
+Adjusted Rand of \Sexpr{formatC(rand$adjRand, format="f",
+  digits=2)}. The Rand Index is a measure of the overlap between two
+ways of grouping elements. With a set of blocks
+$\mathcal{B}=\{b_1,\ldots,b_n\}$, let
+$\mathbf{\mathcal{X}}=\{\mathcal{X}_1,\ldots,\mathcal{X}_p\}$ be a partition, or
+  grouping, of the blocks into p neighborhoods. Each block is
+  in some neighborhood $\mathcal{X}_i$ and no block is in more than
+  one neighborhood. Let
+  $\mathbf{\mathcal{Y}}=\{\mathcal{Y}_1,\ldots,\mathcal{Y}_s\}$ be another
+    grouping of the same blocks into $s$ neighborhoods.
+
+Let $a$ be the number of blocks in $\mathcal{B}$ that grouped into
+same neighborhoods in both $\mathbf{\mathcal{X}}$ and $\mathbf{\mathcal{Y}}$. Let $b$ be
+the number of blocks in $\mathcal{B}$ that are placed in different
+neighborhoods in both $\mathbf{\mathcal{X}}$ and $\mathbf{\mathcal{Y}}$. $a$ and $b$ are
+the number of agreements between the two neighborhood groupings.
+ 
+Let $c$ be the number of blocks that are grouped in the same
+neighborhood in $\mathbf{\mathcal{X}}$ but put in separate neighborhoods in
+$\mathbf{\mathcal{Y}}$. Finally, let $d$ be the number of blocks that are in
+separate neighborhoods in $\mathbf{\mathcal{X}}$ but put in the same
+neighborhoods in $\mathbf{\mathcal{Y}}$. $c$ and $d$ are the number of
+disagreements between the neighborhood groupings.
+ 
+The Rand index is 
+\begin{equation}
+   R=\frac{a + b}{a + b + c + d}
+\end{equation}
+
+The index has a value of 0 if the neighborhood groupings completely
+disagree and 1 if they completely agree. 
+
+However, for random groupings, the value of the Rand Index is not
+expected to be 0. Indeed, as the number of groupings increase, the
+expected value of the Rand Index tends toward 1.
+ 
+The Adjusted Rand Index corrects for this. 
+\begin{equation}
+  AR=\frac{\text{Rand index} - \text{Expected index}}{\text{Maximum
+      Rand index}
+    - \text{Expected index}}
+\end{equation}
+
+The maximum Rand index is the highest Rand index possible
+given the number of groupings in $\mathcal{X}$ and $\mathbf{\mathcal{Y}}$. It
+will only be $1$ if the number of groupings are the same. For details
+see on the Rand index see \cite{yeung_details_2001}. Both the Rand Index are
+difficult to interpret as isolated numbers. They are most useful in
+comparing multiple grouping techniques against another. I report
+these numbers mainly so that others researchers can compare their
+models and technique against mine.
+
+\section*{Discussion}
+In the social sciences, we have a long tradition of learning about
+society by asking people questions. However, we usually don't do this
+to try to identify what social groupings are meaningful. In part this
+is because people, like social scientists, have a very difficult time
+coming up with credible ways of identifying the boundaries of a social
+movement, class, or status group.
+
+However, people often reveal patterns of affiliation, either directly
+when we ask what kind of person they are, or indirectly when we ask
+about their friends and things they don't like. We haven't had good
+ways of aggregating those patterns or of thinking about the logic of
+those patterns. Traditional, network community detection methods can
+help us see patterns of affiliation. They don't usually help us test
+our ideas about what kind of processes produce those pattern.
+
+The case of the neighborhood is easier than many social
+groupings. But, if the approaches we have discussed here help us a
+grasp on what parts of the social world people think are real, and
+techniques for thinking about why, then we can extend this work to
+approaches for understanding the core distinctions of our society and
+our science.
+
+ 
+
+
 
 \newpage
-\begingroup
-\parindent 0pt
+\begingroup \parindent 0pt
 \parskip 2ex
 \def\enotesize{\normalsize}
 \theendnotes
 \endgroup
 
 \newpage
-\bibliographystyle{asr}
+\bibliographystyle{plainnat}
 \bibliography{qp}
 
 \begin{figure}
