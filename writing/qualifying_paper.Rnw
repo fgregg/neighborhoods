@@ -67,18 +67,18 @@ help or harm the overall welfare of an area. This variation in
 ability to coordinate is often called a `neighborhood
 effect'\cite{sampson_great_2013}.
 
-As a name, `neighborhood effect' has produced some confusion, as it
-has directed attention to the neighborhood as an area and away from
-groups of residents facing common coordination problems. When we focus
-on the residents and their problems, we see the variety of types of
-problems, coordination mechanisms, and characteristic
-geographies. Each problem has its own neighborhood.
+As a term, `neighborhood effect' has produced some confusion. It has
+directed attention to the neighborhood as an area and away from groups
+of residents facing common coordination problems. When we focus on the
+residents and their problems, we see the many types of problems, each
+with their own coordination mechanisms and characteristic geographies.
+Each problem has its own neighborhood.
 
 Residents handle many small-scale problems by praising, encouraging,
 exhorting, shaming, or otherwise pressuring their neighbors to behave.
 Informal social control depends upon neighbors knowing one another and
 therefore has a small geographic scope. Whether a resident knows her
-neighbor depends very strongly on distance. Most people know their
+neighbor depends strongly on distance. Most people know their
 immediate neighbors, but the proportion of neighbors they know falls
 exponentially with distance. Very few people know anyone ten houses
 away \cite{grannis_ground_2009,hipp_simultaneous_2009}. For keeping an
@@ -99,7 +99,7 @@ Residents also face coordination problems that are much larger
 then their individuals networks but which are uncontrolled by local
 organizations. In urban sociology, the classic example is the problem
 of maintaining property values. Individual, small property owners have
-very little control of the values of property in their area. Except in
+little control of the values of property in their area. Except in
 some extraordinary cases, local organizations have also been
 ineffective in regulating area prices \cite{mckenzie_reconsidering_2002,hirsch_making_1998}. Yet, property owners do coordinate, by sharing perceptions and
 beliefs about the fate of an area.
@@ -114,7 +114,7 @@ building this year. Other owners observe the newly renewed edifice as
 news that figure into their own calculations\cite{taub_paths_1987}.
 
 This positive feedback loop between individual beliefs about the
-future of an area and perceptible changes in the area produces the
+future of an area and perceptible changes within the area produces the
 cycles of investment and disinvestment that characterize local real
 estate markets in American cities, and the cascading pattern of
 neighborhood transitions.\cite{taub_paths_1987,sampson_systematic_1999}
@@ -127,29 +127,30 @@ we know that local activists and developers also believe that the fate
 of an area can depend upon beliefs about what the area is or will be
 \cite{martin_place-framing_2003}.
 
-For these types of coordination problems, the set of relevant
+For this type of coordination problems, the set of relevant
 neighbors are the ones whose actions provide salient information about
-the future of the area. However, unlike informal social control or
+the future of an area. However, unlike informal social control or
 formal organizations, urban sociologists have not been able to
 characterize the geography of relevant news. Without being able to
 locate these areas, we have suffered in our ability to understand how
-beliefs and perceptions evolve about areas.
+beliefs and perceptions about areas evolve.
 
-We know very little about a.) how residents come to perceive some
+We know little about a.) how residents come to perceive some
 common region of the city as their neighborhood, and b.) how they form
 beliefs about this area. In large part, this is because we have not
 had any means to systematically and reliably identify the parts of a
 city that residents will tend to see as their neighborhood. It's hard
-to study how a thing if we can't ever locate the thing.
+to study a thing if we can't ever locate it.
 
 Some researchers have attempted to identify perceived neighborhoods by
-surveying city residents, typically by asking them to draw maps
-of their neighborhood. These studies persistently find that residents
-draw very idiosyncratic maps, often with little
-overlap\cite{hunter_symbolic_1974, campbell_subjective_2009}.
-However, even with great individual level variation, there can still be
+surveying city residents, typically by asking them to draw maps of
+their neighborhood. These studies reliably find that residents draw
+idiosyncratic maps, often with little
+overlap\cite{hunter_symbolic_1974,campbell_subjective_2009}.  However,
+even with great individual level variation, there can still be
 definite districts of a city which residents will tend to perceive as
-their neighborhood. We need much more data to uncover them.
+their neighborhood. We need much more data to uncover these average
+perceived neighborhoods.
 
 Historically, it has not been practical to collect these data at the
 volume and spatial resolution necessary.  In this paper, I discuss a
@@ -159,22 +160,22 @@ provide evidence that these differences in perception line up with
 physical features and the spatial organization of social factors.
 
 By capturing what parts of a city residents perceive as their
-neighborhood, these methods provide the grounds for investigation for
-how the beliefs and reputations of places affect the fact of an area,
-and how those beliefs, perceptions, and reputations can be transformed.
+neighborhood, these methods will provide the grounds for investigating
+how beliefs and perceptions shape the fate of an area and how those
+beliefs and perceptions can be altered.
 
 \section{Neighborhood Claims}
-Craigslist a large, online classified listing service, with about 60
-million visitors each month from the United States
-\cite{_craigslist_????}. Craigslists has many categories of listings
-including listings for apartments, sublets, roommates. Many of these housing
-listings contain claims that the advertised location is part of a
-particular neighborhood. In aggregate, these claims can inform us
-about neighborhood perception.
+Craigslist is a large, online classified listing service, with about 60
+million visitors each month from the United
+States\cite{fcraigslist1111}. Craigslist's has many categories of
+listings include listings for apartments, sublets, and roommates. Many
+of these housing listings contain claims that the advertised location
+is part of a particular neighborhood. In aggregate, these claims can
+inform us about neighborhood perception.
 
 \subsubsection{Craigslist Listings}
 Craigslist is organized into more than 700 city specific sites. On a
-city specific site, like \url{http://chicago.craigslist.org}, the
+city site, like \url{http://chicago.craigslist.org}, the
 classified listings are organized into categories like ``Housing'' and
 subcategories like ``Sublets/Temporary.''\footnote{It is free to read
   the classified ads and free to post ads except for a few
@@ -182,30 +183,32 @@ subcategories like ``Sublets/Temporary.''\footnote{It is free to read
   except for brokered apartment rentals in New York City.}
 
 Both private individuals and real estate companies use Craigslist to
-advertise housing listings. However, the listings in the categories
+advertise housing listings. The listings in the categories
 for roommates, shared housing, sublets, are mainly made by
-individuals (about 66\% and 85\% respectively). 
+individuals (about 66\% and 85\% respectively). The listings in the
+apartment category are 80\% rental broker or other professional and
+20\% small land lord. 
 
-When an advertiser posts a housing listing on Craigslist, they have the
-option of putting in an address of the listing or a nearby street
+When an advertiser posts a housing listing on Craigslist, they have
+the option of putting in an address of the listing or a nearby street
 intersection. If the advertiser puts in the geographic information,
 she will be shown a map with a pin over the listing's location. If the
-pin is not in the correct place, the advertiser can move the pin as
-necessary. The advertiser can also put a pin in the desired location
-without entering in address or street intersection information. When
-the listing is published, the geographic coordinates of the posting
-are embedded in the posting's web page.
+pin is not in the correct place, the advertiser can move the pin. The
+advertiser can also put a pin in the desired location without entering
+in an address or street intersection. When the listing is published, the
+geographic coordinates of the location are embedded in the listing's
+web page.
 
-In addition to location of the listing, the advertiser also has the
-option of filling out a field entitled ``Specific location.'' The
-advertiser can put whatever text she wants to in this field, but
-typically advertisers put in the name of a neighborhood. This
-information is also embedded in the published listing.
+Additionally, the advertiser can fill out a field entitled ``Specific
+location.'' The advertiser can put whatever text she wants to in this
+field, but typically advertisers put in the name of a
+neighborhood. This information is also embedded in the published
+listing.
 
 If a housing listing has a neighborhood name in the ``Specific
 location'' and the geographic coordinates of the listing location, the
 listing represents a claim that a particular point in the city is part
-of a neighborhood. We'll be using this claim to estimate the location
+of a neighborhood. We'll be using these claims to estimate the location
 of perceived neighborhoods.
 
 \subsection{Extracting the Claims}
@@ -247,7 +250,7 @@ include a claim that an identifiable, geographic location belongs to some
 
 %  select avg(daily_count) from (select count(claim_id) as daily_count from listing inner join claim using(listing_id) where city = 'chicago' and published > '2014-01-01' group by (date(published)) having daily_count < 10000) as t1;
 
-\subsection{Distribution of Claims}
+\subsection{Average Perceived Neighborhood}
 <<loadFeatures, include=FALSE, cache=FALSE>>= 
 setwd('../code/training/')
 source('features.R')
@@ -255,27 +258,18 @@ setwd(CURDIR)
 @ 
 
 From previous research, we know that individuals who claim the same
-neighborhood can have very different ideas about the contours of the
+neighborhood can have different ideas about the contours of the
 neighborhood\cite{hunter_symbolic_1974,
   campbell_subjective_2009}. With the volume of claims we have from
-Craigslist, we will be able to average out this idiosyncrasy and find
-the average perceived neighborhood. We will locate the parts of the
-city that residents tend to claim as the same neighborhood.
-
-We'll do this in two steps. First, for each neighborhood, we'll
-estimate a probability distribution of seeing that claim anywhere in
-the city. Second, we'll compare each neighborhood's estimated
-distribution to find areas where a particular neighborhood name
-predominates.
+Craigslist, we will be able to average out the idiosyncrasies and find
+the average perceived neighborhoods. 
 
 Of course, advertiser's claims culled from an Internet source are an
-imperfect measure of resident's perception. The claims are biased
-by both selection and strategy. 
-
-As we are using listings for apartments, sublets, and roommates, we
-have much less data from homeowners. Moreover, listers are
-advertising, and they may be more likely to claim a desirable
-neighborhood than one with some stigma.
+imperfect measure of resident's perception. The claims are biased by
+both selection and strategy. As we are using listings for apartments,
+sublets, and roommates, we have much less data from
+homeowners. Moreover, listers are advertising, and they may be more
+likely to claim a desirable neighborhood than one with some stigma.
 
 We will build confidence in our estimates of perceived neighborhoods
 if they line up, as expected, with physical barriers and the spatial
@@ -283,31 +277,35 @@ organization of social characteristics--factors not used to produce the
 estimates.
 
 \subsubsection{Kernel Density Estimation}
-The probability of the location of a neighborhood claim depends upon
-the neighborhood. For a particular neighborhood name, we can imagine
-that the location of a particular claim is generated by a random draw
-from that names geographic probability distribution. We can estimate
+To find the average perceived neighborhood, we start by estimating the
+probability distribution of seeing a neighborhood claims across the
+space of the city.
+
+The probability of seeing a neighborhood claim in particular location
+depends upon the neighborhood. For a given neighborhood name, we can
+imagine that the location of a claim is generated by a random draw
+from that name's geographic probability distribution. We can estimate
 that distribution by looking at the empirical distribution of observed
 neighborhood claims.
 
 There are many ways to estimate a probability distribution from
 observed location data. For one dimensional space, the classic histogram
 is the most familiar method. We'll use a simple method called Kernel
-Density Estimation (KDE). It behaves much like smoothed histogram
+Density Estimation (KDE). It behaves much like a smoothed histogram
 (Figure 1). 
 
 The main advantage of KDE over histograms is that histogram estimates
 are sensitive to the location of the break points between bins and KDE
 is not. As the probability of seeing a neighborhood claim can rise and
-fall very sharply and unpredictably across the space of the city, we
+fall sharply and unpredictably across the space of the city, we
 do not want to depend on a fixed binning grid. 
 
 With KDE, we associate every observed point with a two-dimensional
 normal distribution centered on the point. At any location in space,
 every observation's associated normal distribution will have some
 probability density. At a particular location, if we sum up these
-densities, we get an overall probability density of observing a
-neighborhood claim at this location.
+densities, we get an estimate of the probability density of observing
+a neighborhood claim at this location.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Comparison_of_1D_histogram_and_KDE.png}
@@ -317,17 +315,13 @@ neighborhood claim at this location.
 \subsection{Neighborhood Areas}
 
 Using KDE, we estimate the probability distribution of locations for
-every neighborhood name we observe. With this in hand, we have an
-estimate of the probability of seeing a neighborhood claim at any
-location in the city for any neighborhood:
-$\hat{\Pr}(\text{Location}_j \mid \text{Hood}_i)$
-
-Next, we transform the probabilities of locations given a neighborhoods
-into the probabilities of observing a particular neighborhood claim
-given a location, $\hat{\Pr}(\text{Hood}_i \mid
+every neighborhood name we observe: $\hat{\Pr}(\text{Location}_j \mid
+\text{Hood}_i)$ Next, we transform the probabilities of a location
+given a neighborhood into the probabilities of observing a particular
+neighborhood claim given a location, $\hat{\Pr}(\text{Hood}_i \mid
 \text{Location}_j)$. This depends not just on the probability of
-seeing a claim for a particular neighborhood, but will also depend
-upon probabilities for of seeing a claim all neighborhoods.
+seeing a claim for a particular neighborhood, but also depends
+upon the probabilities of seeing a claim for all neighborhoods.
 
 \begin{equation}
   \Pr(\text{Hood}_i \mid \text{Location}_j) = 
@@ -350,7 +344,7 @@ Where $n_i$ is the number of observations of neighborhood name $i$.
 In Figure \ref{fig:prob}, we map the estimated probabilities for
 neighborhood claims on the North Side of Chicago. Each color
 represents a different neighborhood claim distribution. The dark lines
-between mark the where the most probable neighborhood claim switches
+between mark where the most probable neighborhood claim switches
 from one neighborhood to another.
 
 \begin{figure}
@@ -363,22 +357,23 @@ from one neighborhood to another.
 \section{Spatial and Social Organization}
 
 Visually, we can notice that each `neighborhood' is contiguous. If
-neighborhood claiming was very idiosyncratic, then we would expect
-that that would be neighborhood names that dominated two or more
-separate, disconnected areas. Instead we see definite districts of the
-city wherein Craigslist advertisers tend to claim that area is a
-neighborhood. 
+neighborhood claiming was idiosyncratic, then we would expect that
+there would be neighborhood names that dominated two or more separate,
+disconnected areas. Instead we see definite, unitary districts of the
+city wherein Craigslist advertisers tend to claim the area as the
+same neighborhood.
 
 If neighborhoods claims are an acceptable measure of neighborhood
 perception, then these are our average perceived neighborhoods. But,
-we have already discussed, we have reason to fear that claims are a
-biased measure. To build confidence, we show that these neighborhood
-areas line up with the physical barriers and sociological similarities
-and differences that urban sociologists have long associated with
-neighborhood boundaries. We'll make the case first visually and
-impressionalistically and then formally and mathematically.
+we have already discussed reasons to fear that claims are a biased
+measure of perception. To build confidence, we show that these
+neighborhood areas line up with the physical barriers and sociological
+similarities and differences that urban sociologists have long
+associated with neighborhood boundaries. We'll make the case first
+visually and impressionalistically and then formally and
+mathematically.
 
-In the Figure \ref{fig:prob}, the map shows the large parks, the
+In the Figure \ref{fig:prob}, the map shows large parks, the
 north branch of the Chicago river and railroad embankments (dashed
 line). Neighborhoods are generally separated by these large physical
 features. 
@@ -389,7 +384,7 @@ had and would continue to have distinct social histories. Within his
 boundaries, we see multiple neighborhoods, but nearly no neighborhoods
 straddle his boundaries. 
 
-In order make these associations mathematically precise, we need a
+In order to make these associations mathematically precise, we need a
 means of associating the spatial organization of a claimed
 neighborhood with the spatial organization of sociological factors and
 the locations of physical borders. 
@@ -397,8 +392,8 @@ the locations of physical borders.
 As a first step, we could split the city into many
 small areas, say city blocks. Then, for each block, we can attempt to
 predict the dominant neighborhood claim. Regardless of what else we
-put in the model, a prediction for a particular block should depend
-upon what we predict for the neighboring blocks. This is a problem of
+put in the model, a prediction for a block should depend
+upon what we predict for its neighboring blocks. This is a problem of
 multinomial regression with spatial autocorrelation.
 
 This type of problem is not tractable using classic techniques of
@@ -420,17 +415,17 @@ this technique puts together three ideas. First, a formalism that
 represents a distribution over coupled discrete random variables as an
 undirected graph. Second, a result that the best scoring 
 configuration of that distribution is equivalent to a special
-division of the network called a minimum cut. Finally, a method of
+partition of the network called a minimum cut. Finally, a method of
 finding the minimum cut of a network in polynomial time. 
 
 \input{theory_and_math.tex}
 
 \section{Modeling}
 
-Now that we have the machinery, we can now measure the association
-between the spatial organization of our estimated neighborhoods and
-the spatial organization of physical and social factors in a
-city. First, we'll describe the data.
+Now that we have the machinery, we can measure the association between
+the spatial organization of our estimated neighborhoods and the
+spatial organization of physical and social factors in a city. First,
+we'll describe the data.
 
 \subsection{Data}
 
@@ -513,10 +508,11 @@ For family structure, the distribution is of households with children
 versus households without. 
 
 For housing structure, the distribution is of housing units in the
-rental market, housing market, or otherwise disposed. We also use the
-absolute difference between the log median density of housing units.
+rental market, housing market, or neither--abandoned, vacation home,
+guest house, etc. We also use the absolute difference between the log
+median density of housing units.
 
-Many blocks have no one living in them or only a handful. In such
+Many blocks have no one living in them or nearly so. In such
 cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
 not calculate the demographic differences. There are
@@ -664,7 +660,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 \caption{Difference in Distribution of Housing Type}
 \end{figure}
 
-\section{Modeling}
+\section{Model}
 Since many census blocks are empty, the demographic similarity between
 these blocks is not well defined. We might be tempted to ignore these
 cases, but deleting these cases would change the topology of the
@@ -784,10 +780,10 @@ and racial composition is strongly positive. Such a `divisive'
 parameter is required to have face validity in Chicago. Differences in
 the density of housing units also has the expected sign. Differences
 in median age and housing structure are unexpectedly weak, but also
-very close to 0. The relatively strong `attractive' parameter for
-differences in family structure is very surprising. According this
+close to 0. The relatively strong `attractive' parameter for
+differences in family structure is surprising. According this
 model, a block that is all families and a block that has no families
-are very apt to belong the same neighborhood. 
+are apt to belong the same neighborhood. 
 
 <<weightTable, results='asis', cache=FALSE>>=
 setwd('../code/training/')
@@ -933,7 +929,7 @@ models and technique against mine.
 In the social sciences, we have a long tradition of learning about
 society by asking people questions. However, we usually don't do this
 to try to identify what social groupings are meaningful. In part this
-is because people, like social scientists, have a very difficult time
+is because people, like social scientists, have a difficult time
 coming up with credible ways of identifying the boundaries of a social
 movement, class, or status group.
 
