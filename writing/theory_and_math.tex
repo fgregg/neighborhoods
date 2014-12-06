@@ -31,15 +31,11 @@ $1$, $2$, $3$, and $4$.
 \end{figure}
 
 Suppose that, in our city, there are two neighborhoods. Each block
-belongs to either one or the other of these neighborhoods. Neighboring
-blocks that are similar are more apt to belong to the same
-neighborhood and neighboring blocks that are different are more apt to
-belong to different neighborhoods.
-
-We want similar blocks to belong to the same
-neighborhood. One way to formalize this desire is to score every
-possible pattern of neighborhood labels in such a way that our
-preferred patterns have the best score.
+belongs to either one or the other of these neighborhoods. We want
+similar blocks to belong to the same neighborhood. One way to
+formalize this desire is to score every possible pattern of
+neighborhood labels in such a way that our preferred patterns have the
+best score.
 
 First, we need some more precise terms. Let the two neighborhoods be
 called $0$ and $1$. A block belongs to either neighborhood $0$ or
@@ -159,10 +155,10 @@ $\phi$'s we can have made our preferred pattern have the lowest scores.
 
 \subsection{Learning similarities}
 Suppose we knew that we wanted some particular pattern of
-neighborhoods, but we didn't what similarity scores, $\phi$'s would
-give that pattern the lowest score. In order to find the $phi$'s we
-might start with a likely looking set of $\phi$'s, and check that
-these similarities gave the preferred pattern the best score.
+neighborhoods, but we didn't know what similarity scores, $\phi$'s
+would give that pattern the lowest score. Given a candidate set of
+$\phi$'s, we could start by checking that these similarity scores gave
+the preferred pattern the best score.
 
 For small networks, we could check the scores for each individual
 pattern, but this exhaustive strategy becomes quickly impractical
@@ -173,17 +169,15 @@ possibly check every possible neighborhood assignment in human-scale
 time.
 
 \subsubsection{Network Methods}
-Fortunately, researchers, largely in the field of computer vision,
-have developed methods to quickly find the lowest scoring assignment
-for problems like ours. This work traces back to a 1986 paper by
-Greig, Porteous, and Sehult, where they demonstrated that finding
-lowest scoring assignment for a two neighborhood case was equivalent
-to solving the problem of finding the minimum cut of a
-network.\cite{greig_exact_1989}
+Surprisingly, there is a method for finding the lowest scoring
+assignment given some $\phi$'s in polynomial time. Greig, Porteous,
+and Sehult demonstrated that finding the lowest scoring assignment for
+a two neighborhood case was equivalent to solving the problem of
+finding the minimum cut of a network.\cite{greig_exact_1989}
 
-In that paper, the authors set up an scoring problem that is slightly
-different than ours. In addition to terms that depended upon pairs of
-neighbors, their score also included terms for individual nodes.
+Greig and his co-authors set up a more general scoring problem. In
+addition to terms that depended upon pairs of neighbors, their score
+also included terms for individual nodes.
 
 \begin{align}
 \operatorname{E}(\mathbf{y}) = \sum_i\epsilon_i(y_i) + \sum_{<i
@@ -254,7 +248,7 @@ undirected network, they introduced a directed edge from $z_i$ to $z_j$ and
 another from $z_j$ to $z_i$ with associated costs of $\phi_{i,j}$.
 
 In addition to the original nodes, they also introduced two special
-nodes: a source node called $s$ and a target, or sink, node called
+nodes: a source node called $s$ and a target node called
 $t$. If $\epsilon_i(0) = 0$ then there would be a directed edge from
 $s$ to the $i$th node. If $\epsilon_i(1) = 0$ then there would be
 directed edge from the $i$th node to $t$. Networks like this are
@@ -274,10 +268,10 @@ Figure \ref{fig:directed}.
 \tikzset{Uedge/.style = {<->}}
 
 \node[vertex, above=of 1] (0) {$s$} ; %
-\node[vertex] (1) {$y_1$} ; %
-\node[vertex, below left=of 1] (2) {$y_2$} ; %
-\node[vertex, below right=of 1] (3) {$y_3$} ; %
-\node[vertex, below left=of 3] (4) {$y_4$} ; %
+\node[vertex] (1) {$z_1$} ; %
+\node[vertex, below left=of 1] (2) {$z_2$} ; %
+\node[vertex, below right=of 1] (3) {$z_3$} ; %
+\node[vertex, below left=of 3] (4) {$z_4$} ; %
 \node[vertex, below=of 4] (5) {$t$} ; %
 \path
   (0) edge [Dedge] node {2} (1)
@@ -296,9 +290,9 @@ Figure \ref{fig:directed}.
 
 We must now introduce some terms. First, to `cut' a network is to
 remove edges from the network so that the network is split into two
-unconnected, smaller networks. Second, an `s-t cut' is a cut on a s-t
+disconnected, smaller networks. Second, an `s-t cut' is a cut on a s-t
 network that causes the source node and target node to end up in
-separate, unconnected networks. Finally, a `minimum cut' is an s-t cut
+separate, disconnected networks. Finally, a `minimum cut' is an s-t cut
 where the sum of cost associated with the removed edges is as small as
 any other possible s-t cut. 
 
@@ -316,10 +310,10 @@ $(z_1, z_2)$ and $(z_3, z_4)$ (Figure \ref{fig:mincut}).
 \tikzset{Uedge/.style = {<->}}
 
 \node[vertex, above=of 1] (0) {$s$} ; %
-\node[vertex] (1) {$y_1$} ; %
-\node[vertex, below left=of 1] (2) {$y_2$} ; %
-\node[vertex, below right=of 1] (3) {$y_3$} ; %
-\node[vertex, below left=of 3] (4) {$y_4$} ; %
+\node[vertex] (1) {$z_1$} ; %
+\node[vertex, below left=of 1] (2) {$z_2$} ; %
+\node[vertex, below right=of 1] (3) {$z_3$} ; %
+\node[vertex, below left=of 3] (4) {$z_4$} ; %
 \node[vertex, below=of 4] (5) {$t$} ; %
 \path
   (0) edge [Dedge] node {2} (1)
@@ -352,7 +346,7 @@ In particular, if we want to see if a certain set of similarities,
 $\phi's$ gives a preferred pattern of neighborhood labels a lower
 score than any other pattern, we can apply Greig's approach. If the
 minimum cut of the associated s-t network corresponds to our preferred
-pattern, then we know that a set of similarities gives us our
+pattern, then we know our $\phi$'s gives us our
 preferred pattern the lowest score. If the minimum cut corresponds to
 some other pattern, then we know that these $\phi$'s do not give our
 preferred pattern the lowest score.
@@ -365,24 +359,24 @@ submodular scoring function would be one where $\epsilon_{i,j}(0,0) +
 \epsilon_{i,j}(1,1) \leq \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$
 for all $i,j$ in $\mathcal{N}$. Our scoring function is decisively not
 submodular because we want it to cost more to put together very
-dissimilar neighboring blocks than to assign them to them to different
+dissimilar neighboring blocks than to assign them to different
 neighborhoods. That is, for very dissimilar blocks we want it to hold
 that $\epsilon_{i,j}(0,0) + \epsilon_{i,j}(1,1) \boldsymbol{>}
 \epsilon_{i,j}(0,1) + \epsilon_{i,j}(1,0)$.
 
-Since we don't have a submodular scoring functions and often will have
+Since we don't have a submodular scoring function and will often have
 more than two neighborhood names, we can't use the minimum cuts
 algorithm directly to find the lowest scoring neighborhood
-pattern. However, since the 1980s computers scientists have developed
+pattern. Since the 1980s computers scientists have developed
 other graph cutting methods that allow us to find approximate
 solutions to multi-label non-submodular scoring problems like ours
-\cite{something}.
+\cite{kolmogorov_minimizing_2007}
 
 \subsection{Learning similarities}
 These network methods mean that we can quickly check if a
 particular set of inter-block similarities gives a preferred
 neighborhood pattern the best score. We will now describe how to use
-this to efficiently inter-block similarities that will give a
+this to efficiently find inter-block similarities that will give a
 preferred pattern the lowest score.
 
 We will make our lives easier by only considering simple, linear
@@ -413,14 +407,14 @@ observed similarities between block $i$ and $j$.
 \noindent
 An observed inter-block similarity could be absolute difference in
 population, or dummy variable indicating whether the blocks are
-separated by a railroad, or similar.
+separated by a highway, railroad embankment, or similar.
 
 \noindent
 
 With this form, learning a scoring function means finding weights
 that give a better score to our preferred pattern of neighborhood
 assignments than any other pattern. In other words, we want to find
-some weights, $\mathbf{w}$, that solves this system of linear
+some weights, $\mathbf{w}$, that solve this system of linear
 equations:
 
 \begin{align*}
@@ -444,7 +438,7 @@ In order to use some convenient machinery, we will modify the learning
 problem somewhat. These modifications will only act to specify a
 particular solution to the system of inequalities. Any solution to the
 modified problems is also a solution to the system of inequalities and
-if there is solution to the system of inequalities there will be a
+if there is a solution to the system of inequalities there will be a
 solution to the modified problems.
 
 First, observe that if a set of weights gives the preferred assignment
@@ -465,10 +459,10 @@ weights that give our preferred assignment the largest margin.
 \end{align}
 
 This still does not specify a unique set of weights. To do that, we
-constrain the sizes of the weights. We could do this by limiting the
-sum of the absolute values of the weights. As will be momentarily
-clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2}
-  = 1$. The learning problem is now:
+constrain the sizes of the weights. We could do this in many ways. For
+example, we could limit the sum of the absolute values of the weights. As
+will be momentarily clear, a more convenient choice is to require that
+$\sqrt{\sum_i^M w_i^2} = 1$. The learning problem is now:
 
 %
 \begin{align*}
@@ -485,7 +479,7 @@ clear, more convenient choice is to require that $\sqrt{\sum_i^M w_i^2}
 With these two modifications, the learning problem is now a quadratic
 program, a well known class of constrained optimization
 problems.\footnote{The problem is easier to recognize as a quadratic
-  program in it's dual, canonical form:
+  program in its dual, canonical form:
 %
 \begin{align*}
 &\argmin_{\mathbf{w}} \frac{1}{2}||\mathbf{w}||^2 \\
@@ -505,9 +499,9 @@ score than our target pattern, and the number of possible patterns
 grows exponentially with the number of blocks.
 
 Instead, we will solve a similar problem that takes advantage of the
-network cutting algorithm but which can be solved
+network cutting algorithm and so can be solved
 quickly. The algorithm for solving this problem is typically called
-the `structured support vector machine.'\cite{szummer_learning_2008}
+the `structured support vector machine'\cite{szummer_learning_2008}.
  
 
 \subsubsection{Structured Support Vector Machine}
@@ -544,12 +538,12 @@ set of weights, then it would have been added to $\mathcal{K}$ in step
 
 With this structured support vector machine, we have the means of
 efficiently learning weights that give a targeted pattern a better
-score than any other pattern, if those weights exist. 
+score than any other pattern, but only if those weights exist. 
 
 There is a similar, but more general form that can find weights that
 either give the target pattern the lowest score or minimize the
-difference between the score of the target pattern and the another,
-lowest scoring pattern. There are also a tweaks that penalize the
+difference between the score of the target pattern and another,
+lowest scoring pattern. There is also a tweak that penalizes the
 scores of patterns that empirically diverge from the target pattern,
 and which can help the algorithm learn better weights for predicting
 new patterns.
