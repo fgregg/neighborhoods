@@ -430,12 +430,12 @@ we'll describe the data.
 \subsection{Data}
 
 Our basic units will the Census block, a geographic unit which, in
-Chicago typically covers half a city block. Using census blocks gives
+Chicago, typically covers half a city block. Using census blocks gives
 us a fine geographic resolution and also allows for convenient use of
 Census data. For each census block, we will calculate the most likely
-neighborhood from our estimated neighborhood distributions at the
-center of each block. The most likely neighborhood will be our block
-label $y_i$ (Figure \ref{fig:training}).
+neighborhood from our estimated neighborhood distributions. The most
+likely neighborhood will be our block label $y_i$ (Figure
+\ref{fig:training}).
 
 \begin{figure}
 <<plotTraining, dev='pdf', message=FALSE>>=
@@ -445,26 +445,28 @@ source('plot_training.R')
 \caption{Training Data}
 \end{figure}
 
-We will count two blocks as neighbors if they a both share a bordering
+We will count two blocks as neighbors if they both share a bordering
 street or alley. In the training data, there are
 \Sexpr{dim(blocks.poly)[1]} blocks and \Sexpr{dim(features)[1]}
 block-neighbors.
 
 \subsubsection{Physical Barriers}
-For the inter-block similarities, we will use physical, demographic, and
-administrative features (Table \ref{tab:Distribution}).
+For the observed inter-block distances, we will use physical,
+demographic, and administrative features (Table
+\ref{tab:Distribution}).
 
 Highways, rail lines, rivers, and major streets often act as
-neighborhood boundaries. For each of these types of features, we code
-a similarity feature, $s$, as 1 if the two adjacent blocks are
-separated by the feature or code and 0 otherwise.
+neighborhood boundaries. For each of these types of barriers, we code
+a distance feature, $d$, as 1 if the two adjacent blocks are
+separated by the barrier and 0 otherwise.
 
 We also measure the difference in orientation between blocks. Blocks
 are nearly all longer than they are wide, and we calculate the angle
 of the longest side. For each pair of blocks, we calculate the
 difference between the orientations of the blocks. We normalize the
-difference to fall in $[0, 1]$. This measure was inspired by Vivien
-Palmer's work on the persistent effect of primary settlements. 
+difference to fall in the interval $[0, 1]$. This measure was inspired
+by Vivien Palmer's work on the persistent effect of primary
+settlements.
 
 In the late 1920s, Palmer argued that when a subdivision
 of a city was originally opened for residential settlement, the
@@ -478,11 +480,11 @@ atomic, spatial unit for urban processes.\cite{palmer_primary_1932}
 
 When subdivision were originally laid out, the developers tended to
 align the streets within their subdivision. Misalignment of blocks are
-a rough measure of the where different subdivision meet. 
+a rough measure of where different subdivision meet. 
 
 \subsection{School Boundaries}
 If two adjacent blocks are in different elementary school attendance
-boundary then we code a similarity feature with 1, 0
+boundary then we code a distance feature with 1 and 0
 otherwise. Similar for high schools.
 
 \subsection{Demographic Features}
@@ -490,7 +492,7 @@ From the U.S. Census, we have block level information on race, age, family
 structure, and housing ownership patterns. We can define measures between
 blocks for these data.
 
-We will use two measures for the demographic factors. The first is the
+We will use two distance measures for the demographic factors. The first is the
 absolute difference. The second is the $\chi$ distance $\sqrt{
 \frac{1}{2} \sum_i^d \frac{(x_i - y_i)^2}{x_i + y_i}}$, where $x_i$ is
 the frequency of bin $i$ of the histogram $\mathbf{x}$ and similar for
@@ -517,7 +519,7 @@ cases, it makes little sense to compare demographic distributions. If
 either adjacent blocks has fewer than 30 persons living in it, we do
 not calculate the demographic differences. There are
 \Sexpr{sum(features$all_sufficient)} edges where we calculate these
-demographic similarities.
+differences.
 
 <<featureTable, results='asis', message=FALSE>>= 
 feature_summary <- data.frame(sufficient.population=c(mean(features$all_sufficient), 
