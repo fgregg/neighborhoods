@@ -1,9 +1,12 @@
 \documentclass[12pt,letter]{article}
-\title{DRAFT: Learning Who Your Neighbors Are}
-\author{Forest Gregg}
+\title{LEARNING WHO YOUR NEIGHBORS ARE}
+\author{FOREST GREGG}
 \usepackage{amsmath}
 \usepackage{url}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
 \usepackage{tikz}
+\usepackage[toc,page]{appendix}
 \usepackage{adjustbox}
 \usepackage{natbib}
 \usepackage{endnotes}
@@ -11,6 +14,32 @@
 %\usepackage{endfloat}
 \doublespacing
 \setcounter{tocdepth}{5}
+
+\renewcommand\maketitle{\begin{titlepage}%
+    \begin{center}
+      {\large THE UNIVERSITY OF CHICAGO}
+      \vskip 4em
+      {\large LEARNING WHO YOUR NEIGHBORS ARE}
+      \vskip 5em
+      {\large A QUALIFYING PAPER SUBMITTED TO}
+      \vskip 1em
+      {\large THE FACULTY OF THE DEPARTMENT OF SOCIOLOGY}
+      \vskip 1em
+      {\large TOWARD THE FULFILLMENT OF}
+      \vskip 1em
+      {\large DOCTORAL PROGRAM REQUIREMENTS}
+      \vskip 7em
+      {\large BY}
+      \vskip 1em
+      {\large FOREST GREGG}
+      \vskip 1em
+      {\large FACULTY ADVISOR: JAMES EVANS}
+      \vskip 2em
+      {\large CHICAGO, ILLINOIS}
+      \vskip 2em
+      {\large WINTER, 2015}
+      \end{center}
+\end{titlepage}}
 
 \let\footnote=\endnote
 \let\cite=\citep
@@ -55,7 +84,7 @@ default_margins = par("mar")
 CURDIR <- "/home/fgregg/academic/neighborhoods/writing"
 @ 
 
-%\tableofcontents
+
 
 \section{Introduction}
 City residents face a variety of problems that depend upon
@@ -489,7 +518,7 @@ otherwise. Similar for high schools.
 
 \subsection{Demographic Features}
 From the U.S. Census, we have block level information on race, age, family
-structure, and housing ownership patterns. We can define measures between
+structure, and the housing market structure. We can define measures between
 blocks for these data.
 
 We will use two distance measures for the demographic factors. The first is the
@@ -511,13 +540,17 @@ versus households without.
 
 For housing structure, the distribution is of housing units in the
 rental market, housing market, or neither--abandoned, vacation home,
-guest house, etc. We also use the absolute difference between the log
-median density of housing units.
+guest house, etc. 
 
-Many blocks have no one living in them or nearly so. In such
-cases, it makes little sense to compare demographic distributions. If
-either adjacent blocks has fewer than 30 persons living in it, we do
-not calculate the demographic differences. There are
+We'll also look at the density of housing: the number of housing units
+per unit area. This will capture the difference between a block of
+apartment buildings and a block of detached, single family
+homes. We'll use the absolute vale of the log difference in density.
+
+Many blocks have no one living in them or nearly so. In such cases, it
+makes little sense to compare demographic distributions. If either
+adjacent blocks has fewer than 30 persons living in it, we do not
+calculate the demographic differences. There are
 \Sexpr{sum(features$all_sufficient)} edges where we calculate these
 differences.
 
@@ -636,6 +669,7 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:abs_age"][features$all_sufficient==1]/max(M[,"all_sufficient:abs_age"]))/255))
 @ 
 \caption{Difference in Log Median Age}
+\label{fig:age_difference}
 \end{figure}
 
 
@@ -659,20 +693,21 @@ plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey
 <<<housingImage, dev='pdf'>>=
 plot(all_edges$lines[features$all_sufficient==1], col=rgb(colorRamp(c("lightgrey", "red"), space="Lab")(M[,"all_sufficient:chi_housing"][features$all_sufficient==1])/255))
 @ 
-\caption{Difference in Distribution of Housing Type}
+\caption{Difference in Distribution of Housing Ownership Type}
 \end{figure}
 
 \section{Model}
-Since many census blocks are empty, the demographic similarity between
-these blocks is not well defined. We might be tempted to ignore these
-cases, but deleting these cases would change the topology of the
-city. Removing unpopulated blocks would turn populated blocks into
-islands separated by commercial corridors. This would not allow for a
-neighborhood to span a highway or industrial corridor, a possibility
-we do not want to preclude.
+Since many census blocks are empty, the demographic distance between
+these blocks is not well defined. We might be tempted delete these
+cases, but that the topology of the city. Removing unpopulated blocks
+would turn residential areas into islands, separated by zones of
+commerce, industry, or other nonresidential land use. This would not
+allow a neighborhood to span a highway or industrial corridor, a
+possibility we do not want to preclude.
 
-We deal with this variation by using dummy variables to effectively
-learn two model at once: a nonpopulated and populated block model.
+We deal with this nonpopulated blocks by using dummy variables to
+effectively learn two model at once: a nonpopulated and populated
+block model.
 
 Our overall scoring function is 
 \begin{align}
@@ -757,35 +792,63 @@ variables to our unpopulated model.\footnote{Actually, our model is
 
 \section{Results}
 After estimating the model using the PyStruct structure learning
-framework,\cite{muller_pystruct_2014} we see that the average,
+framework\cite{muller_pystruct_2014}, we see that the average,
 perceived neighborhoods are associated with the location of physical
-barriers and the spatial organization of social factors.
+barriers and the spatial organization of social factors. 
 
 We'll focus on the parameters for the populated blocks (Table
-\ref{tab:parameters}). A positive parameter means that, all else
-equal, the total score will be lower if adjacent blocks are allocated
-to separate neighborhoods. Negative parameters, means that all else
-equal, adjacent blocks should be allocated to the same
-neighborhood. So, for example the negative intercepts mean that
-adjacent blocks that are identical will ‘prefer’ to be assigned to the
-same neighborhood.
+\ref{tab:parameters}).  All of the features are dummy variables
+or distance measures with a minimum of zero. If the values of all the
+features are 0, that means that the blocks are not separated by any
+physical feature, are in the same school districts, have the same
+alignment, and are demographically identical.
 
-Nearly all parameters for barriers and administrative zones have a
-positive sign, which is what we expect: dissimilar blocks and blocks
-separated by barriers are more apt to be placed in separate
-neighborhoods. The negative `attractive' parameter for major street is
-likely due to fact that every one of our training neighborhoods
-contains multiple major grid streets.
+If a parameter is positive, it means that the feature is
+divisive. That is, the total score of block assignments will tend to
+have a lower, better score if neighboring blocks are assigned to
+different neighborhoods. If a parameter is negative, then the feature
+is cohesive. The total score would tend to be better if the
+neighboring blocks were assigned to the same neighborhood.
 
-The demographic distances are more complicated. Differences in ethnic
-and racial composition is strongly positive. Such a `divisive'
-parameter is required to have face validity in Chicago. Differences in
-the density of housing units also has the expected sign. Differences
-in median age and housing structure are unexpectedly weak, but also
-close to 0. The relatively strong `attractive' parameter for
-differences in family structure is surprising. According this
-model, a block that is all families and a block that has no families
-are apt to belong the same neighborhood. 
+For example, railroads are a highly divisive feature. If two blocks
+are separated by a railroad, they will tend to be assigned to
+different neighborhoods. If they are not, that penalizes the total
+score. Water and highways are similarly divisive
+barriers. 
+
+Interestingly, major streets are cohesive. Blocks separated by a major
+street will tend to belong to the same neighborhood. Average perceived
+neighborhoods are large and contain multiple major streets. Most
+blocks separated by a major street do belong to the same neighborhood.
+
+High schools attendance boundaries are divisive. Blocks which send
+their children to different high schools tend to be in different
+neighborhoods. Elementary schools boundaries are divisive, but more
+weakly. They have much smaller service areas and some neighborhoods
+contain multiple elementary schools.
+
+Block angle is divisive.  Blocks tend to divide into different
+neighborhoods along ruptures in the orientation of the street grid.
+
+Differences in race and ethnicity are the most divisive demographic
+features. Blocks with different racial compositions tend to belong two
+different neighborhoods.
+
+Differences in the density of housing units
+is also divisive. A block of detached, single family homes would tend
+to be in a different neighborhood than a block of high rise apartment
+buildings.
+
+Differences in the housing market structure and median age are
+cohesive, but weakly. Differences in family structure are strongly
+cohesive. This is surprising. A block where every household includes
+children will tend to be in the same neighborhood as a block with no
+children. Equivalently, neighborhoods will tend to divide between
+blocks with similar proportions of children. This result needs further
+investigation. 
+
+The negative intercept means that identical blocks will tend to belong
+to the same neighborhood.
 
 <<weightTable, results='asis', cache=FALSE>>=
 setwd('../code/training/')
@@ -834,7 +897,7 @@ rownames(models) <- c('(Intercept)',
                       'Race and Ethnicity', 
                       'Age Structure', 
                       'Density of Housing Units',
-                      'Housing Structure')
+                      'Housing Marker Structure')
 
 WT <- xtable(models, digits=4,
              caption="Parameter Estimates for Populated Blocks",
@@ -845,10 +908,6 @@ print(WT)
 
 @ 
 
-
-\subsection*{Model Fit}
-In order to evaluate our model fit, we will compare the neighborhoods
-our model predicts with the training data (Figure \ref{fig:predictTraining}).
 
 \begin{figure}
 <<plotPredictions, echo=FALSE, dev='pdf', message=FALSE>>=
@@ -872,11 +931,62 @@ infrequent <- hood_frequency[hoods] < 10
 rand <- phyclust::RRand(hoods[!infrequent], training_neighborhoods[!infrequent])
 @ 
 
+As a measure of model fit, we use the Rand Index and the Adjusted Rand
+Index (Appendix \ref{sec:rand}). The Rand Index will measure the
+agreement between the model's predicted partition of blocks into
+neighborhoods and the training partition. If partitions completely
+agreed on which pairs of blocks belong together the Rand Index will be
+1. If the Rand Index completely disagree the Rand Index would be
+0. Our Rand Index is \Sexpr{formatC(rand$Rand, format="f",
+  digits=2)}. The Adjusted Rand Index corrects for chance and also has
+a range of 0 to 1. Our Adjusted Rand Index is
+\Sexpr{formatC(rand$adjRand, format="f", digits=2)}. These indexes are
+like deviance scores for linear models; they are mainly useful in model
+comparison.
 
-Third, our model seems to do an adequate job in capturing
-neighborhoods. We have a Rand Index score of \Sexpr{formatC(rand$Rand, format="f", digits=2)} and an
-Adjusted Rand of \Sexpr{formatC(rand$adjRand, format="f",
-  digits=2)}. The Rand Index is a measure of the overlap between two
+
+\section*{Discussion}
+We now have means for identifying average perceived neighborhoods and
+validating that they line up with expected physical barriers and
+spatial differences in sociological characteristics. This lays the ground
+for how beliefs and perceptions of these neighborhoods affect social
+processes in urban life. 
+
+The preliminary work on modeling the neighborhoods can be extended,
+and structure supported vector machine give us the tools to further
+study how parts of a city come to be seen as distinct areas.
+
+In addition, the general approach we have taken for neighborhoods can
+be used in other fields of social life.In the social sciences, we have
+a long tradition of learning about society by asking people
+questions. However, we usually don't do this to try to identify what
+social groupings are meaningful. In part this is because people often have
+a difficult time coming up with credible ways of identifying the
+boundaries of a group, social movement, or class.
+
+People can often reveal patterns of affiliation, either directly
+when we ask what kind of person they are, or indirectly when we ask
+about their friends and things they like and don't like. We haven't
+had good, quantitative tools for aggregating these patterns of affiliation 
+or revealing their logic. 
+
+The case of the neighborhood is easier than many social
+groupings. But, if the approaches we have discussed here help us
+locate what parts of the social world people think are real, and gives
+us techniques for thinking about why, then we can extend this work to
+reveal the core groupings of our society and our science.
+
+\newpage
+\begingroup \parindent 0pt
+\parskip 2ex
+\def\enotesize{\normalsize}
+\theendnotes
+\endgroup
+
+\appendix
+\section{Rand Index}
+\label{sec:rand}
+The Rand Index is a measure of the overlap between two
 ways of grouping elements. With a set of blocks
 $\mathcal{B}=\{b_1,\ldots,b_n\}$, let
 $\mathbf{\mathcal{X}}=\{\mathcal{X}_1,\ldots,\mathcal{X}_p\}$ be a partition, or
@@ -921,45 +1031,7 @@ The Adjusted Rand Index corrects for this.
 The maximum Rand index is the highest Rand index possible
 given the number of groupings in $\mathcal{X}$ and $\mathbf{\mathcal{Y}}$. It
 will only be $1$ if the number of groupings are the same. For details
-see on the Rand index see \cite{yeung_details_2001}. Both the Rand Index are
-difficult to interpret as isolated numbers. They are most useful in
-comparing multiple grouping techniques against another. I report
-these numbers mainly so that others researchers can compare their
-models and technique against mine.
-
-\section*{Discussion}
-In the social sciences, we have a long tradition of learning about
-society by asking people questions. However, we usually don't do this
-to try to identify what social groupings are meaningful. In part this
-is because people, like social scientists, have a difficult time
-coming up with credible ways of identifying the boundaries of a social
-movement, class, or status group.
-
-However, people often reveal patterns of affiliation, either directly
-when we ask what kind of person they are, or indirectly when we ask
-about their friends and things they don't like. We haven't had good
-ways of aggregating those patterns or of thinking about the logic of
-those patterns. Traditional, network community detection methods can
-help us see patterns of affiliation. They don't usually help us test
-our ideas about what kind of processes produce those pattern.
-
-The case of the neighborhood is easier than many social
-groupings. But, if the approaches we have discussed here help us a
-grasp on what parts of the social world people think are real, and
-techniques for thinking about why, then we can extend this work to
-approaches for understanding the core distinctions of our society and
-our science.
-
- 
-
-
-
-\newpage
-\begingroup \parindent 0pt
-\parskip 2ex
-\def\enotesize{\normalsize}
-\theendnotes
-\endgroup
+see on the Rand index see \cite{yeung_details_2001}.
 
 \newpage
 \bibliographystyle{plainnat}
