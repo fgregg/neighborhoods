@@ -15,31 +15,31 @@
 \doublespacing
 \setcounter{tocdepth}{5}
 
-\renewcommand\maketitle{\begin{titlepage}%
-    \begin{center}
-      {\large THE UNIVERSITY OF CHICAGO}
-      \vskip 4em
-      {\large LEARNING WHO YOUR NEIGHBORS ARE}
-      \vskip 5em
-      {\large A QUALIFYING PAPER SUBMITTED TO}
-      \vskip 1em
-      {\large THE FACULTY OF THE DEPARTMENT OF SOCIOLOGY}
-      \vskip 1em
-      {\large TOWARD THE FULFILLMENT OF}
-      \vskip 1em
-      {\large DOCTORAL PROGRAM REQUIREMENTS}
-      \vskip 7em
-      {\large BY}
-      \vskip 1em
-      {\large FOREST GREGG}
-      \vskip 1em
-      {\large FACULTY ADVISOR: JAMES EVANS}
-      \vskip 2em
-      {\large CHICAGO, ILLINOIS}
-      \vskip 2em
-      {\large WINTER, 2015}
-      \end{center}
-\end{titlepage}}
+%% \renewcommand\maketitle{\begin{titlepage}%
+%%     \begin{center}
+%%       {\large THE UNIVERSITY OF CHICAGO}
+%%       \vskip 4em
+%%       {\large LEARNING WHO YOUR NEIGHBORS ARE}
+%%       \vskip 5em
+%%       {\large A QUALIFYING PAPER SUBMITTED TO}
+%%       \vskip 1em
+%%       {\large THE FACULTY OF THE DEPARTMENT OF SOCIOLOGY}
+%%       \vskip 1em
+%%       {\large TOWARD THE FULFILLMENT OF}
+%%       \vskip 1em
+%%       {\large DOCTORAL PROGRAM REQUIREMENTS}
+%%       \vskip 7em
+%%       {\large BY}
+%%       \vskip 1em
+%%       {\large FOREST GREGG}
+%%       \vskip 1em
+%%       {\large FACULTY ADVISOR: JAMES EVANS}
+%%       \vskip 2em
+%%       {\large CHICAGO, ILLINOIS}
+%%       \vskip 2em
+%%       {\large WINTER, 2015}
+%%       \end{center}
+%% \end{titlepage}}
 
 \let\footnote=\endnote
 \let\cite=\citep
@@ -418,6 +418,8 @@ means of associating the spatial organization of a claimed
 neighborhood with the spatial organization of sociological factors and
 the locations of physical borders. 
 
+\subsection*{Modeling discrete spatial data}
+
 As a first step, we could split the city into many
 small areas, say city blocks. Then, for each block, we can attempt to
 predict the dominant neighborhood claim. Regardless of what else we
@@ -425,27 +427,41 @@ put in the model, a prediction for a block should depend
 upon what we predict for its neighboring blocks. This is a problem of
 multinomial regression with spatial autocorrelation.
 
-This type of problem is not tractable using classic techniques of
-maximum likelihood or MCMC methods. The inter-block coupling of
-discrete variables requires that we calculate terms for every possible
-configuration of assignments between neighborhood claims and blocks. With
-just a few blocks and possible neighborhood claims, the combinatorial
-explosion makes this computationally unfeasible.\footnote{In order to
-  converge on the mode of the distribution of scores, we have to
-  calculate a normalizing constant, which is the sum of the scores of
-  all possible assignments. This is computationally too
-  expensive. There have been a number of attempts to find an
-  acceptable substitute for the normalizing constant, but the
-  empirical results have disappointed.\cite{li_mrf_2009}}
+Urban researchers have long been interested in this type of problem,
+particularly the case of racial residential segregation. In American
+cities, the likelihood of finding a household of a particular race
+depends upon the race of the neighboring households. Theoretically, we
+can model the race of each household as a multinomial outcome where
+the outcomes are dependent upon the outcomes of neighbors
+\cite{schelling_dynamic_1971}.
 
-However, computer scientists have developed techniques for just this
-kind of problem, called structured support vector machines. In brief,
-this technique puts together three ideas. First, a formalism that 
-represents a distribution over coupled discrete random variables as an
-undirected graph. Second, a result that the best scoring 
-configuration of that distribution is equivalent to a special
-partition of the network called a minimum cut. Finally, a method of
-finding the minimum cut of a network in polynomial time. 
+Unfortunately, researchers have not been able to use this model to
+study real cases of racial segregation or other social
+phenomena. Classic methods for estimating the parameters are
+computationally intractable. The inter-block coupling of discrete
+variables requires that we calculate terms for every possible
+configuration of assignments between neighborhood claims and
+blocks. With just a few blocks and possible neighborhood claims, the
+combinatorial explosion makes this computationally
+unfeasible.\footnote{In order to converge on the mode of the
+  distribution of scores, we have to calculate a normalizing constant,
+  which is the sum of the scores of all possible assignments. This is
+  computationally too expensive. There have been a number of attempts
+  to find an acceptable substitute for the normalizing constant, but
+  the empirical results have disappointed.\cite{li_mrf_2009}}
+
+However, in recent years, computer scientists have developed
+techniques for just this kind of problem, called structured support
+vector machines. In brief, this technique puts together three
+ideas. First, a formalism that represents a distribution over coupled
+discrete random variables as an undirected graph. Second, a result
+that the best scoring configuration of that distribution is equivalent
+to a special partition of the network called a minimum cut. Finally, a
+method of finding the minimum cut of a network in polynomial time.
+
+While we will be using the case of the neighborhood throughout this
+paper, the technique is general for any spatially dependent
+categorical outcome.
 
 \input{theory_and_math.tex}
 
@@ -850,6 +866,27 @@ investigation.
 The negative intercept means that identical blocks will tend to belong
 to the same neighborhood.
 
+\subsection*{Confidence intervals}
+At this time, we are unable to provide confidence or credibility
+intervals for these parameters estimates. This is an area of current
+research and the difficulties are worth mentioning briefly. Because of
+the discrete outcomes and dependency structure, the
+$\operatorname{E}(\mathbf{Y})$ does not change smoothly with changes
+in parameters, so we cannot use the gradient to estimate standard
+errors. Because we never calculate the normalizing constant, we cannot
+directly compare the scores with different parameter values for
+likelihood ratio test. Because of dependency structure, we cannot
+easily generate draws from a null or fitted model, so classical
+bootstrapping is not feasible.
+
+Currently, the most promising avenue is a subsampling
+\cite{politis_subsampling_1999}. However, for this data, some of of
+the important independent variables are rare--most blocks are not
+separated by the river or rail lines. Many subsamples may not have any
+variation on an independent variable, and therefore the associated
+parameter estimates will be ill defined. This and other issues will
+need to be worked out.
+
 <<weightTable, results='asis', cache=FALSE>>=
 setwd('../code/training/')
 weights <- read.table("weights.csv")
@@ -946,35 +983,47 @@ comparison.
 
 
 \section*{Discussion}
-We now have means for identifying average perceived neighborhoods and
-validating that they line up with expected physical barriers and
-spatial differences in sociological characteristics. This lays the ground
-for how beliefs and perceptions of these neighborhoods affect social
-processes in urban life. 
+We have introduced a number of methodological innovations for the
+study of cities: capturing claims about neighborhood location from
+online advertisements, estimating the average perceived neighborhood
+from point data using kernel density estimation, and estimating
+parameters for discrete, spatially dependent, outcomes.
 
-The preliminary work on modeling the neighborhoods can be extended,
-and structure supported vector machine give us the tools to further
-study how parts of a city come to be seen as distinct areas.
+Taken together, these methods allow us to identify the parts of a city
+that residents will see as distinct, unitary areas and build
+confidence in their social reality. We can estimate, for the first
+time, how observable block-by-block differences and similarities leads
+to the emergence of perceptually distinct senses of place.
 
-In addition, the general approach we have taken for neighborhoods can
-be used in other fields of social life.In the social sciences, we have
-a long tradition of learning about society by asking people
-questions. However, we usually don't do this to try to identify what
-social groupings are meaningful. In part this is because people often have
-a difficult time coming up with credible ways of identifying the
-boundaries of a group, social movement, or class.
+This prepares the ground for the quantitative study of urban processes
+that have historically been the reserve of ethnographic research--how
+belief, perception, and reputation about areas form and then shape
+the fate of an area. When we can locate the perceived neighborhood, we
+can study it.
 
-People can often reveal patterns of affiliation, either directly
-when we ask what kind of person they are, or indirectly when we ask
-about their friends and things they like and don't like. We haven't
-had good, quantitative tools for aggregating these patterns of affiliation 
-or revealing their logic. 
+Separately, these methods open up a even larger fields of
+inquiry. Most promising, the ability to estimate the parameters for a
+model of spatially dependent discrete outcomes touches on one the
+fundamental theoretical and methodological problems of sociology: when
+does a collection of interacting units become a distinct group.
 
-The case of the neighborhood is easier than many social
-groupings. But, if the approaches we have discussed here help us
-locate what parts of the social world people think are real, and gives
-us techniques for thinking about why, then we can extend this work to
-reveal the core groupings of our society and our science.
+While students of city know how difficult it has been to locate the
+neighborhood, political scientists struggle to delimit a social
+movement, organizational analysts argue about the borders of a firm or
+industry, and Marxists attempt to corral the occupational structure
+into classes. The boundary specification problem is both problem of
+theory and a headache for practical research \cite{laumann_boundary_1989}.
+
+However, just as residents can often tell us what neighborhood,
+respondents can also tells us what groups they belong to either
+directly or indirectly. Where we also have data on the network of
+interactions between people, we can model the group as the same sort
+of interdependent, discrete outcomes that we have done here with
+neighborhoods. Theoretically, we will be able to develop much better
+understandings of what distinctions are relevant for making certain
+groups. Methodologically, we will have firmer ground for choosing the
+practical limits of our study.
+
 
 \newpage
 \begingroup \parindent 0pt
