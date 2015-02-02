@@ -7,5 +7,6 @@ install.packages("rgdal")
 install.packages("igraph")
 install.packages("xtable")
 install.packages("phyclust")
+install.packages("RMySQL")
 
 

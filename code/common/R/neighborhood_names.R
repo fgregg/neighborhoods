@@ -19,26 +19,26 @@ html2txt <- function(charvec) {
 
 cleanChars <- function(label) {
     label <- html2txt(label)
+    label <- gsub(pattern = "^[^a-zA-Z0-9]*|[^a-zA-Z0-9]*$", replacement="", label) # trim everything that's not an ASCII letter or number from front and back
+    label <- unname(label)
+    label <- gsub(pattern = "(\\d\\W*\\s*){9,11}", replacement="", label)   # phone
     label <- gsub(pattern = "\\b(\\+|&)\\b", replacement=" and ", label)
     label <- gsub(pattern = "(\\+|&)", replacement="and", label)
-    label <- gsub(pattern = "[[#!._{}<>]+", replacement=" ", label)
-    label <- gsub(pattern = "'", replacement="", label)
-    label <- gsub(pattern = "  +", replacement=" ", label)
-    label <- gsub(pattern = "[-!|@:;,()*]+", replacement="/", label)
-    label <- gsub(pattern = " */ *", replacement="/", label)
-    label <- gsub(pattern = "^ *(.*)", replacement="\\1", label)
-    label <- gsub(pattern = "(.*) *$", replacement="\\1", label)
+    label <- gsub(pattern = "[-!|@:;,()*<>{}_~!#[]+", replacement="/", label)
+    label <- gsub(pattern = "\\s*/\\s*", replacement="/", label)
+    label <- gsub(pattern = "\\s+", replacement=" ", label)
+    label <- gsub(pattern = "^\\s*|\\s*$", replacement="", label)
     return(label)
 }
 
-removeCityState <- function(label, city, state) {
-    label <- gsub(pattern = paste(", ", city, "$", sep=""),
+removeCityState <- function(label, city, state, fullstate) {
+    label <- gsub(pattern = paste("[,/] *", city, "\\b", sep=""),
                   replacement = "",
                   label)
-    label <- gsub(pattern = paste(", ", state, "$", sep=""),
+    label <- gsub(pattern = paste("[,/] *(", state, '|', fullstate, ")\\b", sep=""),
                   replacement = "",
                   label)
-    label <- gsub(pattern = paste(", ", city, ", ", state, "$", sep=""),
+    label <- gsub(pattern = paste("[,/] *", city, "[,/] *", state, "\\b", sep=""),
                   replacement = "",
                   label)
     return(label)

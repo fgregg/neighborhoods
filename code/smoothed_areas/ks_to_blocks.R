@@ -4,22 +4,30 @@ library(devtools)
 pkg <- devtools::as.package('~/academic/neighborhoods/code/common')
 devtools::load_all(pkg)
 
+source('~/academic/neighborhoods/code/settings.R') # load DB_ connection info
+
 labelNodes <- function(nodes) {
-    con <- dbConnect(MySQL(), dbname="neighborhood")
+
+    con <- dbConnect(MySQL(),
+                     user=DB_USER,
+                     password=DB_PASSWORD,
+                     host=DB_HOST,
+                     port=DB_PORT,
+                     dbname="neighborhood")
 
     names <- dbGetQuery(con, "
       SELECT 
       COUNT(DISTINCT(location_id)) as num_locations,
-      LOWER(label) AS neighborhood
-      FROM claim, listing
-      WHERE claim.listing_id = listing.listing_id
-      AND listing.city = 'chicago'
-      group by lower(label)")
+      LOWER(TRIM(label)) AS neighborhood
+      FROM claim INNER JOIN listing
+      USING (listing_id)
+      WHERE listing.city = 'chicago'
+      group by neighborhood")
 
     dbDisconnect(con)
 
     normalized_neighborhood <- common::normalizedNames(names, 'chicago',
-                                                       'il')
+                                                       'il', 'illinois')
 
     # remove compound neighborhood
     normalized_neighborhood <- normalized_neighborhood[!grepl("/",
